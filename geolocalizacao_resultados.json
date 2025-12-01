@@ -1,0 +1,20 @@
+[
+    {
+        "enderoco_origial": "1600 Amphitheatre Parkway, Mountain View, CA",
+        "endereco_formatado": "Google Building 41, 1600 Amphitheatre Pkwy, Mountain View, CA 94043, USA",
+        "latitude": 37.4216724,
+        "longitude": -122.0856444
+    },
+    {
+        "enderoco_origial": "1 Infinite Loop, Cupertino, CA",
+        "endereco_formatado": "Infinite Loop 1, 1 Infinite Loop, Cupertino, CA 95014, USA",
+        "latitude": 37.3318598,
+        "longitude": -122.0302485
+    },
+    {
+        "enderoco_origial": "350 Fifth Avenue, New York, NY",
+        "endereco_formatado": "350 5th Ave, New York, NY 10001, USA",
+        "latitude": 40.7487206,
+        "longitude": -73.9848167
+    }
+]
