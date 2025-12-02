@@ -1,7 +1,8 @@
 {
   "dependencies": {
     "@googlemaps/google-maps-services-js": "^3.4.2",
-    "csv-parser": "^3.2.0"
+    "csv-parser": "^3.2.0",
+    "dotenv": "^17.2.3"
   },
   "name": "tcc_rotas_inteligentes",
   "version": "1.0.0",

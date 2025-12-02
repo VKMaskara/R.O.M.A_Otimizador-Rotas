@@ -1,0 +1,93 @@
+// matrix_coordenadas.js (FINAL E CORRIGIDO)
+
+// 1. IMPORTAÇÕES E CONFIGURAÇÕES INICIAIS
+import { Client } from "@googlemaps/google-maps-services-js";
+import * as fs from "fs"; 
+import 'dotenv/config'; 
+
+// 2. CONSTANTES
+const INPUT_COORDS_FILE = 'geolocalizacao_resultados.json';
+const OUTPUT_MATRIX_FILE = 'distancia_matriz_bruta.json'; // CORRIGIDO: Nome do arquivo de saída
+const BATCH_SIZE = 5; // Limite de 5 Origens por lote para evitar o erro 100 elementos
+
+const client = new Client({});
+// 💡 CORRIGIDO/VERIFICAR: Use o nome da variável de ambiente que está no seu .env (ex: GOOGLE_MAPS_API_KEY)
+const apiKey = process.env.GOOGLE_MAPS_MATRIX_API_KEY; 
+
+// FUNÇÃO PARA LER E FILTRAR COORDENADAS VÁLIDAS
+function readCoordinatesFromJSON(filePath) {
+    const rawdata = fs.readFileSync(filePath, 'utf-8');
+    const results = JSON.parse(rawdata);
+
+    // Filtra apenas os endereços que foram geocodificados (têm latitude)
+    const validResults = results.filter(item => item.latitude);
+
+    const coords = validResults.map(item => {
+        return `${item.latitude},${item.longitude}`;
+    })
+    return coords; // Array com as 11 coordenadas válidas
+}
+
+// 3. FUNÇÃO PRINCIPAL: CALCULAR A MATRIZ DE DISTÂNCIAS (COM LOTES)
+async function calculateDistanceMatrix() {
+    console.log("Iniciando o cálculo da Matriz de Distância com processamento em lotes...");
+    
+    // PASSO 1: Carregar as coordenadas válidas
+    const coords = readCoordinatesFromJSON(INPUT_COORDS_FILE);
+    const numPoints = coords.length;
+    
+    if (numPoints < 2) {
+        console.error("❌ ERRO: É necessário pelo menos duas coordenadas válidas.");
+        return;
+    }
+    
+    const combinedMatrix = []; // Array para armazenar os resultados de todos os lotes
+    
+    // PASSO 2: Iterar sobre os lotes (Processamento de 5 Origens por vez)
+    for (let i = 0; i < numPoints; i += BATCH_SIZE) {
+        // Seleciona as origens para este lote (ex: P1 a P5, depois P6 a P10, depois P11)
+        const originsBatch = coords.slice(i, i + BATCH_SIZE);
+        
+        console.log(`\nProcessando Lote: Origens ${i + 1} a ${i + originsBatch.length} de ${numPoints}...`);
+        
+        try {
+            const response = await client.distancematrix({
+                params: {
+                    origins: originsBatch, // Bloco de Origens
+                    destinations: coords,   // Todos os Destinos (para completar a matriz)
+                    key: apiKey,
+                    units: 'metric', 
+                    mode: 'driving', 
+                },
+                timeout: 5000,
+            });
+
+            // Adiciona as linhas (resultados) deste lote à matriz combinada
+            combinedMatrix.push(...response.data.rows);
+
+        } catch (error) {
+            console.error(`❌ ERRO no Lote ${i + 1}:`, error.response?.data?.error_message || error.message);
+            return; 
+        }
+    }
+    
+    // PASSO 3: Reestruturar e Salvar a Matriz Completa
+    const finalMatrix = {
+        destination_addresses: coords,
+        origin_addresses: coords,
+        rows: combinedMatrix, // Todas as linhas de distância combinadas
+        status: "OK - COMBINED"
+    };
+
+    try {
+        // CORRIGIDO: Variável de saída
+        fs.writeFileSync(OUTPUT_MATRIX_FILE, JSON.stringify(finalMatrix, null, 4)); 
+        console.log(`\n🎉 Sucesso! Matriz de Distância COMPLETA (${numPoints}x${numPoints}) salva em: ${OUTPUT_MATRIX_FILE}`);
+        console.log(`Próximo passo: Algoritmo TSP para otimização.`);
+    } catch (err) {
+        console.error("Erro ao salvar o arquivo da matriz:", err);
+    }
+}
+
+// 4. CHAMA A FUNÇÃO PRINCIPAL PARA INICIAR
+calculateDistanceMatrix();

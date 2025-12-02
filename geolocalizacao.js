@@ -1,31 +1,31 @@
 // 1. CONFIGURAÇÃO (Imports e chaves de API)
 import { Client } from "@googlemaps/google-maps-services-js";
-import * as fs from "fs";
-import cvs from 'csv-parser';
-import { resolve } from "path";
-import { rejects } from "assert";
-
+import * as fs from "fs"; //encanamento que pega o texto do disco rígido e o joga no seu programa.
+import csv from 'csv-parser'; // csv-parser É  como o filtro que organiza o texto bagunçado em dados utilizáveis.
+import 'dotenv/config'; // Carrega variáveis de ambiente do arquivo .env
 //Inicialize o cliente do Google Maps
 const client = new Client({});
 
 // **Importação da chave da API do Google Maps**
-const apiKey = "SUA_CHAVE_AQUI"; // Certifique-se de que sua chave real está aqui, entre as aspas!
+const apiKey = process.env.GOOGLE_MAPS_GEOCOORDINATE_API_KEY; 
+// Certifique-se de que sua chave real está aqui, entre as aspas!
 
 // 2. DADOS DE  ENTRADA (Lista de endereços)
-const INPUT_FILE = 'input_enderecos.cvs';
+const INPUT_FILE = 'input_enderecos.csv';
 const OUTPUT_FILE = "geolocalizacao_resultados.json";
+
 // FUNÇÃO PAR LER O CSV E RETORNAR UM ARRAY DE ENDEREÇOS
 function getAddressesFromCSV(filePath){
-    return new Promise((resolve, reject) => {
-        const address = [];
-        fs.createReadStream(filePath)
-        .pipe(cvs())
-        .on('data' , (row) => {
+    return new Promise((resolve, reject) => { // Retorna uma promessa que resolve com a lista de endereços
+        const addresses = []; // Array para armazenar os endereços lidos do CSV
+        fs.createReadStream(filePath) // => Cria um fluxo de dados  bruto
+        .pipe(csv()) // => Passa o fluxo bruto pelo csv-parser para converter em objetos
+        .on('data', (row) => { 
             // Adiciona o endereço do CSV ao array, usando o nome da coluna 'Endereco'
-            addresses.push(row.Endereco);
+            addresses.push(row.Endereco); // Adiciona o endereço do CSV ao array
         })
-        .on('end', () => {
-            resolve(addresses);
+        .on('end', () => { // Ele serve como um sinal de que a tarefa está concluída
+            resolve(addresses); // Resolve a promessa com o array de endereços
         })
         .on('error', (error) => {
             reject(error);
@@ -36,13 +36,13 @@ function getAddressesFromCSV(filePath){
 // 3. FUNÇÃO DE GEOCODIFICAÇÃO
 async function geocodificarEndereco() {
     // 💡 PASSO 1: Carrega os endereços do CSV de forma assíncrona
-    const enderecos = await getAddressesFromCSV(INPUT_FILE)
+    const enderecos = await getAddressesFromCSV(INPUT_FILE) // Espera até que os endereços sejam carregados => wait para esperar a resposta
    console.log(`Iniciando o processo de geocodificação de ${enderecos.length} endereços...`);
     const resultados = [];
 
     for (const endereco of enderecos) {
         try {
-            const response = await client.geocode({
+            const response = await client.geocode({ // Chama a API de geocodificação do Google Maps => wait para esperar a resposta
                 params: {
                     address: endereco,
                     key: apiKey,
@@ -84,8 +84,8 @@ async function geocodificarEndereco() {
 
     // 2. Grava a string no arquivo
     try {
-        fs.writeFileSync(outputFile, jsonOutput);
-        console.log(`\n🎉 Sucesso! Arquivo de geolocalização criado: ${outputFile}`);
+        fs.writeFileSync(OUTPUT_FILE, jsonOutput);
+        console.log(`\n🎉 Sucesso! Arquivo de geolocalização criado: ${OUTPUT_FILE}`);
         console.log(`Total de ${resultados.length} registros processados.`);
     } catch (err) {
         console.error("Erro ao salvar o arquivo:", err);
