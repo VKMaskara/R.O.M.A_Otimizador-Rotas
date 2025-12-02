@@ -1,12 +1,13 @@
 {
   "dependencies": {
-    "@googlemaps/google-maps-services-js": "^3.4.2"
+    "@googlemaps/google-maps-services-js": "^3.4.2",
+    "csv-parser": "^3.2.0"
   },
   "name": "tcc_rotas_inteligentes",
   "version": "1.0.0",
+  "type": "module",
   "description": "Repositório para o TCC",
   "main": "geolocalizacao.js",
-  "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },

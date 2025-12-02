@@ -1,24 +1,42 @@
 // 1. CONFIGURAÇÃO (Imports e chaves de API)
 import { Client } from "@googlemaps/google-maps-services-js";
 import * as fs from "fs";
+import cvs from 'csv-parser';
+import { resolve } from "path";
+import { rejects } from "assert";
 
 //Inicialize o cliente do Google Maps
 const client = new Client({});
 
 // **Importação da chave da API do Google Maps**
-const apiKey = "CHAVE_DE_API_AQUI"; // Certifique-se de que sua chave real está aqui, entre as aspas!
+const apiKey = "SUA_CHAVE_AQUI"; // Certifique-se de que sua chave real está aqui, entre as aspas!
 
 // 2. DADOS DE  ENTRADA (Lista de endereços)
-const enderecos = [
-  "1600 Amphitheatre Parkway, Mountain View, CA",
-  "1 Infinite Loop, Cupertino, CA",
-  "350 Fifth Avenue, New York, NY",
-];
-
-const outputFile = "geolocalizacao_resultados.json";
+const INPUT_FILE = 'input_enderecos.cvs';
+const OUTPUT_FILE = "geolocalizacao_resultados.json";
+// FUNÇÃO PAR LER O CSV E RETORNAR UM ARRAY DE ENDEREÇOS
+function getAddressesFromCSV(filePath){
+    return new Promise((resolve, reject) => {
+        const address = [];
+        fs.createReadStream(filePath)
+        .pipe(cvs())
+        .on('data' , (row) => {
+            // Adiciona o endereço do CSV ao array, usando o nome da coluna 'Endereco'
+            addresses.push(row.Endereco);
+        })
+        .on('end', () => {
+            resolve(addresses);
+        })
+        .on('error', (error) => {
+            reject(error);
+        });
+    })
+}
 
 // 3. FUNÇÃO DE GEOCODIFICAÇÃO
 async function geocodificarEndereco() {
+    // 💡 PASSO 1: Carrega os endereços do CSV de forma assíncrona
+    const enderecos = await getAddressesFromCSV(INPUT_FILE)
    console.log(`Iniciando o processo de geocodificação de ${enderecos.length} endereços...`);
     const resultados = [];
 
