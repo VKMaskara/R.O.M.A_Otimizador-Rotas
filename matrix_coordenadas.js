@@ -1,32 +1,34 @@
 // matrix_coordenadas.js (FINAL E CORRIGIDO)
 
 // 1. IMPORTAÇÕES E CONFIGURAÇÕES INICIAIS
-import { Client } from "@googlemaps/google-maps-services-js";
-import * as fs from "fs"; 
-import 'dotenv/config'; 
+import { Client } from "@googlemaps/google-maps-services-js"; // Importa o cliente do Google Maps
+import * as fs from "fs"; // Importa o módulo de sistema de arquivos para ler/escrever arquivos
+import 'dotenv/config';  // Carrega variáveis de ambiente do arquivo .env
 
 // 2. CONSTANTES
 const INPUT_COORDS_FILE = 'geolocalizacao_resultados.json';
 const OUTPUT_MATRIX_FILE = 'distancia_matriz_bruta.json'; // CORRIGIDO: Nome do arquivo de saída
 const BATCH_SIZE = 5; // Limite de 5 Origens por lote para evitar o erro 100 elementos
 
-const client = new Client({});
-// 💡 CORRIGIDO/VERIFICAR: Use o nome da variável de ambiente que está no seu .env (ex: GOOGLE_MAPS_API_KEY)
+const client = new Client({}); // Inicializa o cliente do Google Maps
+
+// **Importação da chave da API do Google Maps para Matriz de Distâncias**
 const apiKey = process.env.GOOGLE_MAPS_MATRIX_API_KEY; 
 
 // FUNÇÃO PARA LER E FILTRAR COORDENADAS VÁLIDAS
 function readCoordinatesFromJSON(filePath) {
     const rawdata = fs.readFileSync(filePath, 'utf-8');
-    const results = JSON.parse(rawdata);
+    const results = JSON.parse(rawdata); // Array de objetos com endereços e coordenadas
 
     // Filtra apenas os endereços que foram geocodificados (têm latitude)
     const validResults = results.filter(item => item.latitude);
 
     const coords = validResults.map(item => {
         return `${item.latitude},${item.longitude}`;
-    })
+    }) // Converte para o formato "lat,lng"
     return coords; // Array com as 11 coordenadas válidas
 }
+
 
 // 3. FUNÇÃO PRINCIPAL: CALCULAR A MATRIZ DE DISTÂNCIAS (COM LOTES)
 async function calculateDistanceMatrix() {
@@ -44,9 +46,10 @@ async function calculateDistanceMatrix() {
     const combinedMatrix = []; // Array para armazenar os resultados de todos os lotes
     
     // PASSO 2: Iterar sobre os lotes (Processamento de 5 Origens por vez)
-    for (let i = 0; i < numPoints; i += BATCH_SIZE) {
+    for (let i = 0; i < numPoints; i += BATCH_SIZE) { // Incrementa de 5 em 5
+
         // Seleciona as origens para este lote (ex: P1 a P5, depois P6 a P10, depois P11)
-        const originsBatch = coords.slice(i, i + BATCH_SIZE);
+        const originsBatch = coords.slice(i, i + BATCH_SIZE); // ele vai cortar o array de coordenadas de i até i + BATCH_SIZE
         
         console.log(`\nProcessando Lote: Origens ${i + 1} a ${i + originsBatch.length} de ${numPoints}...`);
         

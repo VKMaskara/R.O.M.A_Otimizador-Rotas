@@ -1,0 +1,76 @@
+[
+    {
+        "enderoco_origial": "1600 Amphitheatre Parkway",
+        "endereco_formatado": "Google Building 41, 1600 Amphitheatre Pkwy, Mountain View, CA 94043, USA",
+        "latitude": 37.4216724,
+        "longitude": -122.0856444
+    },
+    {
+        "enderoco_origial": "Rua Yoshinobu Kuwabashi",
+        "endereco_formatado": "R. Yoshinobo Sunahara - Zona 10, Paranavaí - PR, 87708, Brazil",
+        "latitude": -23.1034609,
+        "longitude": -52.4508787
+    },
+    {
+        "enderoco_origial": "1 Infinite Loop",
+        "endereco_formatado": "Infinite Loop 1, 1 Infinite Loop, Cupertino, CA 95014, USA",
+        "latitude": 37.3318598,
+        "longitude": -122.0302485
+    },
+    {
+        "endereco_original": "742 Evergreen Terrace",
+        "status": "NOT_FOUND"
+    },
+    {
+        "enderoco_origial": "Avenida das Acácias 1280",
+        "endereco_formatado": "Av. das Acácias da Península, 1280 - Barra da Tijuca, Rio de Janeiro - RJ, 22776-000, Brazil",
+        "latitude": -22.9894449,
+        "longitude": -43.3526043
+    },
+    {
+        "enderoco_origial": "221B Baker Street",
+        "endereco_formatado": "221B Baker St, London NW1 6XE, UK",
+        "latitude": 51.5237791,
+        "longitude": -0.1584514
+    },
+    {
+        "enderoco_origial": "Rua dos Cravos 452",
+        "endereco_formatado": "R. dos Cravos, 452 - Braga, Cabo Frio - RJ, 28908-280, Brazil",
+        "latitude": -22.8915383,
+        "longitude": -42.0278103
+    },
+    {
+        "enderoco_origial": "500 Fifth Avenue",
+        "endereco_formatado": "500 5th Ave, New York, NY 10110, USA",
+        "latitude": 40.7539143,
+        "longitude": -73.9810162
+    },
+    {
+        "endereco_original": "Estrada do Sol 2331",
+        "status": "NOT_FOUND"
+    },
+    {
+        "enderoco_origial": "350 Market Street",
+        "endereco_formatado": "Market St, San Francisco, CA, USA",
+        "latitude": 37.7734015,
+        "longitude": -122.4213719
+    },
+    {
+        "enderoco_origial": "Rua das Laranjeiras 89",
+        "endereco_formatado": "R. das Laranjeiras, 89 - Laranjeiras, Rio de Janeiro - RJ, 22240-000, Brazil",
+        "latitude": -22.9322592,
+        "longitude": -43.1821434
+    },
+    {
+        "enderoco_origial": "77 Massachusetts Avenue",
+        "endereco_formatado": "77 Massachusetts Ave, Cambridge, MA 02139, USA",
+        "latitude": 42.3592444,
+        "longitude": -71.0931389
+    },
+    {
+        "enderoco_origial": "Avenida Atlântica 4500",
+        "endereco_formatado": "Av. Atlântica, 4500 - Interlagos, São Paulo - SP, 04772-002, Brazil",
+        "latitude": -23.7038938,
+        "longitude": -46.7147821
+    }
+]

@@ -8,7 +8,7 @@ const client = new Client({});
 
 // **Importação da chave da API do Google Maps**
 const apiKey = process.env.GOOGLE_MAPS_GEOCOORDINATE_API_KEY; 
-// Certifique-se de que sua chave real está aqui, entre as aspas!
+
 
 // 2. DADOS DE  ENTRADA (Lista de endereços)
 const INPUT_FILE = 'input_enderecos.csv';
@@ -40,7 +40,8 @@ async function geocodificarEndereco() {
    console.log(`Iniciando o processo de geocodificação de ${enderecos.length} endereços...`);
     const resultados = [];
 
-    for (const endereco of enderecos) {
+    // 💡 PASSO 2: Itera sobre cada endereço e chama a API de geocodificação
+    for (const endereco of enderecos) { // Para cada endereço na lista faz:
         try {
             const response = await client.geocode({ // Chama a API de geocodificação do Google Maps => wait para esperar a resposta
                 params: {
@@ -50,7 +51,7 @@ async function geocodificarEndereco() {
                 timeout: 1000, // 1 segundo de timeout
             });
 
-            if (response.data.results.length && response.data.results.length > 0) {
+            if (response.data.results.length && response.data.results.length > 0) { 
                 const geocoded = response.data.results[0];
                 const location = geocoded.geometry.location;
 
