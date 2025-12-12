@@ -28,7 +28,7 @@ function getAddressesFromCSV(filePath){
             resolve(addresses); // Resolve a promessa com o array de endereços
         })
         .on('error', (error) => {
-            reject(error);
+            reject(error); // Rejeita a promessa em caso de erro
         });
     })
 }
@@ -38,6 +38,7 @@ async function geocodificarEndereco() {
     // 💡 PASSO 1: Carrega os endereços do CSV de forma assíncrona
     const enderecos = await getAddressesFromCSV(INPUT_FILE) // Espera até que os endereços sejam carregados => wait para esperar a resposta
    console.log(`Iniciando o processo de geocodificação de ${enderecos.length} endereços...`);
+
     const resultados = [];
 
     // 💡 PASSO 2: Itera sobre cada endereço e chama a API de geocodificação
@@ -51,9 +52,11 @@ async function geocodificarEndereco() {
                 timeout: 1000, // 1 segundo de timeout
             });
 
-            if (response.data.results.length && response.data.results.length > 0) { 
-                const geocoded = response.data.results[0];
-                const location = geocoded.geometry.location;
+            if (response.data.results.length && response.data.results.length > 0) { // Verifica se há resultados
+                const geocoded = response.data.results[0]; /// Pega o primeiro resultado
+                const location = geocoded.geometry.location; // Extrai latitude e longitude
+
+                // Armazena o resultado formatado no array
 
                 resultados.push({
                     enderoco_origial: endereco,
