@@ -1,4 +1,4 @@
-import fs from "fs"; 
+import fs from "fs";
 import 'dotenv/config';
 
 const INPUT_MATRIX_FILE = 'distancia_matriz_bruta.json';
@@ -27,7 +27,7 @@ function readTravelMatrix() {
         const rawdata = fs.readFileSync(INPUT_MATRIX_FILE, 'utf-8');
         const matrixData = JSON.parse(rawdata);
 
-        const timeMatrix = []; 
+        const timeMatrix = [];
         for (const row of matrixData.rows) {
             const rowTimes = row.elements.map(element => {
                 if (element.status === 'OK') {
@@ -35,53 +35,78 @@ function readTravelMatrix() {
                 } else {
                     return Infinity;
                 }
-            });        
+            });
             timeMatrix.push(rowTimes);
         }
-        
+
         console.log(`\n✅ Matriz de distâncias carregada: ${timeMatrix.length} pontos.`);
-        return timeMatrix; 
+        return timeMatrix;
 
     } catch (error) {
         console.error(`\n❌ ERRO FATAL: Falha ao carregar ou processar o arquivo JSON (${INPUT_MATRIX_FILE}).`);
         console.error('Verifique se o arquivo existe e se está no formato JSON esperado.');
         // Retorna um array vazio para evitar o TypeError, mas o erro será percebido em 'n'
-        return []; 
+        return [];
     }
 }
 
 // FUNÇÃO 2: ALGORITMO TSP (Vizinho Mais Próximo)
-function nearestNeighborTSP(matrix, start=0) {
-    const n = matrix.length; 
-    
+function nearestNeighborTSP(matrix, start = 0) {
+    const n = matrix.length;
+
     // Checagem de segurança (Resolve o caso de arquivo vazio)
     if (n === 0) {
         console.error("❌ Erro: Matriz vazia. Não há pontos para otimizar.");
-        return {route: [], totalTime: 0};
+        return { route: [], totalTime: 0 };
     }
 
-    let route = [start]; 
-    let visited = new Set(route);
-    let current = start;
-    
-    // 1. Loop de Otimização
-    while (route.length < n){
-        let minTime = Infinity;
-        let bestNeighborIndex = null;
+    let route = [start];  // Rota inicial
+    let visited = new Set(route); // Conjunto para rastrear pontos visitados
+    let current = start; // Ponto atual
 
-        for (let i = 0; i < n; i++){
+    // 1. Loop de Otimização
+    while (route.length < n) { // Enquanto houver pontos não visitados
+        let minTime = Infinity; // -> inicializa o tempo mínimo como infinito (0) 
+        let bestNeighborIndex = null; // -> vai guardar o menor indice do vizinho mais próximo
+
+        // Depuração detalhada (descomente para usar)
+        // console.log("--- Verificação de Segurança ---");
+        // console.log("Ponto atual (current):", current);
+        // console.log("A linha existe na matriz?", matrix[current] !== undefined);
+
+        // if (current === 8) {
+        //     console.log("--- Diagnóstico do Ponto 8 ---");
+        //     for (let i = 0; i < n; i++) {
+        //         console.log(`Para ponto ${i}: tempo = ${matrix[current][i]}, visitado? ${visited.has(i)}`);
+        //     }
+        // }
+
+        for (let i = 0; i < n; i++) {
             // O erro 'TypeError' ocorre nesta linha se 'matrix' for undefined.
             const timeToNeighbor = matrix[current][i];
-            if (!visited.has(i) && timeToNeighbor < minTime){
+            if (!visited.has(i) && timeToNeighbor <
+                minTime) { // Se o ponto não foi visitado e o tempo é menor que o mínimo atual (OBS: <= para pegar o último igual)
                 minTime = timeToNeighbor;
-                bestNeighborIndex = i;  
+                bestNeighborIndex = i;
             }
+
         }
-        
-        // Se bestNeighborIndex for null, significa que não há mais rotas válidas (Infinity)
+
+        // // Se bestNeighborIndex for null, significa que não há mais rotas válidas (Infinity)
+        // if (bestNeighborIndex === null) {
+        //     console.warn(`⚠️ Aviso: Rota interrompida no índice ${current}. Não há conexão com os pontos restantes.`);
+        //     break; // Sai do loop se não for possível continuar
+        // }
+
+        // Se não encontrou vizinho próximo, procura o primeiro disponível
+
         if (bestNeighborIndex === null) {
-             console.warn(`⚠️ Aviso: Rota interrompida no índice ${current}. Não há conexão com os pontos restantes.`);
-             break; // Sai do loop se não for possível continuar
+            for (let i = 0; i < n; i++) {
+                if (!visited.has(i)) {
+                    bestNeighborIndex = i;
+                    break; // Encontrou um? Para de procurar e sai do loop
+                }
+            }
         }
 
         // 2. Atualização da Rota
@@ -89,21 +114,29 @@ function nearestNeighborTSP(matrix, start=0) {
         visited.add(bestNeighborIndex);
         current = bestNeighborIndex;
     }
-    
+
     // 3. Cálculo do Tempo Total
-    const totalTime = route.reduce((acc, curr, index) => {
+    const PENALITY_TIME = 3600; // 1 hora em segundos para rotas inválidas
+    const totalTime = route.reduce((acc, curr, index) => { // acc = acumulador, curr = valor atual, index = índice atual
         if (index === 0) return acc;
-        return acc + matrix[route[index - 1]][curr];
+
+        const tempoOriginal = matrix[route[index - 1]][curr];
+
+        const tempoSomar = (tempoOriginal === Infinity) ? PENALITY_TIME : tempoOriginal;
+
+        return acc + tempoSomar;
+
     }, 0);
 
     // 4. Retorno dos resultados
-    return {route, totalTime};
+    return { route, totalTime };
 }
 
 
+
 // --- EXECUÇÃO PRINCIPAL ---
-const matrix = readTravelMatrix(); 
-const result = nearestNeighborTSP(matrix);
+const matrix = readTravelMatrix();  // Lê a matriz de distâncias
+const result = nearestNeighborTSP(matrix);  // Executa o TSP
 
 console.log("\n-----------------------------------------");
 console.log("✅ OTIMIZAÇÃO CONCLUÍDA");

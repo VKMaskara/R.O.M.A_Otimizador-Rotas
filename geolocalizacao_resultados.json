@@ -1,0 +1,92 @@
+[
+    {
+        "enderoco_origial": "Rua das Amendoeiras",
+        "endereco_formatado": "R. das Amendoeiras - Cosmos, Rio de Janeiro - RJ, 23056-620, Brazil",
+        "latitude": -22.9187851,
+        "longitude": -43.6155364
+    },
+    {
+        "enderoco_origial": "Avenida Professor Manoel José Pedroso",
+        "endereco_formatado": "Av. Prof. Manoel José Pedroso - Parque Bahia, Cotia - SP, 06717-100, Brazil",
+        "latitude": -23.6070816,
+        "longitude": -46.9187365
+    },
+    {
+        "enderoco_origial": "Rua do Engenho",
+        "endereco_formatado": "R. do Engenho - Vila Nova Cachoeirinha, São Paulo - SP, 02612-130, Brazil",
+        "latitude": -23.4740692,
+        "longitude": -46.6657831
+    },
+    {
+        "enderoco_origial": "Rua José Michelotti",
+        "endereco_formatado": "R. José Michelotti - Cidade da Saude, Itapevi - SP, 06702-300, Brazil",
+        "latitude": -23.5413948,
+        "longitude": -46.9346986
+    },
+    {
+        "enderoco_origial": "Avenida Rubens Caramez",
+        "endereco_formatado": "Av. Rubens Caramez, Itapevi - SP, Brazil",
+        "latitude": -23.5555517,
+        "longitude": -46.9346415
+    },
+    {
+        "enderoco_origial": "Rua Agostinho Ferreira Campos",
+        "endereco_formatado": "R. Agostinho Ferreira Campos, Itapevi - SP, Brazil",
+        "latitude": -23.5395238,
+        "longitude": -46.9365728
+    },
+    {
+        "enderoco_origial": "Rua São Paulo",
+        "endereco_formatado": "R. de São Paulo, 2735-521 Agualva-Cacém, Portugal",
+        "latitude": 38.7753083,
+        "longitude": -9.3110278
+    },
+    {
+        "enderoco_origial": "Avenida Antônio Dias Bastos",
+        "endereco_formatado": "R. Santa Emília - Jardim Villaca, São Roque - SP, 18135-400, Brazil",
+        "latitude": -23.5460521,
+        "longitude": -47.1216593
+    },
+    {
+        "enderoco_origial": "Rua Quintino Bocaiuva",
+        "endereco_formatado": "R. Quintino Bocaiúva, Bocaiúva do Sul - PR, 83450-000, Brazil",
+        "latitude": -25.2071602,
+        "longitude": -49.1140733
+    },
+    {
+        "enderoco_origial": "Avenida dos Autonomistas",
+        "endereco_formatado": "Av. dos Autonomistas, São Paulo, Brazil",
+        "latitude": -23.5340383,
+        "longitude": -46.7833038
+    },
+    {
+        "enderoco_origial": "Rua Antônio Agu",
+        "endereco_formatado": "R. Antônio Agú - Centro, Osasco - SP, 06013-006, Brazil",
+        "latitude": -23.5333671,
+        "longitude": -46.7790848
+    },
+    {
+        "enderoco_origial": "Rua Dante Carraro",
+        "endereco_formatado": "R. Dante Carraro - Pinheiros, São Paulo - SP, 05422-060, Brazil",
+        "latitude": -23.5675465,
+        "longitude": -46.6857538
+    },
+    {
+        "enderoco_origial": "Rua Augusta",
+        "endereco_formatado": "R. Augusta, 1100 Lisboa, Portugal",
+        "latitude": 38.7106557,
+        "longitude": -9.1376722
+    },
+    {
+        "enderoco_origial": "Avenida Sapopemba",
+        "endereco_formatado": "Av. Sapopemba, São Paulo - SP, Brazil",
+        "latitude": -23.6006133,
+        "longitude": -46.5120845
+    },
+    {
+        "enderoco_origial": "Rua Vergueiro",
+        "endereco_formatado": "Rua Vergueiro, São Paulo - SP, Brazil",
+        "latitude": -23.5927566,
+        "longitude": -46.6211486
+    }
+]
