@@ -34,7 +34,7 @@ function getAddressesFromCSV(filePath){
 }
 
 // 3. FUNÇÃO DE GEOCODIFICAÇÃO
-async function geocodificarEndereco() {
+export async function geocodificarEndereco() {
     // 💡 PASSO 1: Carrega os endereços do CSV de forma assíncrona
     const enderecos = await getAddressesFromCSV(INPUT_FILE) // Espera até que os endereços sejam carregados => wait para esperar a resposta
    console.log(`Iniciando o processo de geocodificação de ${enderecos.length} endereços...`);
@@ -96,4 +96,3 @@ async function geocodificarEndereco() {
     }
 }
 
-geocodificarEndereco();

@@ -1,12 +1,6 @@
 {
-  "dependencies": {
-    "@googlemaps/google-maps-services-js": "^3.4.2",
-    "csv-parser": "^3.2.0",
-    "dotenv": "^17.2.3"
-  },
   "name": "tcc_rotas_inteligentes",
   "version": "1.0.0",
-  "type": "module",
   "description": "Repositório para o TCC",
   "main": "geolocalizacao.js",
   "scripts": {
@@ -22,5 +16,10 @@
   "bugs": {
     "url": "https://github.com/VKMaskara/TCC_rotas_inteligentes/issues"
   },
-  "homepage": "https://github.com/VKMaskara/TCC_rotas_inteligentes#readme"
+  "homepage": "https://github.com/VKMaskara/TCC_rotas_inteligentes#readme",
+  "dependencies": {
+    "@googlemaps/google-maps-services-js": "^3.4.2",
+    "csv-parser": "^3.2.0",
+    "dotenv": "^17.2.3"
+  }
 }

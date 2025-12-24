@@ -1,6 +1,5 @@
 node_modules/
 .env
 .env.local
-.geolocalizacao.js
-.distancia_matriz_bruta.json
-.geolocalizacao_resultados.json
+distancia_matriz_bruta.json
+geolocalizacao_resultados.json
