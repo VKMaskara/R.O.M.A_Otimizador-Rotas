@@ -5,14 +5,10 @@ const INPUT_MATRIX_FILE = 'distancia_matriz_bruta.json';
 
 // FUNÇÃO AUXILIAR: Converte segundos para HH:MM:SS
 function formatTime(seconds) {
-    // 1. HORAS: Total de segundos dividido por 3600 (segundos em 1 hora)
     const hours = Math.floor(seconds / 3600);
-    // 2. MINUTOS: Segundos restantes dividido por 60. O % 3600 remove as horas já calculadas.
     const minutes = Math.floor((seconds % 3600) / 60);
-    // 3. SEGUNDOS: Restante da divisão por 60.
-    const remainingSeconds = seconds % 60;
+    const remainingSeconds = Math.floor(seconds % 60);
 
-    // Adiciona zero à esquerda se o número for menor que 10
     const h = String(hours).padStart(2, '0');
     const m = String(minutes).padStart(2, '0');
     const s = String(remainingSeconds).padStart(2, '0');
@@ -116,32 +112,47 @@ function nearestNeighborTSP(matrix, start = 0) {
     }
 
     // 3. Cálculo do Tempo Total
-    const PENALITY_TIME = 3600; // 1 hora em segundos para rotas inválidas
-    const totalTime = route.reduce((acc, curr, index) => { // acc = acumulador, curr = valor atual, index = índice atual
+
+    // 1. Transforma a matriz (tabela) em uma lista única e filtra os valores para a média
+    const todosOsTempos = matrix.flat();
+    const temposValidos = todosOsTempos.filter(time => time !== Infinity && time !== 0);
+
+    // 2. Calcula a média real para usar como penalidade em trechos sem conexão (Infinity)
+    const somaTotalTempos = temposValidos.reduce((acc, atual) => acc + atual, 0);
+    const mediaTime = somaTotalTempos / temposValidos.length;
+    const PENALIDADE = mediaTime;
+
+    // 3. Calcula o tempo total da rota gerada
+    const totalTimeFinal = route.reduce((acc, curr, index) => {
+        // Pula o primeiro elemento pois não há trajeto "antes" dele
         if (index === 0) return acc;
 
+        // Busca o tempo na matriz entre o ponto anterior e o atual
         const tempoOriginal = matrix[route[index - 1]][curr];
 
-        const tempoSomar = (tempoOriginal === Infinity) ? PENALITY_TIME : tempoOriginal;
+        // Se o tempo for inválido (Infinity ou undefined), aplica a penalidade média
+        const tempoSomar = (tempoOriginal === Infinity || tempoOriginal === undefined)
+            ? PENALIDADE
+            : tempoOriginal;
 
+        // IMPORTANTE: Retorna a soma acumulada para a próxima iteração
         return acc + tempoSomar;
-
     }, 0);
 
     // 4. Retorno dos resultados
-    return { route, totalTime };
+    return { route, totalTime: totalTimeFinal };
 }
 
 
 
-// --- EXECUÇÃO PRINCIPAL ---
-const matrix = readTravelMatrix();  // Lê a matriz de distâncias
-const result = nearestNeighborTSP(matrix);  // Executa o TSP
+    // --- EXECUÇÃO PRINCIPAL ---
+    const matrix = readTravelMatrix();  // Lê a matriz de distâncias
+    const result = nearestNeighborTSP(matrix);  // Executa o TSP
 
-console.log("\n-----------------------------------------");
-console.log("✅ OTIMIZAÇÃO CONCLUÍDA");
-console.log("-----------------------------------------");
-console.log("Ordem de visita (Índices):", result.route);
-console.log("Tempo Total (Segundos):", result.totalTime);
-console.log("Tempo Total (HH:MM:SS):", formatTime(result.totalTime));
-console.log("-----------------------------------------");
+    console.log("\n-----------------------------------------");
+    console.log("✅ OTIMIZAÇÃO CONCLUÍDA");
+    console.log("-----------------------------------------");
+    console.log("Ordem de visita (Índices):", result.route);
+    console.log("Tempo Total (Segundos):", result.totalTime);
+    console.log("Tempo Total (HH:MM:SS):", formatTime(result.totalTime));
+    console.log("-----------------------------------------");
