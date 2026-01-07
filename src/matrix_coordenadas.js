@@ -2,10 +2,12 @@
 import { Client } from "@googlemaps/google-maps-services-js"; // Importa o cliente do Google Maps
 import * as fs from "fs"; // Importa o módulo de sistema de arquivos para ler/escrever arquivos
 import 'dotenv/config';  // Carrega variáveis de ambiente do arquivo .env
+import path from 'path';
 
 // 2. CONSTANTES
-const INPUT_COORDS_FILE = 'geolocalizacao_resultados.json';
-const OUTPUT_MATRIX_FILE = 'distancia_matriz_bruta.json'; // CORRIGIDO: Nome do arquivo de saída
+const INPUT_COORDS_FILE = path.join(process.cwd(), 'output', 'geolocalizacao_resultados.json');
+const OUTPUT_MATRIX_FILE = path.join(process.cwd(), 'output', 'distancia_matriz_bruta.json'); // CORRIGIDO: Nome do arquivo de saída
+
 const BATCH_SIZE = 5; // Limite de 5 Origens por lote para evitar o erro 100 elementos
 
 const client = new Client({}); // Inicializa o cliente do Google Maps
@@ -15,6 +17,13 @@ const apiKey = process.env.GOOGLE_MAPS_MATRIX_API_KEY;
 
 // FUNÇÃO PARA LER E FILTRAR COORDENADAS VÁLIDAS
 function readCoordinatesFromJSON(filePath) {
+    
+    if (!fs.existsSync(filePath)) {
+        console.error(`❌ ERRO CRÍTICO: O arquivo não foi encontrado em: ${filePath}`);
+        // Retornamos um objeto vazio ou lançamos um erro para o main.js tratar
+        throw new Error("Arquivo de entrada ausente"); 
+    }
+
     const rawdata = fs.readFileSync(filePath, 'utf-8');
     const results = JSON.parse(rawdata); // Array de objetos com endereços e coordenadas
 

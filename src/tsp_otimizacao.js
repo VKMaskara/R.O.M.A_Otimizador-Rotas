@@ -1,7 +1,8 @@
 import fs from "fs";
 import 'dotenv/config';
+import path from 'path';
 
-const INPUT_MATRIX_FILE = 'distancia_matriz_bruta.json';
+const INPUT_MATRIX_FILE =  path.join(process.cwd(), 'output', 'distancia_matriz_bruta.json');
 
 export async function otimizarRota() {
     // FUNÇÃO AUXILIAR: Converte segundos para HH:MM:SS
