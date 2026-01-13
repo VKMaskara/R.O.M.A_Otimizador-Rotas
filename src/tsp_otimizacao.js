@@ -4,7 +4,7 @@ import path from 'path';
 
 const INPUT_MATRIX_FILE =  path.join(process.cwd(), 'output', 'distancia_matriz_bruta.json');
 
-export async function otimizarRota() {
+export async function optimizeRoute() {
     // FUNÇÃO AUXILIAR: Converte segundos para HH:MM:SS
     function formatTime(seconds) {
         const hours = Math.floor(seconds / 3600);
@@ -157,5 +157,5 @@ export async function otimizarRota() {
     console.log("-----------------------------------------");
 
     // Retornamos os dados caso o main.js precise usar
-    return result;
+    return result.route;
 }
