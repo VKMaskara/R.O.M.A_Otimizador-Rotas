@@ -1,0 +1,92 @@
+[
+    {
+        "enderoco_origial": "Rua das Amendoeiras, 482,  Cotia,  SP, Brasil",
+        "endereco_formatado": "Cotia - Caucaia do Alto, Cotia - State of São Paulo, Brazil",
+        "latitude": -23.6059252,
+        "longitude": -46.926502
+    },
+    {
+        "enderoco_origial": "Avenida Professor Manoel JosÃ© Pedroso, 915,  Cotia,  SP, Brasil",
+        "endereco_formatado": "Av. Prof. Manoel José Pedroso, 915 - Parque Bahia, Cotia - SP, 06717-100, Brazil",
+        "latitude": -23.6066178,
+        "longitude": -46.9190534
+    },
+    {
+        "enderoco_origial": "Rua do Engenho, 227,  Cotia,  SP, Brasil",
+        "endereco_formatado": "R. do Engenho, 227 - Parque Monjolo, Cotia - SP, 06704-145, Brazil",
+        "latitude": -23.5858446,
+        "longitude": -46.9189993
+    },
+    {
+        "enderoco_origial": "Rua JosÃ© Michelotti, 680,  Itapevi,  SP, Brasil",
+        "endereco_formatado": "R. José Michelotti, 680 - Cidade da Saude, Itapevi - SP, 06702-300, Brazil",
+        "latitude": -23.5391121,
+        "longitude": -46.9336172
+    },
+    {
+        "enderoco_origial": "Avenida Rubens Caramez, 1042,  Itapevi,  SP, Brasil",
+        "endereco_formatado": "Av. Rubens Caramez, 1042, Itapevi - SP, 06702-300, Brazil",
+        "latitude": -23.5519464,
+        "longitude": -46.9369504
+    },
+    {
+        "enderoco_origial": "Rua Agostinho Ferreira Campos, 339,  Itapevi,  SP, Brasil",
+        "endereco_formatado": "R. Agostinho Ferreira Campos, 339 - Cidade da Saude, Itapevi - SP, 06693-120, Brazil",
+        "latitude": -23.5397661,
+        "longitude": -46.9364678
+    },
+    {
+        "enderoco_origial": "Rua SÃ£o Paulo, 755,  SÃ£o Roque,  SP, Brasil",
+        "endereco_formatado": "R. São Pedro - São Roque, SP, 18130-255, Brazil",
+        "latitude": -23.5324046,
+        "longitude": -47.1320351
+    },
+    {
+        "enderoco_origial": "Avenida AntÃ´nio Dias Bastos, 1201,  SÃ£o Roque,  SP, Brasil",
+        "endereco_formatado": "Av. Antônino Dias Bastos, 1129-1201 - Centro, São Roque - SP, 18130-351, Brazil",
+        "latitude": -23.5256066,
+        "longitude": -47.13337629999999
+    },
+    {
+        "enderoco_origial": "Rua Quintino Bocaiuva, 298,  SÃ£o Roque,  SP, Brasil",
+        "endereco_formatado": "São Roque, State of São Paulo, Brazil",
+        "latitude": -23.5298156,
+        "longitude": -47.13740019999999
+    },
+    {
+        "enderoco_origial": "Avenida dos Autonomistas, 4100,  Osasco,  SP, Brasil",
+        "endereco_formatado": "Av. dos Autonomistas, 4100 - Vila Yara, Osasco - SP, 02675-031, Brazil",
+        "latitude": -23.5280969,
+        "longitude": -46.7877162
+    },
+    {
+        "enderoco_origial": "Rua AntÃ´nio Agu, 822,  Osasco,  SP, Brasil",
+        "endereco_formatado": "R. Antônio Agú, 822 - Centro, Osasco - SP, 06013-006, Brazil",
+        "latitude": -23.5344899,
+        "longitude": -46.7798495
+    },
+    {
+        "enderoco_origial": "Rua Dante Carraro, 299,  Osasco,  SP, Brasil",
+        "endereco_formatado": "Osasco - State of São Paulo, Brazil",
+        "latitude": -23.533385,
+        "longitude": -46.7914568
+    },
+    {
+        "enderoco_origial": "Rua Augusta, 1512,  SÃ£o Paulo,  SP, Brasil",
+        "endereco_formatado": "R. Augusta, 1512 - Consolação, São Paulo - SP, 01304-001, Brazil",
+        "latitude": -23.5564672,
+        "longitude": -46.65900930000001
+    },
+    {
+        "enderoco_origial": "Avenida Sapopemba, 9033,  SÃ£o Paulo,  SP, Brasil",
+        "endereco_formatado": "Av. Sapopemba, 9033 - Jardim Adutora, São Paulo - SP, 03989-010, Brazil",
+        "latitude": -23.600072,
+        "longitude": -46.5129225
+    },
+    {
+        "enderoco_origial": "Rua Vergueiro, 2870,  SÃ£o Paulo,  SP, Brasil",
+        "endereco_formatado": "Rua Vergueiro, 2870 - Vila Mariana, São Paulo - SP, 04102-001, Brazil",
+        "latitude": -23.5866712,
+        "longitude": -46.634827
+    }
+]
