@@ -1,27 +1,27 @@
-Endereco,Numero,Cidade,Estado
-Av. Paulista, 1578 , Bela Vista, São Paulo , SP,
-Rua Augusta, 2500 , Jardim Paulista, São Paulo , SP,
-Rua Oscar Freire, 700 , Pinheiros, São Paulo , SP,
-Av. Brigadeiro Faria Lima, 3477 , Itaim Bibi, São Paulo , SP,
-Rua dos Pinheiros, 1000 , Pinheiros, São Paulo , SP,
-Praça da Sé, 1 , Centro Histórico, São Paulo , SP,
-Av. Ipiranga, 200 , República, São Paulo , SP,
-Rua Galvão Bueno, 400 , Liberdade, São Paulo , SP,
-Av. Cruzeiro do Sul, 1100 , Canindé, São Paulo , SP,
-Rua Domingos de Morais, 2564 , Vila Mariana, São Paulo , SP,
-Av. Jabaquara, 1500 , Saúde, São Paulo , SP,
-Rua Vergueiro, 1000 , Liberdade, São Paulo , SP,
-Av. Nazaré, 481 , Ipiranga, São Paulo , SP,
-Rua Heitor Penteado, 1230 , Sumarezinho, São Paulo , SP,
-Av. Pompéia, 1000 , Vila Pompeia, São Paulo , SP,
-Rua Clélia, 1517 , Lapa, São Paulo , SP,
-Av. Francisco Matarazzo, 1705 , Água Branca, São Paulo , SP,
-Av. Brás Leme, 2000 , Santana, São Paulo , SP,
-Rua Voluntários da Pátria, 547 , Santana, São Paulo , SP,
-Av. Engenheiro Caetano Álvares, 3000 , Imirim, São Paulo , SP,
-Rua Melo Freire, 2000 , Tatuapé, São Paulo , SP,
-Av. Alcântara Machado, 1500 , Brás, São Paulo , SP,
-Rua Teodoro Sampaio, 2550 , Pinheiros, São Paulo , SP,
-Av. Rebouças, 3970 , Pinheiros, São Paulo , SP,
-Rua da Consolação, 2422 , Consolação, São Paulo , SP
+Endereco,Numero,Cidade,Estado,Tipo
 
+Av. Paulista,1578,Bela Vista,São Paulo,DEPOSITO
+Rua Augusta,2500,Jardim Paulista,São Paulo,Entrega
+Rua Oscar Freire,700,Pinheiros,São Paulo,Entrega
+Av. Brigadeiro Faria Lima,3477,Itaim Bibi,São Paulo,Entrega
+Rua dos Pinheiros,1000,Pinheiros,São Paulo,Entrega
+Praça da Sé,1,Centro Histórico,São Paulo,Entrega
+Av. Ipiranga,200,República,São Paulo,Entrega
+Rua Galvão Bueno,400,Liberdade,São Paulo,Entrega
+Av. Cruzeiro do Sul,1100,Canindé,São Paulo,Entrega
+Rua Domingos de Morais,2564,Vila Mariana,São Paulo,Entrega
+Av. Jabaquara,1500,Saúde,São Paulo,Entrega
+Rua Vergueiro,1000,Liberdade,São Paulo,Entrega
+Av. Nazaré,481,Ipiranga,São Paulo,Entrega
+Rua Heitor Penteado,1230,Sumarezinho,São Paulo,Entrega
+Av. Pompéia,1000,Vila Pompeia,São Paulo,Entrega
+Rua Clélia,1517,Lapa,São Paulo,Entrega
+Av. Francisco Matarazzo,1705,Água Branca,São Paulo,Entrega
+Av. Brás Leme,2000,Santana,São Paulo,Entrega
+Rua Voluntários da Pátria,547,Santana,São Paulo,Entrega
+Av. Engenheiro Caetano Álvares,3000,Imirim,São Paulo,Entrega
+Rua Melo Freire,2000,Tatuapé,São Paulo,Entrega
+Av. Alcântara Machado,1500,Brás,São Paulo,Entrega
+Rua Teodoro Sampaio,2550,Pinheiros,São Paulo,Entrega
+Av. Rebouças,3970,Pinheiros,São Paulo,Entrega
+Rua da Consolação,2422,Consolação,São Paulo,Entrega

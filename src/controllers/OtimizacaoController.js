@@ -1,6 +1,7 @@
 // src/controllers/OtimizacaoController.js
 import { MatrizService } from "../services/MatrixService.js";
 import { OtimizacaoService } from "../services/OtimizacaoService.js";
+import { ExecelService } from "../services/ExecelService.js";
 import { apiKeyMatriz } from "../config/googleMaps.js"; // IMPORTAÇÃO FALTANTE
 import fs from 'fs';
 import path from 'path';
@@ -12,16 +13,20 @@ export class OtimizacaoController {
 
             // 1. Obter dados (Exemplo de fluxo)
             // Aqui você deve ter sua lógica que pega os endereços
-            const enderecos = [/* seus endereços */];
+            const enderecos =  ExecelService.getAddresFromExel(path.resolve('data','input_enderecos.xlsx'));
+
+            if (!enderecos || enderecos.length === 0) {
+                throw new Error("Nenhum endereço encontrado para otimização.");
+            }
 
             // 2. Gerar Matriz
-            const matrixData = await MatrizService.gerarMatrizCompleta(enderecos);
+            const matrixData = await MatrizService.gerarMatrizCompleta(enderecos); // ele recebe os endereços e retorna a matrix completa (combinedMatrix)
 
             // 3. Processar Otimização
-            const resultado = await OtimizacaoService.processarOtimizacao(matrixData);
-
-            if (resultado.status === "success") {
-                const { dados } = resultado;
+            const resultadoOtimizacao = await OtimizacaoService.processarOtimizacao(matrixData, enderecos);
+            
+            if (resultadoOtimizacao.status === "success") {
+                const { dados } = resultadoOtimizacao;
 
                 // EXIBIÇÃO DAS MÉTRICAS (Ajustado para evitar NaN e 0.00)
                 console.log("\n=========================================");
@@ -52,7 +57,7 @@ export class OtimizacaoController {
                 );
 
             } else {
-                throw new Error(resultado.mensagem);
+                throw new Error(resultadoOtimizacao.mensagem);
             }
 
         } catch (error) {

@@ -4,13 +4,23 @@ export class TspService {
      */
     static processarDadosBrutos(matrixData) {
         try {
-            // Se matrixData já for um Array, ele é a própria lista de rows
-            // Caso contrário, tentamos buscar dentro das chaves conhecidas
+            // 1. Extração das Linhas (Rows)
             let rows = Array.isArray(matrixData) ? matrixData : (matrixData.rows || matrixData.matriz?.rows || []);
 
-            // Para os nomes, se vier um Array, não teremos os nomes aqui (precisaremos tratar no Service)
-            const pontos = matrixData.endereços || matrixData.enderecos_nomes || [];
-            const nomesDasRuas = pontos.map(p => p.endereco_original || p.endereco || (typeof p === 'string' ? p : "Rua desconhecida"));
+            // 2. CORREÇÃO: Extração dos Nomes das Ruas
+            // Tentamos todas as possibilidades: o que o Google manda e o que seu ExcelService gera
+            // No seu TspService.js, vamos mudar esta parte:
+            const pontos = matrixData.endereços ||
+                matrixData.enderecos_nomes ||
+                matrixData.destination_addresses || // Nome padrão do Google
+                matrixData.origin_addresses ||      // Outro nome padrão do Google
+                [];
+
+            // Criamos o array de strings final
+            const nomesDasRuas = pontos.map(p => {
+                if (typeof p === 'string') return p;
+                return p.endereco_original || p.endereco || "Endereço não identificado";
+            });
 
             if (!rows || rows.length === 0) {
                 throw new Error("A matriz de dados (rows) está vazia no TspService.");
@@ -20,17 +30,23 @@ export class TspService {
             const distanceMatrix = [];
 
             for (const row of rows) {
-                // Se a estrutura for do Google, terá .elements. Se for simplificada, tratamos aqui:
                 const elements = row.elements || row;
 
-                const rowTimes = elements.map(el => el.status === 'OK' ? el.duration.value : (typeof el === 'number' ? el : 999999));
-                const rowDistances = elements.map(el => el.status === 'OK' ? el.distance.value / 1000 : (typeof el === 'number' ? el : 999999));
+                // Extração de Tempo (Segundos) e Distância (KM)
+                const rowTimes = elements.map(el =>
+                    el.status === 'OK' ? el.duration.value : (typeof el === 'number' ? el : 999999)
+                );
+                const rowDistances = elements.map(el =>
+                    el.status === 'OK' ? el.distance.value / 1000 : (typeof el === 'number' ? el : 999999)
+                );
 
                 timeMatrix.push(rowTimes);
                 distanceMatrix.push(rowDistances);
             }
 
             console.log(`\n✅ Matrizes extraídas com sucesso: ${timeMatrix.length} pontos.`);
+
+            // Retornamos os nomes preenchidos para o OtimizacaoService usar
             return { timeMatrix, distanceMatrix, nomesDasRuas };
 
         } catch (error) {
