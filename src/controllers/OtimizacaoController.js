@@ -2,7 +2,7 @@
 import { MatrizService } from "../services/MatrixService.js";
 import { OtimizacaoService } from "../services/OtimizacaoService.js";
 import { ExecelService } from "../services/ExecelService.js";
-import { apiKeyMatriz } from "../config/googleMaps.js"; // IMPORTAÇÃO FALTANTE
+import { GeolocationService } from "../services/GeolocationService.js";
 import fs from 'fs';
 import path from 'path';
 
@@ -11,18 +11,28 @@ export class OtimizacaoController {
         try {
             console.log("\n🚀 Iniciando o processo de Otimização de Rotas...");
 
-            // 1. Obter dados (Exemplo de fluxo)
-            // Aqui você deve ter sua lógica que pega os endereços
-            const enderecos =  ExecelService.getAddresFromExel(path.resolve('data','input_enderecos.xlsx'));
+            // 1. Obter endereços do Excel
+            const enderecos = ExecelService.getAddresFromExel(path.resolve('data', 'input_enderecos.xlsx'));
 
             if (!enderecos || enderecos.length === 0) {
                 throw new Error("Nenhum endereço encontrado para otimização.");
             }
 
-            // 2. Gerar Matriz
-            const matrixData = await MatrizService.gerarMatrizCompleta(enderecos); // ele recebe os endereços e retorna a matrix completa (combinedMatrix)
+            // 2. Geolocalização: converter endereços em coordenadas (lat, lng)
+            const { enderecosComCoordenadas, coordenadasParaMatriz } = await GeolocationService.geocodificarEnderecos(enderecos);
 
-            // 3. Processar Otimização
+            // Salvar resultado da geolocalização (opcional, para auditoria)
+            const outputDir = path.resolve('output');
+            if (!fs.existsSync(outputDir)) fs.mkdirSync(outputDir);
+            fs.writeFileSync(
+                path.join(outputDir, 'geolocalizacao_resultados.json'),
+                JSON.stringify(enderecosComCoordenadas, null, 2)
+            );
+
+            // 3. Gerar matriz de distância/tempo a partir das coordenadas
+            const matrixData = await MatrizService.gerarMatrizCompleta(coordenadasParaMatriz);
+
+            // 4. Processar otimização (TSP + 2-Opt) usando a matriz e os nomes originais
             const resultadoOtimizacao = await OtimizacaoService.processarOtimizacao(matrixData, enderecos);
             
             if (resultadoOtimizacao.status === "success") {
@@ -33,24 +43,29 @@ export class OtimizacaoController {
                 console.log("✅ OTIMIZAÇÃO CONCLUÍDA!");
                 console.log("=========================================");
 
-                console.log("\n📍 ORDEM DA ROTA:");
+                console.log("\n📍 ORDEM DA ROTA (TSP – Vizinho Mais Próximo):");
+                (dados.ordemEnderecosTsp || []).forEach((end, i) => {
+                    console.log(`   ${i + 1}º - ${end}`);
+                });
+
+                console.log("\n📍 ROTA FINAL (Refinada pelo 2-Opt, com retorno ao depósito):");
                 dados.ordemEnderecos.forEach((end, i) => {
-                    console.log(`${i + 1}º - ${end}`);
+                    console.log(`   ${i + 1}º - ${end}`);
                 });
 
                 console.log("\n📊 MÉTRICAS DE DESEMPENHO:");
-                console.log(`📏 Distância Original (TSP): ${dados.distanciaOriginal.toFixed(2)} Km`);
-                console.log(`✨ Distância Refinada (2-Opt): ${dados.distanciaOtimizada.toFixed(2)} Km`);
+                console.log(`📏 Distância Original (TSP) – com retorno: ${dados.distanciaOriginal.toFixed(2)} Km`);
+                console.log(`✨ Distância Refinada (2-Opt) – com retorno: ${dados.distanciaOtimizada.toFixed(2)} Km`);
+                if (dados.distanciaOriginalSemRetorno != null) {
+                    console.log(`📏 Distância da rota de entregas (sem retorno): ${dados.distanciaOriginalSemRetorno.toFixed(2)} Km → ${dados.distanciaOtimizadaSemRetorno.toFixed(2)} Km`);
+                }
                 console.log(`💰 Economia Gerada: ${dados.economiaKm.toFixed(2)} Km`);
 
-                const tempoMin = Math.round((dados.tempoEstimadoSegundos || 0) / 60);
+                const tempoMin = dados.tempoEstimadoMinutos ?? Math.round((dados.tempoEstimadoSegundos || 0) / 60);
                 console.log(`⏱️ Tempo Estimado: ${tempoMin} min`);
                 console.log("=========================================\n");
 
-                // 4. Salvar Relatório
-                const outputDir = path.resolve('output');
-                if (!fs.existsSync(outputDir)) fs.mkdirSync(outputDir);
-
+                // 5. Salvar relatório da rota otimizada
                 fs.writeFileSync(
                     path.join(outputDir, 'rota_final_otimizada.json'),
                     JSON.stringify(dados, null, 2)
@@ -61,7 +76,6 @@ export class OtimizacaoController {
             }
 
         } catch (error) {
-            // O ERRO apiKeyMatriz IS NOT DEFINED MORRE AQUI:
             console.error("\n❌ Erro no fluxo de otimização:", error.message);
         }
     }

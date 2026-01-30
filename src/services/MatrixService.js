@@ -3,18 +3,18 @@ import { client, apiKeyMatriz } from '../config/googleMaps.js'; // Única import
 
 export class MatrizService {
     // Definimos o tamanho do lote para respeitar os limites da API do Google
-    static BATCH_SIZE = 3;
+    static BATCH_SIZE = 1;
 
+    
     /**
-     * Calcula a matriz de distância completa entre todos os pontos.
-     * @param {Array} listaCoordenadas - Array de strings ou objetos de localização
-     * @returns {Promise<Array>} - Retorna as linhas (rows) processadas
+     * Gera matriz de distância e tempo (Google Distance Matrix API).
+     * @param {string[]} listaCoordenadas - Array de "lat,lng" ou endereços (ex: saída do GeolocationService.coordenadasParaMatriz)
      */
-    static async gerarMatrizCompleta(listaCoordenadas) { // Nome ajustado para alinhar com o Controller
+    static async gerarMatrizCompleta(listaCoordenadas) {
         console.log(`\n⏳ Iniciando cálculo da Matriz de Distância para ${listaCoordenadas.length} pontos...`);
 
         if (!listaCoordenadas || listaCoordenadas.length < 2) {
-            throw new Error("É necessário fornecer pelo menos duas coordenadas para calcular a matriz.");
+            throw new Error("É necessário fornecer pelo menos duas coordenadas (ou endereços) para calcular a matriz.");
         }
 
         const combinedMatrix = [];

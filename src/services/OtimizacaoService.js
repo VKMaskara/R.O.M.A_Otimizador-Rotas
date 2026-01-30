@@ -22,27 +22,40 @@ export class OtimizacaoService {
             const resultadoTsp = TspService.executarAlgoritmoTSP(timeMatrix);
 
             // 3. REFINAMENTO (2-OPT)
-            const kmAntes = TwoOptService.calcularDistanciaTotal(resultadoTsp.rota, distanceMatrix);
+            const kmAntesTotal = TwoOptService.calcularDistanciaTotal(resultadoTsp.rota, distanceMatrix);
+            const kmAntesSemRetorno = TwoOptService.calcularDistanciaSemRetorno(resultadoTsp.rota, distanceMatrix);
             const resultado2Opt = TwoOptService.aplicar2Opt(resultadoTsp.rota, distanceMatrix);
-            const kmDepois = (resultado2Opt.distanciaFinal > 0) ? resultado2Opt.distanciaFinal : kmAntes;
+            const kmDepoisTotal = (resultado2Opt.distanciaFinal > 0) ? resultado2Opt.distanciaFinal : kmAntesTotal;
+            const kmDepoisSemRetorno = TwoOptService.calcularDistanciaSemRetorno(resultado2Opt.rotaOtimizada, distanceMatrix);
 
             // 4. PREPARAR RETORNO COM ENDEREÇOS REAIS
+            const rotaTspIndices = resultadoTsp.rota;
             const rotaOtimizadaIndices = resultado2Opt.rotaOtimizada;
-            
-            // Mapeia os índices para os nomes das ruas reais
-            const ordemEnderecos = rotaOtimizadaIndices.map(idx => nomesDasRuas[idx] || `Ponto ${idx + 1}`);
 
-            // 5. FECHAR A ROTA (Opcional: Voltar ao depósito)
-            // Se quiser que apareça o retorno no console:
+            // Ordem da rota TSP (vizinho mais próximo) – só entregas
+            const ordemEnderecosTsp = rotaTspIndices.map(idx => nomesDasRuas[idx] || `Ponto ${idx + 1}`);
+            // Ordem da rota refinada pelo 2-Opt – só entregas
+            const ordemEnderecosRefinada = rotaOtimizadaIndices.map(idx => nomesDasRuas[idx] || `Ponto ${idx + 1}`);
+
+            // Rota final exibida/salva: refinada + retorno ao depósito
+            const ordemEnderecos = [...ordemEnderecosRefinada];
             ordemEnderecos.push(`🏁 Retorno ao Origem: ${nomesDasRuas[0]}`);
 
             return {
                 status: "success",
                 dados: {
                     ordemEnderecos: ordemEnderecos,
-                    distanciaOriginal: Number(kmAntes.toFixed(2)),
-                    distanciaOtimizada: Number(kmDepois.toFixed(2)),
-                    economiaKm: Number(Math.max(0, kmAntes - kmDepois).toFixed(2)),
+                    ordemEnderecosTsp: ordemEnderecosTsp,
+                    ordemEnderecosRefinada: ordemEnderecosRefinada,
+                    rotaIndicesTsp: rotaTspIndices,
+                    // Distância total (inclui retorno ao depósito)
+                    distanciaOriginal: Number(kmAntesTotal.toFixed(2)),
+                    distanciaOtimizada: Number(kmDepoisTotal.toFixed(2)),
+                    // Distância só da rota de entregas (sem retorno) – para comparar com cálculos manuais
+                    distanciaOriginalSemRetorno: Number(kmAntesSemRetorno.toFixed(2)),
+                    distanciaOtimizadaSemRetorno: Number(kmDepoisSemRetorno.toFixed(2)),
+                    economiaKm: Number(Math.max(0, kmAntesTotal - kmDepoisTotal).toFixed(2)),
+                    tempoEstimadoSegundos: resultadoTsp.tempoFinal,
                     tempoEstimadoMinutos: Math.round(resultadoTsp.tempoFinal / 60),
                     rotaIndices: rotaOtimizadaIndices
                 }

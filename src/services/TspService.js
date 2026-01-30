@@ -32,19 +32,29 @@ export class TspService {
             for (const row of rows) {
                 const elements = row.elements || row;
 
-                // Extração de Tempo (Segundos) e Distância (KM)
+                // API retorna: duration.value em SEGUNDOS, distance.value em METROS
                 const rowTimes = elements.map(el =>
                     el.status === 'OK' ? el.duration.value : (typeof el === 'number' ? el : 999999)
                 );
-                const rowDistances = elements.map(el =>
-                    el.status === 'OK' ? el.distance.value / 1000 : (typeof el === 'number' ? el : 999999)
-                );
+                const rowDistances = elements.map(el => {
+                    if (el.status !== 'OK') return typeof el === 'number' ? el : 999999;
+                    const metros = el.distance?.value; // sempre em metros (Google API)
+                    if (metros == null || typeof metros !== 'number') return 999999;
+                    return metros / 1000; // converter para KM
+                });
 
                 timeMatrix.push(rowTimes);
                 distanceMatrix.push(rowDistances);
             }
 
+            // Diagnóstico: amostra do primeiro trecho (origem 0 -> destino 1) para validar unidade
+            const amostraDistKm = distanceMatrix[0]?.[1];
+            const amostraTempoS = timeMatrix[0]?.[1];
             console.log(`\n✅ Matrizes extraídas com sucesso: ${timeMatrix.length} pontos.`);
+            console.log(`   [Amostra] Trecho 0→1: distância = ${amostraDistKm?.toFixed(2) ?? '?'} km, tempo = ${amostraTempoS ?? '?'} s`);
+            if (amostraDistKm != null && amostraDistKm > 100) {
+                console.warn(`   ⚠️ Trecho 0→1 com distância muito alta (${amostraDistKm.toFixed(0)} km). Confira se a API retorna distância em metros (valor/1000 = km).`);
+            }
 
             // Retornamos os nomes preenchidos para o OtimizacaoService usar
             return { timeMatrix, distanceMatrix, nomesDasRuas };
