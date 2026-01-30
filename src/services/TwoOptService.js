@@ -98,4 +98,5 @@ export class TwoOptService {
 
         return novaRota;
     }
+    
 }
