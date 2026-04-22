@@ -1,9 +1,9 @@
 // src/controllers/OtimizacaoController.js
-import { MatrizService } from "../services/MatrixService.js";
-import { OtimizacaoService } from "../services/OtimizacaoService.js";
-import { ExecelService } from "../services/ExecelService.js";
+import { MatrizService }      from "../services/MatrixService.js";
+import { OtimizacaoService }  from "../services/OtimizacaoService.js";
 import { GeolocationService } from "../services/GeolocationService.js";
-import fs from 'fs';
+import { InputService }       from "../services/InputService.js";
+import fs   from 'fs';
 import path from 'path';
 
 export class OtimizacaoController {
@@ -11,62 +11,99 @@ export class OtimizacaoController {
         try {
             console.log("\n🚀 ROMA: Iniciando processo de Otimização de Rotas...");
 
-            // 1. Obter endereços do Excel
-            const enderecos = ExecelService.getAddresFromExel(path.resolve('data', 'input_enderecos.xlsx'));
+            // 1. ENTRADA DE DADOS — suporta excel | ocr | manual
+            //    Modo configurável via variável de ambiente INPUT_MODE
+            const paradas = await InputService.carregarParadas();
 
-            if (!enderecos || enderecos.length === 0) {
-                throw new Error("Nenhum endereço encontrado para otimização.");
+            if (!paradas || paradas.length < 2) {
+                throw new Error("É necessário ao menos 1 depósito e 1 entrega para otimizar.");
             }
 
-            // 2. Geolocalização (Agora usando Adapters internamente)
-            // Removemos o 'coordenadasParaMatriz' (string), pois os Adapters usam o objeto puro
-            const { enderecosComCoordenadas } = await GeolocationService.geocodificarEnderecos(enderecos);
+            // 2. GEOLOCALIZAÇÃO
+            const { enderecosComCoordenadas } = await GeolocationService.geocodificarEnderecos(paradas);
 
-            // Auditoria
+            // Auditoria: salva resultado do geocoding
             const outputDir = path.resolve('output');
             if (!fs.existsSync(outputDir)) fs.mkdirSync(outputDir);
+
             fs.writeFileSync(
                 path.join(outputDir, 'geolocalizacao_resultados.json'),
                 JSON.stringify(enderecosComCoordenadas, null, 2)
             );
 
-            // 3. Gerar matriz de distância/tempo
-            // IMPORTANTE: Agora passamos 'enderecosComCoordenadas' que é um Array de Objetos [{lat, lng, endereco}, ...]
+            // 3. MATRIZ DE DISTÂNCIA / TEMPO
             const matrixData = await MatrizService.gerarMatrizCompleta(enderecosComCoordenadas);
 
-            // 4. Processar otimização (TSP + 2-Opt)
-            // Passamos os endereços geolocalizados para garantir que o TSP tenha acesso às coordenadas se precisar
-            const resultadoOtimizacao = await OtimizacaoService.processarOtimizacao(matrixData, enderecosComCoordenadas.map(e => e.endereco));
-            
-            if (resultadoOtimizacao.status === "success") {
-                const { dados } = resultadoOtimizacao;
+            // 4. OTIMIZAÇÃO (TSP + 2-Opt)
+            const nomesEnderecos = enderecosComCoordenadas.map(e => e.endereco);
+            const resultadoOtimizacao = await OtimizacaoService.processarOtimizacao(
+                matrixData,
+                nomesEnderecos
+            );
 
-                console.log("\n=========================================");
-                console.log("✅ OTIMIZAÇÃO CONCLUÍDA!");
-                console.log("=========================================");
-
-                console.log("\n📍 ROTA FINAL (Refinada pelo 2-Opt):");
-                dados.ordemEnderecos.forEach((end, i) => {
-                    console.log(`   ${i + 1}º - ${end}`);
-                });
-
-                console.log("\n📊 MÉTRICAS DE DESEMPENHO:");
-                console.log(`📏 Distância Original: ${dados.distanciaOriginal.toFixed(2)} Km`);
-                console.log(`✨ Distância Otimizada: ${dados.distanciaOtimizada.toFixed(2)} Km`);
-                console.log(`💰 Economia Gerada: ${dados.economiaKm.toFixed(2)} Km`);
-
-                const tempoMin = dados.tempoEstimadoMinutos ?? Math.round((dados.tempoEstimadoSegundos || 0) / 60);
-                console.log(`⏱️ Tempo Estimado: ${tempoMin} min`);
-                console.log("=========================================\n");
-
-                fs.writeFileSync(
-                    path.join(outputDir, 'rota_final_otimizada.json'),
-                    JSON.stringify(dados, null, 2)
-                );
-
-            } else {
+            if (resultadoOtimizacao.status !== "success") {
                 throw new Error(resultadoOtimizacao.mensagem);
             }
+
+            const { dados } = resultadoOtimizacao;
+
+            // 5. ENRIQUECER ROTA COM DADOS DE PACOTE
+            //    Monta lista detalhada com endereço + pacote para cada parada da rota final
+            const rotaDetalhada = dados.rotaIndices.map((idx, posicao) => {
+                const parada = enderecosComCoordenadas[idx];
+                return {
+                    posicao:      posicao + 1,
+                    endereco:     parada.endereco,
+                    tipo:         parada.tipo   || 'ENTREGA',
+                    pacote:       parada.pacote || null,
+                    lat:          parada.lat,
+                    lng:          parada.lng,
+                };
+            });
+
+            // Adiciona retorno ao depósito no final
+            const origem = enderecosComCoordenadas[0];
+            rotaDetalhada.push({
+                posicao:  rotaDetalhada.length + 1,
+                endereco: `Retorno ao Depósito: ${origem.endereco}`,
+                tipo:     'RETORNO',
+                pacote:   null,
+                lat:      origem.lat,
+                lng:      origem.lng,
+            });
+
+            // 6. LOG NO TERMINAL
+            console.log("\n=========================================");
+            console.log("✅ OTIMIZAÇÃO CONCLUÍDA!");
+            console.log("=========================================");
+            console.log("\n📍 ROTA FINAL (Refinada pelo 2-Opt):");
+
+            rotaDetalhada.forEach(p => {
+                const pkg = p.pacote?.id
+                    ? ` [${p.pacote.id}${p.pacote.destinatario ? ' → ' + p.pacote.destinatario : ''}]`
+                    : '';
+                console.log(`   ${p.posicao}º - ${p.endereco}${pkg}`);
+            });
+
+            console.log("\n📊 MÉTRICAS DE DESEMPENHO:");
+            console.log(`📏 Distância Original : ${dados.distanciaOriginal.toFixed(2)} km`);
+            console.log(`✨ Distância Otimizada: ${dados.distanciaOtimizada.toFixed(2)} km`);
+            console.log(`💰 Economia Gerada    : ${dados.economiaKm.toFixed(2)} km`);
+            console.log(`⏱️  Tempo Estimado     : ${dados.tempoEstimadoMinutos} min`);
+            console.log("=========================================\n");
+
+            // 7. SALVAR RESULTADO FINAL
+            const saida = {
+                ...dados,
+                rotaDetalhada,   // ← rota com pacotes vinculados
+            };
+
+            fs.writeFileSync(
+                path.join(outputDir, 'rota_final_otimizada.json'),
+                JSON.stringify(saida, null, 2)
+            );
+
+            console.log(`💾 Resultado salvo em output/rota_final_otimizada.json`);
 
         } catch (error) {
             console.error("\n❌ Erro no fluxo de otimização:", error.message);

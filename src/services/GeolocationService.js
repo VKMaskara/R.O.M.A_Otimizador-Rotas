@@ -4,26 +4,45 @@ import { GoogleGeocodingAdapter } from '../adapters/GoogleGeocodingAdapter.js';
 import { ORSGeocodingAdapter } from '../adapters/ORSGeocodingAdapter.js';
 
 export class GeolocationService {
-    static async geocodificarEnderecos(listaEnderecos) {
-        // Escolhe o adaptador baseado no seu .env
-        const adapter = mapsProvider === 'ors' 
-            ? new ORSGeocodingAdapter() 
+
+    /**
+     * Geocodifica uma lista de paradas.
+     *
+     * Aceita dois formatos:
+     *   - Array de strings (formato legado): ['Rua X, 1, SP', ...]
+     *   - Array de objetos (novo formato):   [{ endereco, pacote, tipo }, ...]
+     *
+     * Retorna array de objetos com coordenadas + dados do pacote preservados:
+     *   [{ endereco, lat, lng, pacote, tipo }, ...]
+     */
+    static async geocodificarEnderecos(listaParadas) {
+        const adapter = mapsProvider === 'ors'
+            ? new ORSGeocodingAdapter()
             : new GoogleGeocodingAdapter();
 
         const enderecosComCoordenadas = [];
 
-        for (const endereco of listaEnderecos) {
-            const coords = await adapter.lookup(endereco);
-            if (coords) {
-                enderecosComCoordenadas.push({ endereco, ...coords });
-            } else {
-                throw new Error(`Falha crítica: Endereço não encontrado: ${endereco}`);
+        for (const parada of listaParadas) {
+            // Suporte ao formato legado (string simples)
+            const isString = typeof parada === 'string';
+            const enderecoStr = isString ? parada : parada.endereco;
+
+            const coords = await adapter.lookup(enderecoStr);
+
+            if (!coords) {
+                throw new Error(`Falha crítica: Endereço não encontrado: ${enderecoStr}`);
             }
+
+            enderecosComCoordenadas.push({
+                endereco: enderecoStr,
+                lat: coords.lat,
+                lng: coords.lng,
+                // Preserva dados do pacote e tipo (null para strings legadas)
+                pacote: isString ? null : (parada.pacote ?? null),
+                tipo:   isString ? 'ENTREGA' : (parada.tipo ?? 'ENTREGA'),
+            });
         }
 
-        // Mantemos sua lógica de validação de RAIO_MAX_KM aqui embaixo...
-        // (A lógica de Haversine que você já escreveu)
-        
         return { enderecosComCoordenadas };
     }
 }

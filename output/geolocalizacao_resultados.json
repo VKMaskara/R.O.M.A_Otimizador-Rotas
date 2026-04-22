@@ -1,127 +1,20 @@
 [
   {
-    "endereco": "Av. Paulista, 1578, Bela Vista, SÃ£o Paulo, Brasil",
-    "lat": -23.5614117,
-    "lng": -46.6558999
+    "endereco": "Rua Yoshihiro Iwahashi, Conjunto Habitacional, 1710, Habitacional, Itapevi, SP, Brasil",
+    "lat": -23.555277,
+    "lng": -46.953234,
+    "pacote": null,
+    "tipo": "DEPOSITO"
   },
   {
-    "endereco": "Rua Augusta, 2500, Jardim Paulista, SÃ£o Paulo, Brasil",
-    "lat": -23.5631185,
-    "lng": -46.6655427
-  },
-  {
-    "endereco": "Rua Oscar Freire, 700, Pinheiros, SÃ£o Paulo, Brasil",
-    "lat": -23.5641915,
-    "lng": -46.6675484
-  },
-  {
-    "endereco": "Av. Brigadeiro Faria Lima, 3477, Itaim Bibi, SÃ£o Paulo, Brasil",
-    "lat": -23.5864794,
-    "lng": -46.68207839999999
-  },
-  {
-    "endereco": "Rua dos Pinheiros, 1000, Pinheiros, SÃ£o Paulo, Brasil",
-    "lat": -23.5672987,
-    "lng": -46.68752809999999
-  },
-  {
-    "endereco": "PraÃ§a da SÃ©, 1, Centro HistÃ³rico, SÃ£o Paulo, Brasil",
-    "lat": -23.5489277,
-    "lng": -46.633576
-  },
-  {
-    "endereco": "Av. Ipiranga, 200, RepÃºblica, SÃ£o Paulo, Brasil",
-    "lat": -23.5462422,
-    "lng": -46.644644
-  },
-  {
-    "endereco": "Rua GalvÃ£o Bueno, 400, Liberdade, SÃ£o Paulo, Brasil",
-    "lat": -23.5591982,
-    "lng": -46.6351439
-  },
-  {
-    "endereco": "Av. Cruzeiro do Sul, 1100, CanindÃ©, SÃ£o Paulo, Brasil",
-    "lat": -23.5215618,
-    "lng": -46.6237801
-  },
-  {
-    "endereco": "Rua Domingos de Morais, 2564, Vila Mariana, SÃ£o Paulo, Brasil",
-    "lat": -23.59909,
-    "lng": -46.6372072
-  },
-  {
-    "endereco": "Av. Jabaquara, 1500, SaÃºde, SÃ£o Paulo, Brasil",
-    "lat": -23.6182222,
-    "lng": -46.6393507
-  },
-  {
-    "endereco": "Rua Vergueiro, 1000, Liberdade, SÃ£o Paulo, Brasil",
-    "lat": -23.5708794,
-    "lng": -46.6402144
-  },
-  {
-    "endereco": "Av. NazarÃ©, 481, Ipiranga, SÃ£o Paulo, Brasil",
-    "lat": -23.5881877,
-    "lng": -46.610008
-  },
-  {
-    "endereco": "Rua Heitor Penteado, 1230, Sumarezinho, SÃ£o Paulo, Brasil",
-    "lat": -23.5466657,
-    "lng": -46.69013469999999
-  },
-  {
-    "endereco": "Av. PompÃ©ia, 1000, Vila Pompeia, SÃ£o Paulo, Brasil",
-    "lat": -23.5329188,
-    "lng": -46.6872457
-  },
-  {
-    "endereco": "Rua ClÃ©lia, 1517, Lapa, SÃ£o Paulo, Brasil",
-    "lat": -23.5254586,
-    "lng": -46.690859
-  },
-  {
-    "endereco": "Av. Francisco Matarazzo, 1705, Ã�gua Branca, SÃ£o Paulo, Brasil",
-    "lat": -23.5257406,
-    "lng": -46.6798583
-  },
-  {
-    "endereco": "Av. BrÃ¡s Leme, 2000, Santana, SÃ£o Paulo, Brasil",
-    "lat": -23.5046341,
-    "lng": -46.6405411
-  },
-  {
-    "endereco": "Rua VoluntÃ¡rios da PÃ¡tria, 547, Santana, SÃ£o Paulo, Brasil",
-    "lat": -23.5152436,
-    "lng": -46.6271309
-  },
-  {
-    "endereco": "Av. Engenheiro Caetano Ã�lvares, 3000, Imirim, SÃ£o Paulo, Brasil",
-    "lat": -23.4923851,
-    "lng": -46.6571116
-  },
-  {
-    "endereco": "Rua Melo Freire, 2000, TatuapÃ©, SÃ£o Paulo, Brasil",
-    "lat": -23.5420303,
-    "lng": -46.5802458
-  },
-  {
-    "endereco": "Av. AlcÃ¢ntara Machado, 1500, BrÃ¡s, SÃ£o Paulo, Brasil",
-    "lat": -23.5522996,
-    "lng": -46.6101678
-  },
-  {
-    "endereco": "Rua Teodoro Sampaio, 2550, Pinheiros, SÃ£o Paulo, Brasil",
-    "lat": -23.566385,
-    "lng": -46.692412
-  },
-  {
-    "endereco": "Av. RebouÃ§as, 3970, Pinheiros, SÃ£o Paulo, Brasil",
-    "lat": -23.5726116,
-    "lng": -46.6964938
-  },
-  {
-    "endereco": "Rua da ConsolaÃ§Ã£o, 2422, ConsolaÃ§Ã£o, SÃ£o Paulo, Brasil",
-    "lat": -23.5556128,
-    "lng": -46.66256749999999
+    "endereco": "pacote teste, 4586, fjdkgw, itapevi, sp, Brasil",
+    "lat": -22.687496,
+    "lng": -45.732561,
+    "pacote": {
+      "id": "PKG-d4g5d",
+      "destinatario": "Kaue",
+      "observacao": "Sim"
+    },
+    "tipo": "ENTREGA"
   }
 ]
