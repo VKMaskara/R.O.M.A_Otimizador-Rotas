@@ -272,15 +272,3 @@ Veja o arquivo [ROADMAP.md](./ROADMAP.md) para o checklist completo de desenvolv
 - Deploy no Railway
 
 ---
-
-## Autor
-
-Desenvolvido como TCC — curso de [nome do curso], [nome da instituição].
-
-Orientador: [nome do orientador]
-
----
-
-## Licença
-
-ISC
