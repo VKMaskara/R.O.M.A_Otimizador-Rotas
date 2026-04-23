@@ -1,4 +1,4 @@
-# R.O.M.A — Roteirizador Otimizado de Mapa e Alocação
+# R.O.M.A — Rotas Otimizadas de Milha Ágil
 
 > Sistema de roteirização inteligente de entregas de última milha, desenvolvido como Trabalho de Conclusão de Curso (TCC).
 
