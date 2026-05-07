@@ -1,162 +1,128 @@
 {
   "ordemEnderecos": [
-    "Rua Rubens Caramez, 14, centro, Itapevi, SP, Brasil",
-    "Rua Leopoldina de Camargo, 260, centro, Itapevi, SP, Brasil",
-    "Jardim São Carlos, 80, Vila Nova Itapevi, Itapevi, SP, Brasil",
-    "Rua Santa Rita, SN, Jardim Rochdale, Itapevi, SP, Brasil",
-    "Rua Lagosta, 100, Jardim São Carlos, Itapevi, SP, Brasil",
-    "Avenida Presidente Vargas, 500, Vila nova Itapevi, Itapevi SP, SP, Brasil",
-    "Rua Pedro de Oliveira, 80, Vila nova itapevi, Itapevi, SP, Brasil",
-    "Avenida João Batista, 64, Centro, Osasco, SP, Brasil",
-    "🏁 Retorno ao Origem: Rua Rubens Caramez, 14, centro, Itapevi, SP, Brasil"
+    "Av. Paulista, 1578, São Paulo, SP, Brasil",
+    "Rua Oscar Freire, 700, São Paulo, SP, Brasil",
+    "Rua Augusta, 2500, São Paulo, SP, Brasil",
+    "Av. Brigadeiro Faria Lima, 3477, São Paulo, SP, Brasil",
+    "Rua Vergueiro, 1000, São Paulo, SP, Brasil",
+    "Praça da Sé, 1, São Paulo, SP, Brasil",
+    "🏁 Retorno ao Origem: Av. Paulista, 1578, São Paulo, SP, Brasil"
   ],
   "ordemEnderecosTsp": [
-    "Rua Rubens Caramez, 14, centro, Itapevi, SP, Brasil",
-    "Rua Leopoldina de Camargo, 260, centro, Itapevi, SP, Brasil",
-    "Jardim São Carlos, 80, Vila Nova Itapevi, Itapevi, SP, Brasil",
-    "Rua Santa Rita, SN, Jardim Rochdale, Itapevi, SP, Brasil",
-    "Rua Lagosta, 100, Jardim São Carlos, Itapevi, SP, Brasil",
-    "Avenida Presidente Vargas, 500, Vila nova Itapevi, Itapevi SP, SP, Brasil",
-    "Rua Pedro de Oliveira, 80, Vila nova itapevi, Itapevi, SP, Brasil",
-    "Avenida João Batista, 64, Centro, Osasco, SP, Brasil"
+    "Av. Paulista, 1578, São Paulo, SP, Brasil",
+    "Rua Augusta, 2500, São Paulo, SP, Brasil",
+    "Rua Oscar Freire, 700, São Paulo, SP, Brasil",
+    "Av. Brigadeiro Faria Lima, 3477, São Paulo, SP, Brasil",
+    "Rua Vergueiro, 1000, São Paulo, SP, Brasil",
+    "Praça da Sé, 1, São Paulo, SP, Brasil"
   ],
   "ordemEnderecosRefinada": [
-    "Rua Rubens Caramez, 14, centro, Itapevi, SP, Brasil",
-    "Rua Leopoldina de Camargo, 260, centro, Itapevi, SP, Brasil",
-    "Jardim São Carlos, 80, Vila Nova Itapevi, Itapevi, SP, Brasil",
-    "Rua Santa Rita, SN, Jardim Rochdale, Itapevi, SP, Brasil",
-    "Rua Lagosta, 100, Jardim São Carlos, Itapevi, SP, Brasil",
-    "Avenida Presidente Vargas, 500, Vila nova Itapevi, Itapevi SP, SP, Brasil",
-    "Rua Pedro de Oliveira, 80, Vila nova itapevi, Itapevi, SP, Brasil",
-    "Avenida João Batista, 64, Centro, Osasco, SP, Brasil"
+    "Av. Paulista, 1578, São Paulo, SP, Brasil",
+    "Rua Oscar Freire, 700, São Paulo, SP, Brasil",
+    "Rua Augusta, 2500, São Paulo, SP, Brasil",
+    "Av. Brigadeiro Faria Lima, 3477, São Paulo, SP, Brasil",
+    "Rua Vergueiro, 1000, São Paulo, SP, Brasil",
+    "Praça da Sé, 1, São Paulo, SP, Brasil"
   ],
   "rotaIndicesTsp": [
     0,
     1,
-    4,
-    6,
-    3,
     2,
-    7,
-    5
+    4,
+    5,
+    3
   ],
-  "distanciaOriginal": 62.7,
-  "distanciaOtimizada": 62.7,
-  "distanciaOriginalSemRetorno": 33.39,
-  "distanciaOtimizadaSemRetorno": 33.39,
-  "economiaKm": 0,
-  "tempoEstimadoSegundos": 2916.5200000000004,
-  "tempoEstimadoMinutos": 49,
+  "distanciaOriginal": 25.25,
+  "distanciaOtimizada": 22.55,
+  "distanciaOriginalSemRetorno": 21.12,
+  "distanciaOtimizadaSemRetorno": 18.42,
+  "economiaKm": 2.7,
+  "tempoEstimadoSegundos": 2502.0199999999995,
+  "tempoEstimadoMinutos": 42,
   "rotaIndices": [
     0,
+    2,
     1,
     4,
-    6,
-    3,
-    2,
-    7,
-    5
+    5,
+    3
   ],
   "rotaDetalhada": [
     {
       "posicao": 1,
-      "endereco": "Rua Rubens Caramez, 14, centro, Itapevi, SP, Brasil",
+      "endereco": "Av. Paulista, 1578, São Paulo, SP, Brasil",
       "tipo": "DEPOSITO",
       "pacote": null,
-      "lat": -23.551383,
-      "lng": -46.966731
+      "lat": -23.555036,
+      "lng": -46.663479
     },
     {
       "posicao": 2,
-      "endereco": "Rua Leopoldina de Camargo, 260, centro, Itapevi, SP, Brasil",
-      "tipo": "ENTREGA",
-      "pacote": {
-        "id": "PKG-001",
-        "destinatario": "OSvaldo",
-        "observacao": null
-      },
-      "lat": -23.551383,
-      "lng": -46.966731
-    },
-    {
-      "posicao": 3,
-      "endereco": "Jardim São Carlos, 80, Vila Nova Itapevi, Itapevi, SP, Brasil",
-      "tipo": "ENTREGA",
-      "pacote": {
-        "id": "PKG-004",
-        "destinatario": "Pedro",
-        "observacao": null
-      },
-      "lat": -23.551383,
-      "lng": -46.966731
-    },
-    {
-      "posicao": 4,
-      "endereco": "Rua Santa Rita, SN, Jardim Rochdale, Itapevi, SP, Brasil",
-      "tipo": "ENTREGA",
-      "pacote": {
-        "id": "PKG-006",
-        "destinatario": "Mika",
-        "observacao": null
-      },
-      "lat": -23.542184,
-      "lng": -46.965283
-    },
-    {
-      "posicao": 5,
-      "endereco": "Rua Lagosta, 100, Jardim São Carlos, Itapevi, SP, Brasil",
-      "tipo": "ENTREGA",
-      "pacote": {
-        "id": "PKG/003",
-        "destinatario": "Albert",
-        "observacao": "Não"
-      },
-      "lat": -23.540713,
-      "lng": -46.949419
-    },
-    {
-      "posicao": 6,
-      "endereco": "Avenida Presidente Vargas, 500, Vila nova Itapevi, Itapevi SP, SP, Brasil",
+      "endereco": "Rua Oscar Freire, 700, São Paulo, SP, Brasil",
       "tipo": "ENTREGA",
       "pacote": {
         "id": "PKG-002",
-        "destinatario": "Lincon",
+        "destinatario": "Maria Santos",
         "observacao": null
       },
-      "lat": -23.536367,
-      "lng": -46.940171
+      "lat": -23.550756,
+      "lng": -46.678797
     },
     {
-      "posicao": 7,
-      "endereco": "Rua Pedro de Oliveira, 80, Vila nova itapevi, Itapevi, SP, Brasil",
+      "posicao": 3,
+      "endereco": "Rua Augusta, 2500, São Paulo, SP, Brasil",
       "tipo": "ENTREGA",
       "pacote": {
-        "id": "PKG-007",
-        "destinatario": "Tiago",
-        "observacao": null
+        "id": "PKG-001",
+        "destinatario": "João Silva",
+        "observacao": "Entregar na portaria"
       },
-      "lat": -23.550379,
-      "lng": -46.931324
+      "lat": -23.563108,
+      "lng": -46.665536
     },
     {
-      "posicao": 8,
-      "endereco": "Avenida João Batista, 64, Centro, Osasco, SP, Brasil",
+      "posicao": 4,
+      "endereco": "Av. Brigadeiro Faria Lima, 3477, São Paulo, SP, Brasil",
+      "tipo": "ENTREGA",
+      "pacote": {
+        "id": "PKG-004",
+        "destinatario": "Ana Costa",
+        "observacao": null
+      },
+      "lat": -23.586798,
+      "lng": -46.682049
+    },
+    {
+      "posicao": 5,
+      "endereco": "Rua Vergueiro, 1000, São Paulo, SP, Brasil",
       "tipo": "ENTREGA",
       "pacote": {
         "id": "PKG-005",
-        "destinatario": "Cauâ",
-        "observacao": "Portaria"
+        "destinatario": "Pedro Alves",
+        "observacao": "Apartamento 42"
       },
-      "lat": -23.528645,
-      "lng": -46.781044
+      "lat": -23.571445,
+      "lng": -46.640275
     },
     {
-      "posicao": 9,
-      "endereco": "Retorno ao Depósito: Rua Rubens Caramez, 14, centro, Itapevi, SP, Brasil",
+      "posicao": 6,
+      "endereco": "Praça da Sé, 1, São Paulo, SP, Brasil",
+      "tipo": "ENTREGA",
+      "pacote": {
+        "id": "PKG-003",
+        "destinatario": "Carlos Lima",
+        "observacao": "Ligar antes"
+      },
+      "lat": -23.549649,
+      "lng": -46.633904
+    },
+    {
+      "posicao": 7,
+      "endereco": "Retorno ao Depósito: Av. Paulista, 1578, São Paulo, SP, Brasil",
       "tipo": "RETORNO",
       "pacote": null,
-      "lat": -23.551383,
-      "lng": -46.966731
+      "lat": -23.555036,
+      "lng": -46.663479
     }
   ]
 }

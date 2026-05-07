@@ -28,7 +28,7 @@ export class OtimizacaoController {
 
             fs.writeFileSync(
                 path.join(outputDir, 'geolocalizacao_resultados.json'),
-                JSON.stringify(enderecosComCoordenadas, null, 2)
+                JSON.stringify(enderecosComCoordenadas, null, 2),  "utf-8"
             );
 
             // 3. MATRIZ DE DISTÂNCIA / TEMPO

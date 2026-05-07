@@ -17,7 +17,7 @@ O core do sistema está funcionando:
 
 ## Fase 1 — Correções urgentes no código atual
 
-- [ ] **Corrigir bug de encoding UTF-8 nos endereços**
+- [X] **Corrigir bug de encoding UTF-8 nos endereços**
   - `São Paulo` aparece como `SÃ£o Paulo` no JSON de saída
   - Corrigir em `ExecelService.js` e `GeolocationService.js`
   - Adicionar `{ encoding: 'utf8' }` no `fs.writeFileSync` do controller
