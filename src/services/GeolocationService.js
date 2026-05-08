@@ -20,29 +20,44 @@ export class GeolocationService {
             ? new ORSGeocodingAdapter()
             : new GoogleGeocodingAdapter();
 
-        const enderecosComCoordenadas = [];
+        const enderecosOk = [];
+        const enderecosComErro = [];
 
-        for (const parada of listaParadas) {
+        for (const [index, parada] of listaParadas.entries()) {
             // Suporte ao formato legado (string simples)
             const isString = typeof parada === 'string';
-            const enderecoStr = isString ? parada : parada.endereco;
+            const enderecoStr = isString ? parada : parada.endereco; //parada é string → usa direto como endereço
+            //parada é objeto → extrai só o campo .endereco
 
-            const coords = await adapter.lookup(enderecoStr);
+            try {
+                const coords = await adapter.lookup(enderecoStr);
 
-            if (!coords) {
-                throw new Error(`Falha crítica: Endereço não encontrado: ${enderecoStr}`);
+                if (!coords) {
+                    throw new Error(`Falha crítica: Endereço não encontrado: ${enderecoStr}`);
+                }
+
+                // ✅ Endereço ok — vai para a fila de roteirização
+                enderecosOk.push({
+                    endereco: enderecoStr,
+                    lat: coords.lat,
+                    lng: coords.lng,
+                    pacote: isString ? null : (parada.pacote ?? null),
+                    tipo: isString ? 'ENTREGA' : (parada.tipo ?? 'ENTREGA'),
+                });
+
+            } catch (error) {
+                // ❌ Endereço falhou — registra para a API informar a empresa
+                enderecosComErro.push({
+                    posicao: index + 1,
+                    endereco: enderecoStr,
+                    erro: erro.message,
+                });
             }
-
-            enderecosComCoordenadas.push({
-                endereco: enderecoStr,
-                lat: coords.lat,
-                lng: coords.lng,
-                // Preserva dados do pacote e tipo (null para strings legadas)
-                pacote: isString ? null : (parada.pacote ?? null),
-                tipo:   isString ? 'ENTREGA' : (parada.tipo ?? 'ENTREGA'),
-            });
         }
-
-        return { enderecosComCoordenadas };
+        return {
+            status: enderecosComErro.length > 0 ? 'parcial' : 'success',
+            enderecosOk,       // prontos para roteirizar
+            enderecosComErro,  // a empresa decide: corrigir ou pular
+        };
     }
 }
