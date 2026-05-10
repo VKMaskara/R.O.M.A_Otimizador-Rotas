@@ -22,11 +22,11 @@ O core do sistema está funcionando:
   - Corrigir em `ExecelService.js` e `GeolocationService.js`
   - Adicionar `{ encoding: 'utf8' }` no `fs.writeFileSync` do controller
 
-- [ ] **Adicionar tratamento de erro global no `OtimizacaoController`**
+- [X] **Adicionar tratamento de erro global no `OtimizacaoController`**
   - Um endereço inválido não pode derrubar todo o fluxo
   - Retornar `{ status: 'error', erro: mensagem }` em vez de crashar
 
-- [ ] **Validar entrada mínima antes de rodar**
+- [X] **Validar entrada mínima antes de rodar**
   - Exigir ao menos 1 depósito + 1 entrega
   - Validar no `InputService` antes de chamar o geocoding
 
@@ -48,7 +48,8 @@ O core do sistema está funcionando:
     nome TEXT NOT NULL,
     cnpj TEXT,
     email TEXT,
-    criado_em DATETIME DEFAULT CURRENT_TIMESTAMP
+    criado_em DATETIME DEFAULT CURRENT_TIMESTAMP,
+    senha_has TEXT NOT NULL
   );
   ```
 
@@ -60,6 +61,8 @@ O core do sistema está funcionando:
     nome TEXT NOT NULL,
     telefone TEXT,
     veiculo TEXT,
+    cpf TEXT NOT NULL,
+    senha_has TEXT NOT NULL
     criado_em DATETIME DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (empresa_id) REFERENCES empresas(id)
   );

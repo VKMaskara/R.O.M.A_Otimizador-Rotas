@@ -22,9 +22,12 @@
   "dependencies": {
     "@googlemaps/google-maps-services-js": "^3.4.2",
     "axios": "^1.13.6",
+    "bcrypt": "^6.0.0",
+    "better-sqlite3": "^12.9.0",
     "csv-parser": "^3.2.0",
     "dotenv": "^17.2.3",
     "express": "^5.2.1",
+    "knex": "^3.2.10",
     "tesseract.js": "^5.1.0",
     "xlsx": "^0.18.5"
   }
