@@ -1,6 +1,6 @@
 import path from 'path';
-import { ExecelService }    from './ExecelService.js';
-import { OcrService }       from './OcrService.js';
+import { ExecelService } from './ExecelService.js';
+import { OcrService } from './OcrService.js';
 import { ManualInputService } from './ManualInputService.js';
 
 /**
@@ -36,6 +36,8 @@ export class InputService {
 
         console.log(`\n📥 InputService: modo "${modoFinal}" selecionado.`);
 
+        let paradas = null;
+
         switch (modoFinal) {
 
             case 'excel': {
@@ -43,10 +45,10 @@ export class InputService {
                     process.env.INPUT_FILE || path.join('data', 'input_enderecos.xlsx')
                 );
                 console.log(`   Arquivo: ${filePath}`);
-                const paradas = ExecelService.getAddresFromExel(filePath);
+                paradas = ExecelService.getAddresFromExel(filePath);
                 if (!paradas) throw new Error('Falha ao ler o arquivo Excel.');
                 InputService._logResumo(paradas);
-                return paradas;
+                break;
             }
 
             case 'ocr': {
@@ -54,15 +56,15 @@ export class InputService {
                     process.env.INPUT_FILE || path.join('data', 'input_imagem.png')
                 );
                 console.log(`   Arquivo: ${filePath}`);
-                const paradas = await OcrService.extrairParadasDeImagem(filePath);
+                paradas = await OcrService.extrairParadasDeImagem(filePath);
                 InputService._logResumo(paradas);
-                return paradas;
+                break;
             }
 
             case 'manual': {
-                const paradas = await ManualInputService.coletarParadasInterativamente();
+                paradas = await ManualInputService.coletarParadasInterativamente();
                 InputService._logResumo(paradas);
-                return paradas;
+                break;
             }
 
             default:
@@ -70,6 +72,23 @@ export class InputService {
                     `Modo de input inválido: "${modoFinal}". Use "excel", "ocr" ou "manual".`
                 );
         }
+
+
+        /*
+        .find() → para quando existe um único resultado esperado
+        .filter() → para quando podem existir vários
+        */
+        const deposito = paradas.find(p => p.tipo === 'DEPOSITO'); // Deve haver exatamente um depósito
+        const entregas = paradas.filter(p => p.tipo === 'ENTREGA'); // deve haver pelomenos uma entrega
+
+        if (!deposito) {
+            throw new Error('O depósito é obrigatório. Verifique o arquivo de input.');
+        }
+        if (entregas.length === 0) {
+            throw new Error('Pelo menos uma entrega é obrigatória. Verifique o arquivo de input.');
+        }
+
+        return paradas; // Só chega aqui se passa nas verificações acima
     }
 
     /**
