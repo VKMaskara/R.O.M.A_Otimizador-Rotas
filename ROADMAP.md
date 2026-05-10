@@ -36,12 +36,12 @@ O core do sistema está funcionando:
 
 > Necessário para o fluxo empresa → entregador → rota → resultado.
 
-- [ ] **Instalar `better-sqlite3` e criar `src/database/db.js`**
+- [X] **Instalar `better-sqlite3` e criar `src/database/db.js`**
   - `npm install better-sqlite3`
   - SQLite local, sem servidor — ideal para TCC
   - Criar arquivo com conexão e execução de migrations
 
-- [ ] **Criar tabela `empresas`**
+- [X] **Criar tabela `empresas`**
   ```sql
   CREATE TABLE empresas (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -53,7 +53,7 @@ O core do sistema está funcionando:
   );
   ```
 
-- [ ] **Criar tabela `entregadores`**
+- [X] **Criar tabela `entregadores`**
   ```sql
   CREATE TABLE entregadores (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
