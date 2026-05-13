@@ -6,13 +6,18 @@ const db = knex(config.development);
 
 const senha_hash = await bcrypt.hash('123456', 10);
 
-await db('empresas').del({
+await db('ro').insert({
     
-  nome: 'Empresa Teste5',
-  cnpj: '12345678000190',
-  email: 'teste1@empresa.com',
-  senha_hash: senha_hash
+  nome: 'Entregador',
+  telefone: '11999999999',
+  veiculo: 'Moto',
+  placa: 'ABC-1234',
+  capacidade: 50,
+  cpf: '123.456.789-00',
+  senha_hash: senha_hash,
+  empresa_id: 3
+
 });
 
-const empresas = await db('empresas').select('*');
-console.log(empresas);
+const entregadores = await db('entregadores').select('*');
+console.log(entregadores);
