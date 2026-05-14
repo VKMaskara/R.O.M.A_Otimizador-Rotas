@@ -11,7 +11,7 @@ export async function up(knex) {
         table.string('endereco').notNullable();
         table.float('latitude').notNullable();
         table.float('longitude').notNullable();
-        table.boolean('status_entrega').notNullable().defaultTo('Pendente');
+        table.string('status_entrega').notNullable().defaultTo('Pendente');
         table.dateTime('criado_em').defaultTo(knex.fn.now());
     }) 
 };

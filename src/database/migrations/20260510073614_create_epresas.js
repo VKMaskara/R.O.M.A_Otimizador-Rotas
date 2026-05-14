@@ -7,7 +7,7 @@ export async function up(knex) {
         table.increments('id');
         table.string('nome').notNullable();
         table.string('cnpj',20).notNullable().unique()
-        table.string('email',20).notNullable().unique()
+        table.string('email',150).notNullable().unique()
         table.dateTime('criado_em').defaultTo(knex.fn.now());
         table.string('senha_hash').notNullable();
     });
