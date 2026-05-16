@@ -6,7 +6,8 @@ export async function up(knex) {
   await knex.schema.createTable('resultados', (table) => {  
     table.increments('id').primary();
 
-    table.integer('rota_id').unsigned().notNullable().unique();
+    table.integer('rota_id').unsigned().notNullable();
+
     table.foreign('rota_id')
         .references('id')
         .inTable('rotas')
@@ -25,8 +26,8 @@ export async function up(knex) {
     table.dateTime('registrado_em')
         .defaultTo(knex.fn.now())
         .notNullable();
-    })
-};
+  });
+}
 
 /**
  * @param { import("knex").Knex } knex
@@ -34,4 +35,4 @@ export async function up(knex) {
  */
 export async function down(knex) {
   await knex.schema.dropTableIfExists('resultados');
-};
+}
