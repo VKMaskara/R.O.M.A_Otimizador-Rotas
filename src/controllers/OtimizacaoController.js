@@ -20,7 +20,7 @@ export class OtimizacaoController {
             }
 
             // 2. GEOLOCALIZAÇÃO
-            const { enderecosComCoordenadas } = await GeolocationService.geocodificarEnderecos(paradas);
+            const { enderecosOk } = await GeolocationService.geocodificarEnderecos(paradas);
 
             // Auditoria: salva resultado do geocoding
             const outputDir = path.resolve('output');
@@ -28,14 +28,14 @@ export class OtimizacaoController {
 
             fs.writeFileSync(
                 path.join(outputDir, 'geolocalizacao_resultados.json'),
-                JSON.stringify(enderecosComCoordenadas, null, 2),  "utf-8"
+                JSON.stringify(enderecosOk, null, 2),  "utf-8"
             );
 
             // 3. MATRIZ DE DISTÂNCIA / TEMPO
-            const matrixData = await MatrizService.gerarMatrizCompleta(enderecosComCoordenadas);
+            const matrixData = await MatrizService.gerarMatrizCompleta(enderecosOk);
 
             // 4. OTIMIZAÇÃO (TSP + 2-Opt)
-            const nomesEnderecos = enderecosComCoordenadas.map(e => e.endereco);
+            const nomesEnderecos = enderecosOk.map(e => e.endereco);
             const resultadoOtimizacao = await OtimizacaoService.processarOtimizacao(
                 matrixData,
                 nomesEnderecos
@@ -50,7 +50,7 @@ export class OtimizacaoController {
             // 5. ENRIQUECER ROTA COM DADOS DE PACOTE
             //    Monta lista detalhada com endereço + pacote para cada parada da rota final
             const rotaDetalhada = dados.rotaIndices.map((idx, posicao) => {
-                const parada = enderecosComCoordenadas[idx];
+                const parada = enderecosOk[idx];
                 return {
                     posicao:      posicao + 1,
                     endereco:     parada.endereco,
@@ -62,7 +62,7 @@ export class OtimizacaoController {
             });
 
             // Adiciona retorno ao depósito no final
-            const origem = enderecosComCoordenadas[0];
+            const origem = enderecosOk[0];
             rotaDetalhada.push({
                 posicao:  rotaDetalhada.length + 1,
                 endereco: `Retorno ao Depósito: ${origem.endereco}`,
