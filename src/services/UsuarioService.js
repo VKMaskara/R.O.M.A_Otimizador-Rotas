@@ -14,8 +14,20 @@ export class UsuarioService {
             nome: dados.nome,
             email: dados.email,
             senha_hash: senhaHash,
-            telefone: dados.telefone
+            telefone: dados.telefone,
+            tipo: dados.tipo,
+            ativo: true
         };
+
+        const tiposValidos = [
+            'EMPRESA',
+            'ENTREGADOR',
+            'ADMIN'
+        ];
+
+        if (!tiposValidos.includes(dados.tipo)) {
+            throw new Error('Tipo inválido');
+        }
 
         const id = await UsuarioModel.criar(novoUsuario);
 
@@ -23,7 +35,7 @@ export class UsuarioService {
             id,
             nome: dados.nome,
             email: dados.email,
-            senha_hash: senhaHash,
+            tipo: dados.tipo,
         }
 
     }

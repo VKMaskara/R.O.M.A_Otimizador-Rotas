@@ -1,0 +1,11 @@
+﻿Endereço,Número,Cidade,Estado,Tipo,Pacote,Destinatário
+Av. Engenheiro Luís Carlos Berrini,1.200,São Paulo,SP,DEPOSITO,N/A,Logística Central
+Rua Pamplona,1.450,São Paulo,SP,Residencial,PKG-009,Fernanda Montenegro
+Alameda Santos,850,São Paulo,SP,Comercial,PKG-010,Rodrigo Santoro
+Rua Teodoro Sampaio,2.122,São Paulo,SP,Comercial,PKG-011,Juliana Paes
+Avenida Ipiranga,200,São Paulo,SP,Residencial,PKG-012,Lázaro Ramos
+Rua Domingos de Morais,2.560,São Paulo,SP,Comercial,PKG-013,Taís Araújo
+Avenida São João,1.100,São Paulo,SP,Residencial,PKG-014,Selton Mello
+Rua Clélia,1.900,São Paulo,SP,Apartamento,PKG-015,Grazi Massafera
+Avenida Jabaquara,1.500,São Paulo,SP,Comercial,PKG-016,Wagner Moura
+Av. Engenheiro Luís Carlos Berrini,1.200,São Paulo,SP,DEPOSITO,N/A,Retorno Depósito

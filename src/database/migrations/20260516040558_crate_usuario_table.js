@@ -7,12 +7,20 @@ export async function up(knex) {
     table.increments('id').primary();
 
     table.string('nome', 150).notNullable();
-    
+
     table.string('email', 150).notNullable().unique();
 
     table.string('senha_hash').notNullable();
 
-    table.string("telefone", );
+    table.string("telefone", 20);
+
+    table.enum('tipo', [
+      'EMPRESA',
+      'ENTREGADOR',
+      'ADMIN'
+    ]).notNullable();
+
+    table.boolean('ativo').defaultTo(true);
 
     table.dateTime('criado_em').defaultTo(knex.fn.now()).notNullable();
   });
