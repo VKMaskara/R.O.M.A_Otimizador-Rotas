@@ -1,22 +1,17 @@
-// src/routes/empresaRoutes.js
+// src/routes/empresasRoutes.js
 import { Router } from 'express';
 import { EmpresaController } from '../controllers/empresaController.js';
+import { autenticar, apenasEmpresa } from '../middlewares/autenticar.js';
 
 const router = Router();
 
-// POST /empresas — cadastrar nova empresa (autocadastro ou admin)
+// POST — aberto, é o autocadastro
 router.post('/', EmpresaController.criar);
 
-// GET /empresas — listar todas as empresas
-router.get('/', EmpresaController.listar);
+// GET, PUT, DELETE — exigem login e tipo EMPRESA
+router.get('/', autenticar, apenasEmpresa, EmpresaController.listar);
+router.get('/:id', autenticar, apenasEmpresa, EmpresaController.buscarPorId);
+router.put('/:id', autenticar, apenasEmpresa, EmpresaController.atualizar);
+router.delete('/:id', autenticar, apenasEmpresa, EmpresaController.desativar);
 
-// GET /empresas/:id — buscar empresa por id
-router.get('/:id', EmpresaController.buscarPorId);
-
-// PUT /empresas/:id — atualizar dados da empresa
-router.put('/:id', EmpresaController.atualizar);
-
-// DELETE /empresas/:id — desativar empresa (soft delete)
-router.delete('/:id', EmpresaController.desativar);
-
-export default router;0
+export default router;
