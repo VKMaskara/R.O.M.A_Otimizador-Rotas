@@ -1,5 +1,6 @@
 import { EntregadorService }
     from "../services/EntregadorService.js";
+import db from '../database/db.js';
 
 export class EntregadorController {
 
@@ -134,6 +135,76 @@ export class EntregadorController {
         } catch (error) {
 
             return res.status(404).json({
+                status: 'error',
+                mensagem: error.message
+            });
+        }
+    }
+    // GET /entregadores/minha-rota
+    static async minhaRota(req, res) {
+        try {
+            const usuario_id = req.usuario.id;
+
+            // Busca o entregador pelo usuario_id
+            const entregador = await db('entregadores')
+                .where({ usuario_id })
+                .first();
+
+            if (!entregador) {
+                return res.status(404).json({
+                    status: 'error',
+                    mensagem: 'Entregador não encontrado.'
+                });
+            }
+
+            // Busca a rota de hoje atribuída a esse entregador
+            const hoje = new Date().toISOString().split('T')[0];
+
+            const rota = await db('rotas')
+                .where({ entregador_id: entregador.id })
+                .whereIn('status', ['pendente', 'em_andamento'])
+                .where('data', hoje)
+                .first();
+
+            if (!rota) {
+                return res.status(200).json({
+                    status: 'success',
+                    mensagem: 'Nenhuma rota atribuída para hoje.',
+                    dados: null
+                });
+            }
+
+            // Busca as paradas com pacotes
+            const paradas = await db('paradas')
+                .leftJoin('pacotes', 'paradas.id', 'pacotes.parada_id')
+                .where('paradas.rota_id', rota.id)
+                .select(
+                    'paradas.id',
+                    'paradas.posicao',
+                    'paradas.endereco',
+                    'paradas.lat',
+                    'paradas.lng',
+                    'paradas.status_entrega',
+                    'pacotes.codigo',
+                    'pacotes.destinatario',
+                    'pacotes.observacao'
+                )
+                .orderBy('paradas.posicao');
+
+            return res.status(200).json({
+                status: 'success',
+                dados: {
+                    rota_id: rota.id,
+                    status: rota.status,
+                    data: rota.data,
+                    km_otimizado: rota.km_otimizado,
+                    tempo_estimado_min: rota.tempo_estimado_min,
+                    paradas
+                }
+            });
+
+        } catch (error) {
+            return res.status(500).json({
                 status: 'error',
                 mensagem: error.message
             });
