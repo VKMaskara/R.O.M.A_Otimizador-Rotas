@@ -9,11 +9,11 @@ export class GeolocationService {
      * Geocodifica uma lista de paradas.
      *
      * Aceita dois formatos:
-     *   - Array de strings (formato legado): ['Rua X, 1, SP', ...]
-     *   - Array de objetos (novo formato):   [{ endereco, pacote, tipo }, ...]
+     * - Array de strings (formato legado): ['Rua X, 1, SP', ...]
+     * - Array de objetos (novo formato):   [{ endereco, pacote, tipo }, ...]
      *
      * Retorna array de objetos com coordenadas + dados do pacote preservados:
-     *   [{ endereco, lat, lng, pacote, tipo }, ...]
+     * [{ endereco, lat, lng, pacote, tipo }, ...]
      */
     static async geocodificarEnderecos(listaParadas) {
         const adapter = mapsProvider === 'ors'
@@ -46,11 +46,14 @@ export class GeolocationService {
                 });
 
             } catch (error) {
+                // Exibe o motivo real da falha no terminal para facilitar o debug
+                console.error(`❌ Erro ao geocodificar o endereço "${enderecoStr}":`, error.message);
+
                 // ❌ Endereço falhou — registra para a API informar a empresa
                 enderecosComErro.push({
                     posicao: index + 1,
                     endereco: enderecoStr,
-                    erro: erro.message,
+                    erro: error.message,
                 });
             }
         }
