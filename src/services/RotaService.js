@@ -1,28 +1,20 @@
 // src/services/RotaService.js
-import { InputService } from './InputService.js';
 import { GeolocationService } from './GeolocationService.js';
-import { MatrizService } from './MatrixService.js';
-import { OtimizacaoService } from './OtimizacaoService.js';
-import { RotaModel } from '../models/rotaModel.js';
+import { MatrizService }      from './MatrixService.js';
+import { OtimizacaoService }  from './OtimizacaoService.js';
+import { RotaModel }          from '../models/RotaModel.js';
+import db                     from '../database/db.js';
 
 export class RotaService {
 
-    /**
-     * Fluxo completo de otimização:
-     * 1. Geocodifica os endereços
-     * 2. Gera a matriz de distâncias
-     * 3. Otimiza com TSP + 2-Opt 
-     * 4. Salva rota, paradas e pacotes no banco
-     * 5. Retorna resultado completo para a API
-     *
-     * @param {number} empresa_id - ID da empresa (vem do token JWT)
-     * @param {Array}  paradas    - Lista de paradas com endereço e pacote
-     * @param {number} [entregador_id] - Opcional: atribuir entregador na criação
-     */
-   static async otimizarERosalvar(empresa_id, paradas, entregador_id = null) {
+    static async otimizarERosalvar(usuario_id, paradas, entregador_id = null) {
+
+        // ── 0. BUSCA O ID REAL DA EMPRESA ─────────────────────────────────────
+        const empresa = await db('empresas').where({ usuario_id }).first();
+        if (!empresa) throw new Error('Empresa não encontrada para este usuário.');
+        const empresa_id = empresa.id;
 
         // ── 1. GEOCODIFICAÇÃO ──────────────────────────────────────────────────
-        // Alterado de enderecosComError para enderecosComErro para manter o padrão em português
         const { status, enderecosOk, enderecosComErro } =
             await GeolocationService.geocodificarEnderecos(paradas);
 
@@ -53,33 +45,33 @@ export class RotaService {
         const rotaDetalhada = dados.rotaIndices.map((idx, posicao) => {
             const parada = enderecosOk[idx];
             return {
-                posicao: posicao + 1,
+                posicao:  posicao + 1,
                 endereco: parada.endereco,
-                tipo: parada.tipo || 'ENTREGA',
-                pacote: parada.pacote || null,
-                lat: parada.lat,
-                lng: parada.lng,
+                tipo:     parada.tipo   || 'ENTREGA',
+                pacote:   parada.pacote || null,
+                lat:      parada.lat,
+                lng:      parada.lng,
             };
         });
 
         // Retorno ao depósito
-        const origen = enderecosOk[0];
+        const origem = enderecosOk[0];
         rotaDetalhada.push({
-            posicao: rotaDetalhada.length + 1,
-            endereco: `Retorno ao Depósito: ${origen.endereco}`,
-            tipo: 'RETORNO',
-            pacote: null,
-            lat: origen.lat,
-            lng: origen.lng,
+            posicao:  rotaDetalhada.length + 1,
+            endereco: `Retorno ao Depósito: ${origem.endereco}`,
+            tipo:     'RETORNO',
+            pacote:   null,
+            lat:      origem.lat,
+            lng:      origem.lng,
         });
 
         // ── 5. SALVA NO BANCO ─────────────────────────────────────────────────
         const rota_id = await RotaModel.criar({
             empresa_id,
             entregador_id,
-            km_original: dados.distanciaOriginal,
-            km_otimizado: dados.distanciaOtimizada,
-            economia_km: dados.economiaKm,
+            km_original:        dados.distanciaOriginal,
+            km_otimizado:       dados.distanciaOtimizada,
+            economia_km:        dados.economiaKm,
             tempo_estimado_min: dados.tempoEstimadoMinutos,
         });
 
@@ -97,15 +89,79 @@ export class RotaService {
         // ── 6. RETORNO ────────────────────────────────────────────────────────
         return {
             rota_id,
-            status: 'pendente',
-            enderecosComErro,   // Now matches the variable from destructuring
+            status:           'pendente',
+            enderecosComErro,
             metricas: {
-                km_original: dados.distanciaOriginal,
-                km_otimizado: dados.distanciaOtimizada,
-                economia_km: dados.economiaKm,
+                km_original:        dados.distanciaOriginal,
+                km_otimizado:       dados.distanciaOtimizada,
+                economia_km:        dados.economiaKm,
                 tempo_estimado_min: dados.tempoEstimadoMinutos,
             },
             rotaDetalhada,
         };
+    }
+
+    // ─── LISTAR ROTAS DA EMPRESA ──────────────────────────────────────────────
+
+    static async listarRotas(usuario_id) {
+        const empresa = await db('empresas').where({ usuario_id }).first();
+        if (!empresa) throw new Error('Empresa não encontrada.');
+        return await RotaModel.listarPorEmpresa(empresa.id);
+    }
+
+    // ─── DETALHE DE UMA ROTA ─────────────────────────────────────────────────
+
+    static async detalharRota(rota_id, usuario_id) {
+        const empresa = await db('empresas').where({ usuario_id }).first();
+        if (!empresa) throw new Error('Empresa não encontrada.');
+
+        const rota = await RotaModel.buscarPorId(rota_id);
+        if (!rota) throw new Error('Rota não encontrada.');
+        if (rota.empresa_id !== empresa.id) {
+            throw new Error('Acesso negado. Esta rota não pertence à sua empresa.');
+        }
+
+        const paradas   = await RotaModel.buscarParadasDaRota(rota_id);
+        const resultado = await RotaModel.buscarResultado(rota_id);
+
+        return { ...rota, paradas, resultado };
+    }
+
+    // ─── ATRIBUIR ENTREGADOR ──────────────────────────────────────────────────
+
+    static async atribuirEntregador(rota_id, entregador_id, usuario_id) {
+        const empresa = await db('empresas').where({ usuario_id }).first();
+        if (!empresa) throw new Error('Empresa não encontrada.');
+
+        const rota = await RotaModel.buscarPorId(rota_id);
+        if (!rota) throw new Error('Rota não encontrada.');
+        if (rota.empresa_id !== empresa.id) throw new Error('Acesso negado.');
+        if (rota.status === 'concluida') {
+            throw new Error('Não é possível alterar uma rota já concluída.');
+        }
+
+        await RotaModel.atribuirEntregador(rota_id, entregador_id);
+        await RotaModel.atualizarStatus(rota_id, 'em_andamento');
+    }
+
+    // ─── ATUALIZAR STATUS DE PARADA ───────────────────────────────────────────
+
+    static async atualizarStatusParada(parada_id, status) {
+        const statusValidos = ['pendente', 'entregue', 'falhou'];
+        if (!statusValidos.includes(status)) {
+            throw new Error(`Status inválido. Use: ${statusValidos.join(', ')}`);
+        }
+        await RotaModel.atualizarStatusParada(parada_id, status);
+    }
+
+    // ─── REGISTRAR RESULTADO FINAL ────────────────────────────────────────────
+
+    static async registrarResultado(rota_id, dados) {
+        const rota = await RotaModel.buscarPorId(rota_id);
+        if (!rota) throw new Error('Rota não encontrada.');
+        if (rota.status === 'concluida') throw new Error('Esta rota já foi finalizada.');
+
+        await RotaModel.salvarResultado(rota_id, dados);
+        await RotaModel.atualizarStatus(rota_id, 'concluida');
     }
 }
