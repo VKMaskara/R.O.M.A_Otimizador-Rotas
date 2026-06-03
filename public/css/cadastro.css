@@ -1,0 +1,294 @@
+/* RESET */
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+
+/* BODY */
+
+body{
+    font-family: Arial, sans-serif;
+
+    background: linear-gradient(135deg, #0B2A4A, #123B63);
+
+    min-height: 100vh;
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    padding: 20px;
+}
+
+
+/* CONTAINER */
+
+.container{
+    width: 100%;
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+}
+
+
+/* CARD */
+
+.cadastro-card{
+    background-color: white;
+
+    width: 100%;
+
+    max-width: 950px;
+
+    padding: 30px 40px;
+
+    border-radius: 35px;
+
+    box-shadow: 0px 10px 30px rgba(17, 100, 255, 0.5);
+}
+
+
+/* LOGO */
+
+.logo{
+    width: 180px;
+
+    display: block;
+
+    margin: 0 auto 10px auto;
+}
+
+
+/* TITULO */
+
+.cadastro-card h1{
+    text-align: center;
+
+    font-size: 38px;
+
+    color: #0B2A4A;
+
+    margin-bottom: 5px;
+}
+
+.cadastro-card h1 span{
+    color: #F28C28;
+}
+
+
+/* SUBTITULO */
+
+.subtitulo{
+    text-align: center;
+
+    color: #666;
+
+    font-size: 15px;
+
+    margin-bottom: 25px;
+}
+
+
+/* FORM */
+
+form{
+    display: grid;
+
+    grid-template-columns: 1fr 1fr;
+
+    gap: 18px 20px;
+}
+
+
+/* TITULOS FORM */
+
+form h2{
+    grid-column: span 2;
+
+    color: #0B2A4A;
+
+    font-size: 20px;
+
+    margin-top: 5px;
+
+    margin-bottom: -5px;
+}
+
+
+/* INPUTS */
+
+.grupo-input{
+    display: flex;
+
+    flex-direction: column;
+}
+
+
+/* LABEL */
+
+.grupo-input label{
+    margin-bottom: 6px;
+
+    color: #0B2A4A;
+
+    font-weight: bold;
+
+    font-size: 14px;
+}
+
+
+/* INPUT */
+
+.grupo-input input{
+    width: 100%;
+
+    padding: 13px;
+
+    border: 2px solid #dcdcdc;
+
+    border-radius: 12px;
+
+    font-size: 14px;
+
+    transition: 0.2s;
+}
+
+
+/* EFEITO INPUT */
+
+.grupo-input input:focus{
+    outline: none;
+
+    border-color: #000000;
+
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.925);
+}
+
+
+/* CAMPOS GRANDES */
+
+.full{
+    grid-column: span 2;
+}
+
+
+/* TERMOS */
+
+.termos{
+    grid-column: span 2;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    margin-top: -5px;
+
+    font-size: 13px;
+
+    color: #555;
+}
+
+.termos input{
+    accent-color: #F28C28;
+}
+
+
+/* BOTÃO */
+
+button{
+    grid-column: span 2;
+
+    width: 100%;
+
+    padding: 14px;
+
+    background-color: #F28C28;
+
+    color: white;
+
+    border: none;
+
+    border-radius: 12px;
+
+    font-size: 17px;
+
+    font-weight: bold;
+
+    cursor: pointer;
+
+    transition: 0.2s;
+}
+
+
+/* HOVER */
+
+button:hover{
+    background-color: #d97706;
+
+    transform: translateY(-2px);
+}
+
+
+/* LOGIN */
+
+.login-link{
+    text-align: center;
+
+    margin-top: 18px;
+
+    color: #555;
+
+    font-size: 14px;
+}
+
+.login-link a{
+    color: #F28C28;
+
+    text-decoration: none;
+
+    font-weight: bold;
+}
+
+.login-link a:hover{
+    text-decoration: underline;
+}
+
+/* RESPONSIVO */
+
+@media(max-width: 768px){
+
+    body{
+        padding: 15px;
+    }
+
+    .cadastro-card{
+        padding: 25px;
+    }
+
+    form{
+        grid-template-columns: 1fr;
+    }
+
+    form h2,
+    .full,
+    button,
+    .termos{
+        grid-column: span 1;
+    }
+
+    .cadastro-card h1{
+        font-size: 30px;
+    }
+
+}
+

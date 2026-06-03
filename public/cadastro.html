@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro</title>7
+    <link rel="stylesheet" href="css/cadastro.css">
+</head>
+<body>
+    
+    <div class="container">
+
+        <div class="cadastro-card">
+
+            <!--logo-->
+            <img src="img/logo.jpeg" alt="Logo ROMA" class="logo">
+
+            <!--titulo-->
+            <h1>
+                Cadastrar <span>Empresa</span>
+            </h1>
+
+            <p class="subtitulo">
+                Cadastre sua empresa para gerenciar entregadores e rotas.
+            </p>
+
+            <!-- formulario -->
+            <form id="cadastro-form">
+
+                <h2>Dados da Empresa</h2>
+
+                <!-- nome -->
+                <div class="grupo-input">
+                    <label>Nome da Empresa</label>
+
+                    <input 
+                        type="text" 
+                        id="empresa"
+                        placeholder="Digite o nome da empresa"
+                    >
+                    <span style="color:red;">*</span>
+                </div>
+
+                <!-- CNPJ -->
+                <div class="grupo-input">
+                    <label>CNPJ</label>
+
+                    <input 
+                        type="text" 
+                        id="cnpj"
+                        placeholder="00.000.000/0000-00"
+                        maxlength="14"
+                    >
+                   <span style="color:red;">*</span>
+                </div>
+
+                <!-- Email -->
+                <div class="grupo-input">
+                    <label>E-mail Empresarial</label>
+
+                    <input 
+                        type="email" 
+                        id="email"
+                        placeholder="empresa@email.com"
+                    >
+                    <span style="color:red;">*</span>
+                </div>
+
+                <!-- Telefone -->
+                <div class="grupo-input">
+                    <label>Telefone</label>
+
+                    <input 
+                        type="tel" 
+                        id="telefone"
+                        placeholder="(11) 99999-9999"
+                        maxlength="11"
+                    >
+                   <span style="color:red;">*</span>
+                </div>
+
+                <!-- Endereço -->
+                <div class="grupo-input">
+                    <label>Endereço da Empresa</label>
+
+                    <input 
+                        type="text" 
+                        id="endereco"
+                        placeholder="Rua, número, bairro..."
+                    >
+                    <span style="color:red;">*</span>
+                </div>
+
+                <!-- Responsavel -->
+                <!-- <div class="grupo-input">
+                    <label>Responsável</label>
+
+                    <input 
+                        type="text" 
+                        id="responsavel"
+                        placeholder="Nome do responsável"
+                    >
+                    <span style="color:red;">*</span>
+                </div> -->
+
+                <!-- Senha -->
+                <h2>Dados de Acesso</h2>
+
+                <div class="grupo-input full">
+                    <label>Senha</label>
+
+                    <input 
+                        type="password" 
+                        id="senha"
+                        placeholder="Digite uma senha"
+                    >
+                </div>
+
+                <!-- Confirmar senha -->
+                <div class="grupo-input">
+                    <label>Confirmar Senha</label>
+
+                    <input 
+                        type="password" 
+                        id="confirmarSenha"
+                        placeholder="Confirme sua senha"
+                    >
+                </div>
+
+                <!-- Termos -->
+                <div class="termos">
+                    <input type="checkbox" id="check">
+
+                    <label for="check">
+                        Eu aceito os Termos de Uso e Política de Privacidade
+                    </label>
+                </div>
+
+                <!-- Botão -->
+                <button type="submit">
+                    Cadastrar Empresa
+                </button>
+
+            </form>
+
+            <!-- Login -->
+            <p class="login-link">
+                Já possui uma conta?
+
+                <a href="login.html">
+                    Fazer login
+                </a>
+            </p>
+
+        </div>
+
+    </div>
+
+    <script src="js/cadastro.js"></script>
+</body>
+</html>

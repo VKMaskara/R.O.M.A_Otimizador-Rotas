@@ -9,7 +9,7 @@ const router = Router();
 router.post('/', EmpresaController.criar);
 
 // GET, PUT, DELETE — exigem login e tipo EMPRESA
-router.get('/', autenticar, apenasEmpresa, EmpresaController.listar);
+router.get('/',  EmpresaController.listar);
 router.get('/:id', autenticar, apenasEmpresa, EmpresaController.buscarPorId);
 router.put('/:id', autenticar, apenasEmpresa, EmpresaController.atualizar);
 router.delete('/:id', autenticar, apenasEmpresa, EmpresaController.desativar);
