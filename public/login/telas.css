@@ -1,0 +1,195 @@
+/* reset */
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+
+/* body */
+
+body {
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, #0B2A4A, #123B63);
+    height: 100vh;
+}
+
+
+/* container inicial*/
+
+.container {
+    width: 100%;
+    height: 100vh;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    padding: 20px;
+}
+
+
+/* card login */
+
+.login-card {
+    background-color: white;
+
+    width: 200%;
+    max-width: 700px;
+
+    padding: 40px;
+
+    border-radius: 40px;
+
+    box-shadow: 0px 10px 30px rgba(17, 100, 255, 0.911);
+}
+
+
+/* logo */
+
+.logo {
+    width: 180px;
+
+    display: block;
+
+    margin: 0 auto 20px auto;
+}
+
+
+/* titulo */
+
+.login-card h1 {
+    text-align: center;
+
+    color: #0B2A4A;
+
+    margin-bottom: 30px;
+
+    font-size: 40px;
+}
+
+
+/* form */
+
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+
+/* Grupo input */
+
+.inicio {
+    margin-bottom: 20px;
+}
+
+
+/* Label */
+
+.inicio label {
+    display: block;
+
+    margin-bottom: 8px;
+
+    color: #0B2A4A;
+
+    font-weight: bold;
+}
+
+
+/* input */
+
+.inicio input {
+    width: 100%;
+
+    padding: 14px;
+
+    border: 2px solid #dcdcdc;
+
+    border-radius: 100px;
+
+    font-size: 15px;
+
+    transition: 0.2s;
+}
+
+
+/* efeito input */
+
+.inicio input:focus {
+    border-color: #F28C28;
+
+    box-shadow: 0 0 8px rgba(242, 140, 40, 0.3);
+}
+
+
+/* botão */
+
+button {
+    width: 100%;
+
+    padding: 14px;
+
+    background-color: #F28C28;
+
+    color: white;
+
+    border: none;
+
+    border-radius: 10px;
+
+    font-size: 17px;
+
+    font-weight: bold;
+
+    transition: 0.2s;
+}
+
+
+/* hover botão */
+
+button:hover {
+    background-color: #d97706;
+
+    transform: translateY(-2px);
+}
+
+
+/* responsividade */
+
+@media (max-width: 768px) {
+
+    .login-card {
+        padding: 30px;
+    }
+
+    .login-card h1 {
+        font-size: 24px;
+    }
+
+}
+
+/* Link cadastro */
+
+.cadastro-link {
+    text-align: center;
+
+    margin-top: 20px;
+
+    color: #555;
+
+    font-size: 14px;
+}
+
+.cadastro-link a {
+    color: #F28C28;
+
+    text-decoration: none;
+
+    font-weight: bold;
+}
+
+.cadastro-link a:hover {
+    text-decoration: underline;
+}
