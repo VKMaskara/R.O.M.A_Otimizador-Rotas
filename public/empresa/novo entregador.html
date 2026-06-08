@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>R.O.M.A - Novo Entregador</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+</head>
+<body>
+
+    <div class="d-flex min-vh-100 layout-container">
+
+        <aside class="sidebar offcanvas-lg offcanvas-start text-white p-4" id="sidebarMenu">
+            <div class="offcanvas-header d-lg-none p-0 mb-4">
+                <h5 class="offcanvas-title text-white">Menu ROMA</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" data-bs-target="#sidebarMenu"></button>
+            </div>
+
+            <div class="logo-area bg-white p-3 rounded-4 text-center mb-5">
+                <img src="../img/logo.jpeg" alt="Logo ROMA" class="img-fluid logo-img">
+            </div>
+
+            <nav class="menu-nav d-flex flex-column gap-2 flex-grow-1">
+                <a href="dashboard.html" class="nav-link-custom">
+                    <i class="bi bi-speedometer2 me-2"></i> Dashboard
+                </a>
+                <a href="rotas.html" class="nav-link-custom">
+                    <i class="bi bi-geo-alt me-2"></i> Rotas
+                </a>
+                <a href="entregadores.html" class="nav-link-custom active">
+                    <i class="bi bi-truck me-2"></i> Entregadores
+                </a>
+                <a href="configuracoes.html" class="nav-link-custom">
+                    <i class="bi bi-gear me-2"></i> Configurações
+                </a>
+            </nav>
+
+            <div class="logout-area mt-auto pt-4">
+                <a href="login.html" class="btn-logout text-center d-block w-100 py-3 rounded-3 text-decoration-none fw-bold text-white">
+                    <i class="bi bi-box-arrow-right me-2"></i> Sair
+                </a>
+            </div>
+        </aside>
+
+        <main class="main-content flex-grow-1 p-4 p-md-5">
+            
+            <header class="d-flex justify-content-between align-items-center mb-5">
+                <div class="d-flex align-items-center gap-3">
+                    <button class="btn btn-outline-dark d-lg-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebarMenu">
+                        <i class="bi bi-list fs-4"></i>
+                    </button>
+                    <h1 class="h2 fw-bold text-navy mb-0">Novo Entregador</h1>
+                </div>
+            </header>
+
+            <section class="mb-4">
+                <div class="card border-0 shadow-sm rounded-4 p-4 p-md-5">
+                    
+                    <form id="form-entregador" novalidate>
+                        <div class="row g-4">
+                            
+                            <div class="col-12 col-md-6">
+                                <label for="nome" class="form-label fw-semibold text-navy">
+                                    Nome Completo <span class="text-danger">*</span>
+                                </label>
+                                <input type="text" class="form-control py-2.5 rounded-3" id="nome" placeholder="Digite o nome completo" required>
+                            </div>
+
+                            <div class="col-12 col-md-6">
+                                <label for="cpf" class="form-label fw-semibold text-navy">
+                                    CPF <span class="text-danger">*</span>
+                                </label>
+                                <input type="text" class="form-control py-2.5 rounded-3" id="cpf" placeholder="000.000.000-00" maxlength="14" required>
+                            </div>
+
+                            <div class="col-12 col-md-6">
+                                <label for="telefone" class="form-label fw-semibold text-navy">
+                                    Telefone <span class="text-danger">*</span>
+                                </label>
+                                <input type="tel" class="form-control py-2.5 rounded-3" id="telefone" placeholder="(11) 99999-9999" maxlength="15" required>
+                            </div>
+
+                            <div class="col-12 col-md-6">
+                                <label for="veiculo" class="form-label fw-semibold text-navy">
+                                    Veículo <span class="text-danger">*</span>
+                                </label>
+                                <select class="form-select py-2.5 rounded-3" id="veiculo" required>
+                                    <option value="" selected disabled>Selecione o tipo de veículo</option>
+                                    <option value="moto">Moto</option>
+                                    <option value="carro">Carro</option>
+                                    <option value="van">Van</option>
+                                    <option value="caminhao">Caminhão</option>
+                                </select>
+                            </div>
+
+                            <div class="col-12 col-md-6">
+                                <label for="cnh" class="form-label fw-semibold text-navy">
+                                    CNH <span class="text-danger">*</span>
+                                </label>
+                                <input type="text" class="form-control py-2.5 rounded-3" id="cnh" placeholder="Digite o número da CNH" required>
+                            </div>
+
+                            <div class="col-12 col-md-6">
+                                <label for="email" class="form-label fw-semibold text-navy">
+                                    E-mail <span class="text-danger">*</span>
+                                </label>
+                                <input type="email" class="form-control py-2.5 rounded-3" id="email" placeholder="nome@empresa.com" required>
+                            </div>
+
+                            <div class="col-12">
+                                <label for="senha" class="form-label fw-semibold text-navy">
+                                    Senha Provisória
+                                </label>
+                                <input type="password" class="form-control py-2.5 rounded-3" id="senha" placeholder="Digite uma senha inicial para o entregador">
+                            </div>
+
+                            <div class="col-12 d-flex flex-wrap gap-3 mt-5 pt-3 border-top">
+                                <button type="submit" class="btn btn-orange px-5 py-2.5 fw-bold text-white shadow-sm rounded-3">
+                                    <i class="bi bi-check-lg me-1"></i> Cadastrar
+                                </button>
+                                <a href="entregadores.html" class="btn btn-light text-secondary px-4 py-2.5 fw-semibold rounded-3 border">
+                                    <i class="bi bi-x-lg me-1"></i> Cancelar
+                                </a>
+                            </div>
+
+                        </div>
+                    </form>
+
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/novo-entregador.js"></script>
+</body>
+</html>

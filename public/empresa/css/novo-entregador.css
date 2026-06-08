@@ -1,0 +1,364 @@
+/* RESET */
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+
+/* BODY */
+
+body{
+    font-family: Arial, sans-serif;
+
+    background-color: #f4f7fb;
+}
+
+
+/* CONTAINER */
+
+.container{
+    display: flex;
+
+    min-height: 100vh;
+}
+
+
+/* SIDEBAR */
+
+.sidebar{
+    width: 260px;
+
+    background: linear-gradient(180deg, #0B2A4A, #123B63);
+
+    padding: 30px 20px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    justify-content: space-between;
+}
+
+
+/* LOGO */
+
+.logo-area{
+    text-align: center;
+
+    background-color: white;
+
+    padding: 15px;
+
+    border-radius: 20px;
+
+    margin-bottom: 30px;
+}
+
+.logo{
+    width: 140px;
+}
+
+
+/* MENU */
+
+.menu{
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 15px;
+
+    margin-top: 30px;
+}
+
+
+/* LINKS MENU */
+
+.menu a{
+    text-decoration: none;
+
+    color: white;
+
+    padding: 14px 18px;
+
+    border-radius: 12px;
+
+    transition: 0.2s;
+
+    font-size: 16px;
+
+    font-weight: bold;
+}
+
+
+/* HOVER */
+
+.menu a:hover{
+    background-color: rgba(255,255,255,0.1);
+}
+
+
+/* ACTIVE */
+
+.menu .active{
+    background-color: #F28C28;
+}
+
+
+/* LOGOUT */
+
+.logout a{
+    text-decoration: none;
+
+    color: white;
+
+    background-color: rgba(255,255,255,0.1);
+
+    padding: 14px 18px;
+
+    border-radius: 12px;
+
+    display: block;
+
+    text-align: center;
+
+    font-weight: bold;
+
+    transition: 0.2s;
+}
+
+.logout a:hover{
+    background-color: #F28C28;
+}
+
+
+/* MAIN */
+
+.main-content{
+    flex: 1;
+
+    padding: 35px;
+}
+
+
+/* TOPO */
+
+.topbar{
+    margin-bottom: 30px;
+}
+
+
+/* TITULO */
+
+.topbar h1{
+    color: #0B2A4A;
+
+    font-size: 35px;
+}
+
+
+/* FORMULÁRIO */
+
+.formulario{
+    background-color: white;
+
+    padding: 35px;
+
+    border-radius: 25px;
+
+    box-shadow: 0px 5px 20px rgba(0,0,0,0.08);
+}
+
+
+/* FORM */
+
+form{
+    display: grid;
+
+    grid-template-columns: 1fr 1fr;
+
+    gap: 20px;
+}
+
+
+/* INPUTS */
+
+.grupo-input{
+    display: flex;
+
+    flex-direction: column;
+}
+
+
+/* LABEL */
+
+.grupo-input label{
+    margin-bottom: 8px;
+
+    color: #0B2A4A;
+
+    font-weight: bold;
+}
+
+
+/* INPUT E SELECT */
+
+.grupo-input input,
+.grupo-input select{
+    width: 100%;
+
+    padding: 14px;
+
+    border: 2px solid #dcdcdc;
+
+    border-radius: 12px;
+
+    font-size: 15px;
+
+    transition: 0.2s;
+}
+
+
+/* FOCUS */
+
+.grupo-input input:focus,
+.grupo-input select:focus{
+    outline: none;
+
+    border-color: #F28C28;
+
+    box-shadow: 0 0 8px rgba(242,140,40,0.3);
+}
+
+
+/* CAMPO GRANDE */
+
+.full{
+    grid-column: span 2;
+}
+
+
+/* BOTÕES */
+
+.botoes{
+    grid-column: span 2;
+
+    display: flex;
+
+    gap: 15px;
+
+    margin-top: 10px;
+}
+
+
+/* BOTÃO SALVAR */
+
+.salvar{
+    flex: 1;
+
+    background-color: #F28C28;
+
+    color: white;
+
+    border: none;
+
+    padding: 15px;
+
+    border-radius: 12px;
+
+    font-size: 16px;
+
+    font-weight: bold;
+
+    cursor: pointer;
+
+    transition: 0.2s;
+}
+
+
+/* HOVER */
+
+.salvar:hover{
+    background-color: #d97706;
+
+    transform: translateY(-2px);
+}
+
+
+/* CANCELAR */
+
+.cancelar{
+    flex: 1;
+
+    background-color: #e5e7eb;
+
+    color: #0B2A4A;
+
+    text-decoration: none;
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    border-radius: 12px;
+
+    font-weight: bold;
+
+    transition: 0.2s;
+}
+
+
+/* HOVER CANCELAR */
+
+.cancelar:hover{
+    background-color: #d1d5db;
+}
+
+
+/* RESPONSIVIDADE */
+
+@media(max-width: 900px){
+
+    form{
+        grid-template-columns: 1fr;
+    }
+
+    .full,
+    .botoes{
+        grid-column: span 1;
+    }
+
+}
+
+
+@media(max-width: 768px){
+
+    .container{
+        flex-direction: column;
+    }
+
+    .sidebar{
+        width: 100%;
+    }
+
+    .main-content{
+        padding: 20px;
+    }
+
+    .formulario{
+        padding: 25px;
+    }
+
+    .topbar h1{
+        font-size: 28px;
+    }
+
+    .botoes{
+        flex-direction: column;
+    }
+
+}

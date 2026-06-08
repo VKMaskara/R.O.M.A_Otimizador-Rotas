@@ -1,0 +1,406 @@
+/* RESET */
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+
+/* BODY */
+
+body{
+    font-family: Arial, sans-serif;
+
+    background-color: #f4f7fb;
+}
+
+
+/* CONTAINER */
+
+.container{
+    display: flex;
+
+    min-height: 100vh;
+}
+
+
+/* SIDEBAR */
+
+.sidebar{
+    width: 260px;
+
+    background: linear-gradient(180deg, #0B2A4A, #123B63);
+
+    padding: 30px 20px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    justify-content: space-between;
+}
+
+
+/* LOGO */
+
+.logo-area{
+    text-align: center;
+
+    background-color: white;
+
+    padding: 15px;
+
+    border-radius: 20px;
+
+    margin-bottom: 30px;
+}
+
+.logo{
+    width: 140px;
+}
+
+
+/* MENU */
+
+.menu{
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 15px;
+
+    margin-top: 30px;
+}
+
+
+/* LINKS MENU */
+
+.menu a{
+    text-decoration: none;
+
+    color: white;
+
+    padding: 14px 18px;
+
+    border-radius: 12px;
+
+    transition: 0.2s;
+
+    font-size: 16px;
+
+    font-weight: bold;
+}
+
+
+/* HOVER */
+
+.menu a:hover{
+    background-color: rgba(255,255,255,0.1);
+}
+
+
+/* ACTIVE */
+
+.menu .active{
+    background-color: #F28C28;
+}
+
+
+/* LOGOUT */
+
+.logout a{
+    text-decoration: none;
+
+    color: white;
+
+    background-color: rgba(255,255,255,0.1);
+
+    padding: 14px 18px;
+
+    border-radius: 12px;
+
+    display: block;
+
+    text-align: center;
+
+    font-weight: bold;
+
+    transition: 0.2s;
+}
+
+.logout a:hover{
+    background-color: #F28C28;
+}
+
+
+/* MAIN */
+
+.main-content{
+    flex: 1;
+
+    padding: 35px;
+}
+
+
+/* TOPBAR */
+
+.topbar{
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    margin-bottom: 30px;
+}
+
+
+/* TITULO */
+
+.topbar h1{
+    color: #0B2A4A;
+
+    font-size: 35px;
+}
+
+
+/* BOTÃO */
+
+.topbar button{
+    background-color: #F28C28;
+
+    color: white;
+
+    border: none;
+
+    padding: 14px 22px;
+
+    border-radius: 12px;
+
+    font-size: 15px;
+
+    font-weight: bold;
+
+    cursor: pointer;
+
+    transition: 0.2s;
+}
+
+
+/* HOVER BOTÃO */
+
+.topbar button:hover{
+    background-color: #d97706;
+
+    transform: translateY(-2px);
+}
+
+
+/* PESQUISA */
+
+.pesquisa{
+    margin-bottom: 30px;
+}
+
+
+/* INPUT */
+
+.pesquisa input{
+    width: 100%;
+
+    padding: 15px;
+
+    border: 2px solid #dcdcdc;
+
+    border-radius: 14px;
+
+    font-size: 15px;
+
+    transition: 0.2s;
+}
+
+
+/* FOCUS */
+
+.pesquisa input:focus{
+    outline: none;
+
+    border-color: #F28C28;
+
+    box-shadow: 0 0 8px rgba(242,140,40,0.3);
+}
+
+
+/* LISTA */
+
+.lista-entregadores{
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 20px;
+}
+
+
+/* CARD */
+
+.entregador-card{
+    background-color: white;
+
+    padding: 25px;
+
+    border-radius: 20px;
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    box-shadow: 0px 5px 20px rgba(0,0,0,0.08);
+}
+
+
+/* INFO */
+
+.entregador-info h2{
+    color: #0B2A4A;
+
+    margin-bottom: 8px;
+}
+
+.entregador-info p{
+    color: #666;
+
+    margin-bottom: 4px;
+}
+
+
+/* STATUS */
+
+.status{
+    padding: 10px 18px;
+
+    border-radius: 30px;
+
+    color: white;
+
+    font-size: 14px;
+
+    font-weight: bold;
+}
+
+
+/* STATUS CORES */
+
+.ativo{
+    background-color: #16a34a;
+}
+
+.ocupado{
+    background-color: #2563eb;
+}
+
+.offline{
+    background-color: #6b7280;
+}
+
+
+/* AÇÕES */
+
+.acoes{
+    display: flex;
+
+    gap: 12px;
+}
+
+
+/* BOTÕES */
+
+.acoes button{
+    border: none;
+
+    padding: 12px 18px;
+
+    border-radius: 10px;
+
+    font-weight: bold;
+
+    cursor: pointer;
+
+    transition: 0.2s;
+}
+
+
+/* PERFIL */
+
+.detalhes{
+    background-color: #0B2A4A;
+
+    color: white;
+}
+
+
+/* EDITAR */
+
+.editar{
+    background-color: #F28C28;
+
+    color: white;
+}
+
+
+/* HOVER */
+
+.acoes button:hover{
+    transform: translateY(-2px);
+
+    opacity: 0.9;
+}
+
+
+/* RESPONSIVIDADE */
+
+@media(max-width: 950px){
+
+    .entregador-card{
+        flex-direction: column;
+
+        align-items: flex-start;
+
+        gap: 20px;
+    }
+
+}
+
+
+@media(max-width: 768px){
+
+    .container{
+        flex-direction: column;
+    }
+
+    .sidebar{
+        width: 100%;
+    }
+
+    .topbar{
+        flex-direction: column;
+
+        gap: 15px;
+
+        align-items: flex-start;
+    }
+
+    .acoes{
+        width: 100%;
+
+        flex-direction: column;
+    }
+
+    .acoes button{
+        width: 100%;
+    }
+
+}

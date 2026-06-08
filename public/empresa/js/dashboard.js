@@ -1,79 +1,31 @@
 // BOTÃO NOVA ROTA
+const novaRotaBtn = document.getElementById("btnNovaRota");
 
-const novaRotaBtn = document.querySelector(".topbar button");
+if (novaRotaBtn) {
+    novaRotaBtn.addEventListener("click", function(){
+        window.location.href = "nova-rota.html";
+    });
+}
 
-
-// EVENTO BOTÃO
-
-novaRotaBtn.addEventListener("click", function(){
-
-    // REDIRECIONAR
-
-    window.location.href = "nova-rota.html";
-
-});
-
-
-// PEGAR BOTÕES DE DETALHES
-
-const detalhesBtns = document.querySelectorAll(".rota-item button");
-
-
-// EVENTO EM CADA BOTÃO
+// SELECIONAR BOTÕES DE DETALHES NA TABELA
+const detalhesBtns = document.querySelectorAll(".btn-detalhes");
 
 detalhesBtns.forEach(function(botao){
-
     botao.addEventListener("click", function(){
-
         alert("Abrindo detalhes da rota...");
-
         // FUTURAMENTE:
         // window.location.href = "detalhes-rota.html";
-
     });
-
 });
 
+// LOGOUT COM CONFIRMAÇÃO
+const sairBtn = document.querySelector(".btn-logout");
 
-// MENU ATIVO
-
-const menuLinks = document.querySelectorAll(".menu a");
-
-
-menuLinks.forEach(function(link){
-
-    link.addEventListener("click", function(){
-
-        // REMOVE ACTIVE
-
-        menuLinks.forEach(function(item){
-
-            item.classList.remove("active");
-
-        });
-
-        // ADICIONA ACTIVE
-
-        this.classList.add("active");
-
+if (sairBtn) {
+    sairBtn.addEventListener("click", function(event){
+        const confirmar = confirm("Deseja realmente sair?");
+        if(!confirmar){
+            event.preventDefault();
+        }
     });
-
-});
-
-
-// LOGOUT
-
-const sairBtn = document.querySelector(".logout a");
-
-
-sairBtn.addEventListener("click", function(event){
-
-    const confirmar = confirm("Deseja realmente sair?");
-
-    if(!confirmar){
-
-        event.preventDefault();
-
-    }
-
-});
+}
