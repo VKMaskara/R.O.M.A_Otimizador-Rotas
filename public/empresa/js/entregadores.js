@@ -11,21 +11,19 @@ document.addEventListener("DOMContentLoaded", function () {
     function iconeVeiculo(veiculo) {
         if (!veiculo) return "bi-bicycle";
         const v = veiculo.toLowerCase();
-        if (v.includes("moto"))     return "bi-bicycle";
-        if (v.includes("van"))      return "bi-truck-front";
-        if (v.includes("caminh"))   return "bi-truck";
-        if (v.includes("carro"))    return "bi-car-front";
+        if (v.includes("moto"))   return "bi-bicycle";
+        if (v.includes("van"))    return "bi-truck-front";
+        if (v.includes("caminh")) return "bi-truck";
+        if (v.includes("carro"))  return "bi-car-front";
         return "bi-bicycle";
     }
 
     // ── BADGE DE STATUS ────────────────────────────────────────────────────────
-    // A tabela de usuários tem campo "ativo" (boolean).
-    // Quando a API retornar um campo "status" (em_rota, etc.), use-o.
-    function badgeStatus(entregador) {
-        if (!entregador.ativo) {
+    function badgeStatus(e) {
+        if (!e.ativo) {
             return `<span class="badge bg-secondary px-3 py-2 rounded-pill">Offline</span>`;
         }
-        if (entregador.status === "em_rota") {
+        if (e.status === "em_rota") {
             return `<span class="badge bg-primary px-3 py-2 rounded-pill">Em Rota</span>`;
         }
         return `<span class="badge bg-success px-3 py-2 rounded-pill">Ativo</span>`;
@@ -75,15 +73,14 @@ document.addEventListener("DOMContentLoaded", function () {
             </div>
         `;
 
-        // Eventos dos botões do card
         col.querySelector(".btn-perfil").addEventListener("click", () => {
             alert(`Abrindo perfil de ${e.nome}...`);
             // window.location.href = `perfil-entregador.html?id=${e.id}`;
         });
 
+        // ← agora redireciona para edição com o id na URL
         col.querySelector(".btn-editar").addEventListener("click", () => {
-            alert(`Abrindo edição de ${e.nome}...`);
-            // window.location.href = `editar-entregador.html?id=${e.id}`;
+            window.location.href = `editar-entregador.html?id=${e.id}`;
         });
 
         return col;
@@ -99,7 +96,6 @@ document.addEventListener("DOMContentLoaded", function () {
             return;
         }
 
-        // Estado de carregamento
         lista.innerHTML = `
             <div class="col-12 text-center py-5 text-muted">
                 <div class="spinner-border text-secondary mb-3" role="status"></div>
@@ -109,10 +105,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         try {
             const res = await fetch("http://localhost:3000/entregadores", {
-                method: "GET",
-                headers: {
-                    "Authorization": `Bearer ${token}`
-                }
+                headers: { "Authorization": `Bearer ${token}` }
             });
 
             if (res.status === 401) {
@@ -123,16 +116,11 @@ document.addEventListener("DOMContentLoaded", function () {
             }
 
             const data = await res.json();
+            if (!res.ok || data.status === "error") throw new Error(data.erro || "Erro ao carregar.");
 
-            if (!res.ok || data.status === "error") {
-                throw new Error(data.erro || "Erro ao carregar entregadores.");
-            }
+            lista.innerHTML = "";
 
-            const entregadores = data.dados;
-
-            lista.innerHTML = ""; // limpa spinner
-
-            if (!entregadores || entregadores.length === 0) {
+            if (!data.dados || data.dados.length === 0) {
                 lista.innerHTML = `
                     <div class="col-12 text-center py-5 text-muted">
                         <i class="bi bi-people fs-1 mb-3 d-block"></i>
@@ -143,18 +131,16 @@ document.addEventListener("DOMContentLoaded", function () {
                 return;
             }
 
-            entregadores.forEach(e => lista.appendChild(criarCard(e)));
+            data.dados.forEach(e => lista.appendChild(criarCard(e)));
 
         } catch (err) {
-            console.error("Erro ao carregar entregadores:", err);
+            console.error("Erro:", err);
             lista.innerHTML = `
                 <div class="col-12 text-center py-5 text-danger">
                     <i class="bi bi-exclamation-triangle fs-1 mb-3 d-block"></i>
                     <p class="fw-bold">Não foi possível carregar os entregadores.</p>
                     <p class="small">${err.message}</p>
-                    <button class="btn btn-outline-danger mt-2" id="btnTentarNovamente">
-                        Tentar novamente
-                    </button>
+                    <button class="btn btn-outline-danger mt-2" id="btnTentarNovamente">Tentar novamente</button>
                 </div>
             `;
             document.getElementById("btnTentarNovamente")
@@ -162,17 +148,16 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 
-    // ── PESQUISA (filtra os cards já renderizados) ─────────────────────────────
+    // ── PESQUISA ───────────────────────────────────────────────────────────────
     inputPesquisa.addEventListener("input", function () {
         const termo = this.value.toLowerCase();
         lista.querySelectorAll(".col-12").forEach(col => {
-            const texto = col.innerText.toLowerCase();
-            col.style.display = texto.includes(termo) ? "" : "none";
+            col.style.display = col.innerText.toLowerCase().includes(termo) ? "" : "none";
         });
     });
 
-    // ── BOTÃO NOVO ENTREGADOR ──────────────────────────────────────────────────
-    btnNovo.addEventListener("click", function () {
+    // ── BOTÃO NOVO ─────────────────────────────────────────────────────────────
+    btnNovo.addEventListener("click", () => {
         window.location.href = "novo-entregador.html";
     });
 
@@ -180,16 +165,14 @@ document.addEventListener("DOMContentLoaded", function () {
     const sairBtn = document.querySelector(".logout-area a");
     if (sairBtn) {
         sairBtn.addEventListener("click", function (event) {
-            const confirmar = confirm("Deseja realmente sair?");
-            if (confirmar) {
+            if (!confirm("Deseja realmente sair?")) {
+                event.preventDefault();
+            } else {
                 localStorage.removeItem("roma_token");
                 localStorage.removeItem("roma_user_tipo");
-            } else {
-                event.preventDefault();
             }
         });
     }
 
-    // ── INICIAR ────────────────────────────────────────────────────────────────
     carregarEntregadores();
 });
