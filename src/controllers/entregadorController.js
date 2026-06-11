@@ -1,213 +1,109 @@
-import { EntregadorService }
-    from "../services/EntregadorService.js";
+// src/controllers/entregadorController.js
+import { EntregadorService } from '../services/EntregadorService.js';
 import db from '../database/db.js';
 
 export class EntregadorController {
 
-    // =========================
-    // CRIAR
-    // =========================
-
+    // POST /entregadores
     static async criar(req, res) {
-
         try {
-
-            const entregador =
-                await EntregadorService
-                    .criarEntregador(req.body);
-
-            return res.status(201).json({
-                status: 'success',
-                dados: entregador
-            });
-
-        } catch (error) {
-
-            return res.status(400).json({
-                status: 'error',
-                mensagem: error.message
-            });
+            // usuario_id vem do token JWT (injetado pelo middleware autenticar)
+            const entregador = await EntregadorService.criarEntregador(
+                req.body,
+                req.usuario.id   // ← passa o id do usuário logado
+            );
+            return res.status(201).json({ status: 'success', dados: entregador });
+        } catch (err) {
+            return res.status(400).json({ status: 'error', erro: err.message });
         }
     }
 
-    // =========================
-    // LISTAR
-    // =========================
-
+    // GET /entregadores
     static async listar(req, res) {
-
         try {
-
-            const entregadores =
-                await EntregadorService
-                    .listarEntregadores();
-
-            return res.status(200).json({
-                status: 'success',
-                dados: entregadores
-            });
-
-        } catch (error) {
-
-            return res.status(500).json({
-                status: 'error',
-                mensagem: error.message
-            });
+            const entregadores = await EntregadorService.listarEntregadores(
+                req.usuario.id   // ← filtra pela empresa do usuário logado
+            );
+            return res.status(200).json({ status: 'success', dados: entregadores });
+        } catch (err) {
+            return res.status(400).json({ status: 'error', erro: err.message });
         }
     }
 
-    // =========================
-    // BUSCAR POR ID
-    // =========================
-
+    // GET /entregadores/:id
     static async buscarPorId(req, res) {
-
         try {
-
-            const entregador =
-                await EntregadorService
-                    .buscarEntregador(
-                        Number(req.params.id)
-                    );
-
-            return res.status(200).json({
-                status: 'success',
-                dados: entregador
-            });
-
-        } catch (error) {
-
-            return res.status(404).json({
-                status: 'error',
-                mensagem: error.message
-            });
+            const entregador = await EntregadorService.buscarEntregador(
+                Number(req.params.id),
+                req.usuario.id
+            );
+            return res.status(200).json({ status: 'success', dados: entregador });
+        } catch (err) {
+            const status = err.message.includes('não encontrado') ? 404 : 400;
+            return res.status(status).json({ status: 'error', erro: err.message });
         }
     }
 
-    // =========================
-    // ATUALIZAR
-    // =========================
-
+    // PUT /entregadores/:id
     static async atualizar(req, res) {
-
         try {
-
-            const entregador =
-                await EntregadorService
-                    .atualizarEntregador(
-                        Number(req.params.id),
-                        req.body
-                    );
-
-            return res.status(200).json({
-                status: 'success',
-                dados: entregador
-            });
-
-        } catch (error) {
-
-            return res.status(400).json({
-                status: 'error',
-                mensagem: error.message
-            });
+            const entregador = await EntregadorService.atualizarEntregador(
+                Number(req.params.id),
+                req.body,
+                req.usuario.id
+            );
+            return res.status(200).json({ status: 'success', dados: entregador });
+        } catch (err) {
+            const status = err.message.includes('não encontrado') ? 404 : 400;
+            return res.status(status).json({ status: 'error', erro: err.message });
         }
     }
 
-    // =========================
-    // DESATIVAR
-    // =========================
-
+    // DELETE /entregadores/:id
     static async desativar(req, res) {
-
         try {
-
-            await EntregadorService
-                .desativarEntregador(
-                    Number(req.params.id)
-                );
-
-            return res.status(200).json({
-                status: 'success',
-                mensagem:
-                    'Entregador desativado com sucesso.'
-            });
-
-        } catch (error) {
-
-            return res.status(404).json({
-                status: 'error',
-                mensagem: error.message
-            });
+            await EntregadorService.desativarEntregador(
+                Number(req.params.id),
+                req.usuario.id
+            );
+            return res.status(200).json({ status: 'success', dados: { mensagem: 'Entregador desativado com sucesso.' } });
+        } catch (err) {
+            const status = err.message.includes('não encontrado') ? 404 : 400;
+            return res.status(status).json({ status: 'error', erro: err.message });
         }
     }
-    // GET /entregadores/minha-rota
+
+    // GET /entregadores/minha-rota  (usado pelo próprio entregador)
     static async minhaRota(req, res) {
         try {
-            const usuario_id = req.usuario.id;
-
-            // Busca o entregador pelo usuario_id
             const entregador = await db('entregadores')
-                .where({ usuario_id })
+                .where({ usuario_id: req.usuario.id })
                 .first();
 
             if (!entregador) {
-                return res.status(404).json({
-                    status: 'error',
-                    mensagem: 'Entregador não encontrado.'
-                });
+                return res.status(404).json({ status: 'error', erro: 'Perfil de entregador não encontrado.' });
             }
 
-            // Busca a rota de hoje atribuída a esse entregador
             const hoje = new Date().toISOString().split('T')[0];
 
             const rota = await db('rotas')
                 .where({ entregador_id: entregador.id })
-                .whereIn('status', ['pendente', 'em_andamento'])
-                .where('data', hoje)
+                .whereIn('status', ['em_andamento', 'pendente'])
+                .whereRaw('DATE(criado_em) = ?', [hoje])
                 .first();
 
             if (!rota) {
-                return res.status(200).json({
-                    status: 'success',
-                    mensagem: 'Nenhuma rota atribuída para hoje.',
-                    dados: null
-                });
+                return res.status(200).json({ status: 'success', dados: null, mensagem: 'Nenhuma rota atribuída para hoje.' });
             }
 
-            // Busca as paradas com pacotes
             const paradas = await db('paradas')
-                .leftJoin('pacotes', 'paradas.id', 'pacotes.parada_id')
-                .where('paradas.rota_id', rota.id)
-                .select(
-                    'paradas.id',
-                    'paradas.posicao',
-                    'paradas.endereco',
-                    'paradas.lat',
-                    'paradas.lng',
-                    'paradas.status_entrega',
-                    'pacotes.codigo',
-                    'pacotes.destinatario',
-                    'pacotes.observacao'
-                )
-                .orderBy('paradas.posicao');
+                .where({ rota_id: rota.id })
+                .orderBy('posicao')
+                .select('*');
 
-            return res.status(200).json({
-                status: 'success',
-                dados: {
-                    rota_id: rota.id,
-                    status: rota.status,
-                    data: rota.data,
-                    km_otimizado: rota.km_otimizado,
-                    tempo_estimado_min: rota.tempo_estimado_min,
-                    paradas
-                }
-            });
-
-        } catch (error) {
-            return res.status(500).json({
-                status: 'error',
-                mensagem: error.message
-            });
+            return res.status(200).json({ status: 'success', dados: { ...rota, paradas } });
+        } catch (err) {
+            return res.status(500).json({ status: 'error', erro: err.message });
         }
     }
 }

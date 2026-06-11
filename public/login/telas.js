@@ -25,7 +25,7 @@ form.addEventListener("submit", async function (event) {
     }
 
     try {
-       
+
         const res = await fetch('http://localhost:3000/auth/login', {
             method: 'POST',
             headers: {
@@ -37,29 +37,28 @@ form.addEventListener("submit", async function (event) {
             })
         });
 
-      
+
         const data = await res.json();
 
         if (!res.ok || data.status === 'error') {
-           
+
             alert(data.mensagem || data.message || 'Erro ao fazer login! Tente novamente.');
             return;
         }
 
-        if (data.token) {
-          
-            localStorage.setItem("roma_token", data.token);
-
-            if (data.usuario) {
-                localStorage.setItem("roma_user_tipo", data.usuario.tipo);
+        
+        if (data.dados?.token) {
+            localStorage.setItem("roma_token", data.dados.token);
+            if (data.dados.usuario) {
+                localStorage.setItem("roma_user_tipo", data.dados.usuario.tipo);
             }
         }
-        
+
         alert("Login realizado com sucesso!");
 
         // REDIRECIONAR para a Dashboard
         window.location.href = "../empresa/dashboard.html";
-        
+
     } catch (error) {
         console.error("Erro na requisição de login:", error);
         alert("Erro de conexão com o servidor. Tente novamente mais tarde.");

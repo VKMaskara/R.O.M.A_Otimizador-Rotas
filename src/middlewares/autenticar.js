@@ -4,68 +4,93 @@ import jwt from 'jsonwebtoken';
 /**
  * Middleware de autenticação JWT.
  *
- * Verifica se o token é válido e injeta os dados do usuário em req.usuario.
- * Uso: router.post('/rota', autenticar, Controller.metodo)
+ * Espera o token no header:
+ *   Authorization: Bearer <token>
  *
- * Para rotas exclusivas de empresa:  autenticar, apenasEmpresa
- * Para rotas exclusivas de entregador: autenticar, apenasEntregador
+ * Após validar, injeta req.usuario = { id, tipo }
  */
 export function autenticar(req, res, next) {
-    const authHeader = req.headers['authorization'];
+    const authHeader = req.headers['authorization'] || req.headers['Authorization'];
 
-    // Espera o formato: "Bearer <token>"
-    const token = authHeader && authHeader.split(' ')[1];
-
-    if (!token) {
+    // ── 1. Header ausente ────────────────────────────────────────────────────
+    if (!authHeader) {
         return res.status(401).json({
             status: 'error',
-            mensagem: 'Token não fornecido. Faça login para continuar.'
+            erro: 'Token não fornecido. Faça login para continuar.',
         });
     }
 
-    try {
-        const payload = jwt.verify(token, process.env.JWT_SECRET);
-
-        // Injeta os dados do usuário na requisição
-        // Disponível em qualquer controller como req.usuario
-        req.usuario = {
-            id:   payload.id,
-            tipo: payload.tipo
-        };
-
-        next(); // segue para o controller
-
-    } catch (error) {
+    // ── 2. Formato inválido (esperado "Bearer <token>") ──────────────────────
+    const partes = authHeader.split(' ');
+    if (partes.length !== 2 || partes[0].toLowerCase() !== 'bearer') {
         return res.status(401).json({
             status: 'error',
-            mensagem: 'Token inválido ou expirado. Faça login novamente.'
+            erro: 'Formato de token inválido. Use: Authorization: Bearer <token>',
+        });
+    }
+
+    const token = partes[1];
+
+    // ── 3. Verificar e decodificar o token ───────────────────────────────────
+    try {
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        req.usuario = {
+            id:   decoded.id,
+            tipo: decoded.tipo,
+        };
+        next();
+    } catch (err) {
+        // Distingue token expirado de token inválido
+        if (err.name === 'TokenExpiredError') {
+            return res.status(401).json({
+                status: 'error',
+                erro: 'Token expirado. Faça login novamente.',
+            });
+        }
+        return res.status(401).json({
+            status: 'error',
+            erro: 'Token inválido.',
         });
     }
 }
 
 /**
- * Middleware de autorização — só empresas passam.
- * Sempre usar depois do autenticar.
+ * Middleware de autorização: apenas usuários do tipo EMPRESA.
+ * Deve ser usado APÓS autenticar().
  */
 export function apenasEmpresa(req, res, next) {
-    if (req.usuario.tipo !== 'EMPRESA') {
+    if (req.usuario?.tipo !== 'EMPRESA') {
         return res.status(403).json({
             status: 'error',
-            mensagem: 'Acesso restrito a empresas.'
+            erro: 'Acesso restrito a empresas.',
         });
     }
     next();
 }
 
 /**
- * Middleware de autorização — só entregadores passam.
- * Sempre usar depois do autenticar.
+ * Middleware de autorização: apenas usuários do tipo ENTREGADOR.
+ * Deve ser usado APÓS autenticar().
  */
 export function apenasEntregador(req, res, next) {
-    if (req.usuario.tipo !== 'ENTREGADOR') {
+    if (req.usuario?.tipo !== 'ENTREGADOR') {
         return res.status(403).json({
             status: 'error',
-            mensagem: 'Acesso restrito a entregadores.'
+            erro: 'Acesso restrito a entregadores.',
+        });
+    }
+    next();
+}
+
+/**
+ * Middleware de autorização: apenas usuários do tipo ADMIN.
+ * Deve ser usado APÓS autenticar().
+ */
+export function apenasAdmin(req, res, next) {
+    if (req.usuario?.tipo !== 'ADMIN') {
+        return res.status(403).json({
+            status: 'error',
+            erro: 'Acesso restrito a administradores.',
         });
     }
     next();
