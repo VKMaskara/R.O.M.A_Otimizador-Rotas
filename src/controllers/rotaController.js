@@ -1,5 +1,7 @@
 // src/controllers/RotaController.js
+import fs from 'fs';
 import { RotaService } from '../services/RotaService.js';
+import { ExecelService } from '../services/ExecelService.js';
 
 export class RotaController {
 
@@ -25,6 +27,49 @@ export class RotaController {
             return res.status(201).json({ status: 'success', dados: resultado });
 
         } catch (error) {
+            return res.status(400).json({ status: 'error', mensagem: error.message });
+        }
+    }
+
+    // POST /rotas/otimizar-excel — modo PLANILHA (multipart/form-data)
+    // Campos do form-data:
+    //   planilha       -> arquivo .xlsx/.xls/.csv (obrigatório)
+    //   entregador_id  -> opcional
+    static async otimizarExcel(req, res) {
+        try {
+            const empresa_id = req.usuario.id;
+
+            if (!req.file) {
+                return res.status(400).json({
+                    status: 'error',
+                    mensagem: 'Nenhuma planilha foi enviada.'
+                });
+            }
+
+            const paradas = ExecelService.getAddresFromExel(req.file.path);
+
+            // Remove o arquivo temporário independentemente do resultado
+            fs.unlink(req.file.path, () => {});
+
+            if (!paradas) {
+                return res.status(400).json({
+                    status: 'error',
+                    mensagem: 'Planilha inválida. Verifique se há uma linha com "Tipo: DEPOSITO" e as colunas Endereco, Numero, Cidade, Estado.'
+                });
+            }
+
+            const { entregador_id } = req.body;
+
+            const resultado = await RotaService.otimizarERosalvar(
+                empresa_id,
+                paradas,
+                entregador_id || null
+            );
+
+            return res.status(201).json({ status: 'success', dados: resultado });
+
+        } catch (error) {
+            if (req.file?.path) fs.unlink(req.file.path, () => {});
             return res.status(400).json({ status: 'error', mensagem: error.message });
         }
     }

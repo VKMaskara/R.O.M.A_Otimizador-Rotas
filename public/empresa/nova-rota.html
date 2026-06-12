@@ -7,6 +7,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="css/dashboard.css">
+    <link rel="stylesheet" href="css/nova-rota.css">
 </head>
 <body>
 
@@ -27,84 +28,112 @@
             </div>
 
             <div class="logout">
-                <a href="login.html" id="btn-sair" class="nav-link text-white p-3 rounded-3 fw-bold text-center bg-white-10"><i class="bi bi-box-arrow-right me-2"></i> Sair</a>
+                <a href="../login/login.html" id="btn-sair" class="nav-link text-white p-3 rounded-3 fw-bold text-center bg-white-10"><i class="bi bi-box-arrow-right me-2"></i> Sair</a>
             </div>
         </aside>
 
         <main class="main-content flex-grow-1 p-4 p-md-5 bg-light">
-            <header class="topbar mb-5">
-                <h1 class="h2 fw-bold text-navy">Nova Rota</h1>
+            <header class="topbar mb-5 d-flex justify-content-between align-items-center">
+                <h1 class="h2 fw-bold text-navy mb-0">Nova Rota</h1>
+                <a href="rotas.html" class="btn btn-outline-secondary px-4 py-2 fw-bold">
+                    <i class="bi bi-arrow-left me-1"></i> Voltar
+                </a>
             </header>
 
             <section class="card border-0 shadow-sm rounded-4 p-4 p-md-5 bg-white">
                 <form id="form-rota">
                     <div class="row g-4">
-                        
-                        <div class="col-md-6">
-                            <label for="nomeRota" class="form-label fw-semibold text-navy">Nome da Rota <span class="text-danger">*</span></label>
-                            <input type="text" class="form-control py-2.5 rounded-3" id="nomeRota" placeholder="Digite o nome descritivo da rota">
-                        </div>
 
+                        <!-- ENTREGADOR -->
                         <div class="col-md-6">
                             <label for="entregador" class="form-label fw-semibold text-navy">Entregador</label>
-                            <select id="entregador" class="form-select py-2.5 rounded-3">
+                            <select id="entregador" class="form-select py-2 rounded-3">
                                 <option value="">Selecione um entregador (Opcional)</option>
-                                <option value="1">João Silva</option>
-                                <option value="2">Maria Oliveira</option>
-                                <option value="3">Carlos Santos</option>
                             </select>
+                            <div class="form-text">Pode ser atribuído depois, na tela de Rotas.</div>
                         </div>
 
-                        <div class="col-12 mt-4">
-                            <label class="form-label fw-semibold text-navy d-block">Forma de Entrada do Endereço <span class="text-danger">*</span></label>
-                            <div class="btn-group w-100" role="group">
-                                <input type="radio" class="btn-check" name="tipoEndereco" id="tipoManual" value="manual" checked>
-                                <label class="btn btn-outline-navy py-2.5 fw-bold" for="tipoManual"><i class="bi bi-keyboard me-2"></i>Digitação Manual</label>
-
-                                <input type="radio" class="btn-check" name="tipoEndereco" id="tipoExcel" value="excel">
-                                <label class="btn btn-outline-navy py-2.5 fw-bold" for="tipoExcel"><i class="bi bi-file-earmark-excel me-2"></i>Importar Planilha Excel</label>
-                            </div>
-                        </div>
-
-                        <div class="col-12" id="container-endereco-manual">
-                            <label for="endereco" class="form-label fw-semibold text-navy">Endereço de Entrega <span class="text-danger">*</span></label>
-                            <input type="text" class="form-control py-2.5 rounded-3" id="endereco" placeholder="Rua, número, bairro, cidade - UF">
-                        </div>
-
-                        <div class="col-12 d-none" id="container-endereco-excel">
-                            <label for="arquivoExcel" class="form-label fw-semibold text-navy">Upload do Arquivo Excel (.xlsx, .xls, .csv) <span class="text-danger">*</span></label>
-                            <div class="input-group">
-                                <span class="input-group-text bg-light"><i class="bi bi-cloud-arrow-up text-navy"></i></span>
-                                <input type="file" class="form-control py-2.5 rounded-end-3" id="arquivoExcel" accept=".xlsx, .xls, .csv">
-                            </div>
-                            <div class="form-text text-muted">A planilha deve conter uma coluna identificada com o nome do endereço de destino.</div>
-                        </div>
-
+                        <!-- PRIORIDADE -->
                         <div class="col-md-6">
-                            <label for="prioridade" class="form-label fw-semibold text-navy">Prioridade <span class="text-danger">*</span></label>
-                            <select id="prioridade" class="form-select py-2.5 rounded-3">
-                                <option value="">Selecione</option>
+                            <label for="prioridade" class="form-label fw-semibold text-navy">Prioridade</label>
+                            <select id="prioridade" class="form-select py-2 rounded-3">
+                                <option value="media" selected>Média</option>
                                 <option value="baixa">Baixa</option>
-                                <option value="media">Média</option>
                                 <option value="alta">Alta</option>
                             </select>
+                            <div class="form-text">Apenas informativo (não altera o cálculo da rota).</div>
                         </div>
 
-                        <div class="col-md-6">
-                            <label for="horario" class="form-label fw-semibold text-navy">Horário Estimado de Entrega <span class="text-danger">*</span></label>
-                            <input type="time" class="form-control py-2.5 rounded-3" id="horario">
+                        <!-- MODO DE ENTRADA -->
+                        <div class="col-12 mt-2">
+                            <label class="form-label fw-semibold text-navy d-block">Forma de Entrada dos Endereços <span class="text-danger">*</span></label>
+                            <div class="btn-group w-100" role="group">
+                                <input type="radio" class="btn-check" name="tipoEndereco" id="tipoManual" value="manual" checked>
+                                <label class="btn btn-outline-navy py-2 fw-bold" for="tipoManual"><i class="bi bi-keyboard me-2"></i>Digitação Manual</label>
+
+                                <input type="radio" class="btn-check" name="tipoEndereco" id="tipoExcel" value="excel">
+                                <label class="btn btn-outline-navy py-2 fw-bold" for="tipoExcel"><i class="bi bi-file-earmark-excel me-2"></i>Importar Planilha Excel</label>
+                            </div>
                         </div>
 
+                        <!-- ══════════ MODO MANUAL ══════════ -->
+                        <div id="container-endereco-manual" class="col-12">
+
+                            <hr class="my-2">
+
+                            <!-- DEPÓSITO -->
+                            <div class="mb-4">
+                                <label for="deposito" class="form-label fw-semibold text-navy">
+                                    <i class="bi bi-house-door me-1"></i> Endereço do Depósito (Origem) <span class="text-danger">*</span>
+                                </label>
+                                <input type="text" class="form-control py-2 rounded-3" id="deposito"
+                                       placeholder="Rua, número, bairro, cidade - UF">
+                            </div>
+
+                            <!-- ENTREGAS -->
+                            <label class="form-label fw-semibold text-navy d-block">
+                                <i class="bi bi-box-seam me-1"></i> Entregas <span class="text-danger">*</span>
+                            </label>
+
+                            <div id="lista-entregas" class="d-flex flex-column gap-3 mb-3">
+                                <!-- linhas de entrega são geradas via JS -->
+                            </div>
+
+                            <button type="button" id="btnAddEntrega" class="btn btn-outline-navy btn-sm rounded-3">
+                                <i class="bi bi-plus-lg me-1"></i> Adicionar entrega
+                            </button>
+                        </div>
+
+                        <!-- ══════════ MODO EXCEL ══════════ -->
+                        <div class="col-12 d-none" id="container-endereco-excel">
+                            <hr class="my-2">
+                            <label for="arquivoExcel" class="form-label fw-semibold text-navy">
+                                Upload do Arquivo Excel (.xlsx, .xls, .csv) <span class="text-danger">*</span>
+                            </label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light"><i class="bi bi-cloud-arrow-up text-navy"></i></span>
+                                <input type="file" class="form-control py-2 rounded-end-3" id="arquivoExcel" accept=".xlsx, .xls, .csv">
+                            </div>
+                            <div class="form-text text-muted">
+                                A planilha deve ter as colunas <strong>Endereco, Numero, Cidade, Estado, Tipo</strong>
+                                (e opcionalmente Pacote, Destinatario, Observacao). Marque <strong>Tipo = DEPOSITO</strong>
+                                na linha de origem.
+                            </div>
+                        </div>
+
+                        <!-- OBSERVAÇÕES -->
                         <div class="col-12">
-                            <label for="observacoes" class="form-label fw-semibold text-navy">Observações Adicionais</label>
-                            <textarea id="observacoes" class="form-control rounded-3" rows="3" placeholder="Informações complementares (Ex: Ponto de referência, cuidados com a carga)"></textarea>
+                            <label for="observacoes" class="form-label fw-semibold text-navy">Observações da Rota</label>
+                            <textarea id="observacoes" class="form-control rounded-3" rows="2"
+                                      placeholder="Informações complementares (opcional)"></textarea>
                         </div>
 
-                        <div class="col-12 d-flex flex-wrap gap-3 mt-5 pt-3 border-top">
-                            <button type="submit" class="btn btn-orange px-5 py-2.5 fw-bold text-white shadow-sm rounded-3">
+                        <!-- BOTÕES -->
+                        <div class="col-12 d-flex flex-wrap gap-3 mt-4 pt-3 border-top">
+                            <button type="submit" id="btnSubmit" class="btn btn-orange px-5 py-2 fw-bold text-white shadow-sm rounded-3">
                                 <i class="bi bi-check-lg me-1"></i> Criar Rota
                             </button>
-                            <a href="rotas.html" class="btn btn-light text-secondary px-4 py-2.5 fw-semibold rounded-3 border">
+                            <a href="rotas.html" class="btn btn-light text-secondary px-4 py-2 fw-semibold rounded-3 border">
                                 <i class="bi bi-x-lg me-1"></i> Cancelar
                             </a>
                         </div>
@@ -114,6 +143,34 @@
             </section>
         </main>
     </div>
+
+    <!-- TEMPLATE de uma linha de entrega (clonado via JS) -->
+    <template id="template-entrega">
+        <div class="entrega-row card border rounded-3 p-3">
+            <div class="row g-2 align-items-end">
+                <div class="col-12 col-md-6">
+                    <label class="form-label small text-muted mb-1">Endereço de Entrega <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control form-control-sm rounded-3 entrega-endereco"
+                           placeholder="Rua, número, bairro, cidade - UF">
+                </div>
+                <div class="col-12 col-md-3">
+                    <label class="form-label small text-muted mb-1">Código do Pacote</label>
+                    <input type="text" class="form-control form-control-sm rounded-3 entrega-pacote"
+                           placeholder="Ex: PKG-001">
+                </div>
+                <div class="col-12 col-md-2">
+                    <label class="form-label small text-muted mb-1">Destinatário</label>
+                    <input type="text" class="form-control form-control-sm rounded-3 entrega-destinatario"
+                           placeholder="Nome">
+                </div>
+                <div class="col-12 col-md-1 d-flex">
+                    <button type="button" class="btn btn-outline-danger btn-sm rounded-3 w-100 btn-remover-entrega" title="Remover">
+                        <i class="bi bi-trash"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </template>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="js/nova-rota.js"></script>

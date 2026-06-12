@@ -2,13 +2,23 @@
 import { Router } from 'express';
 import { RotaController } from '../controllers/rotaController.js';
 import { autenticar, apenasEmpresa, apenasEntregador } from '../middlewares/autenticar.js';
+import { uploadPlanilha } from '../middlewares/uploadMiddleware.js';
 
 const router = Router();
 
 // ─── ROTAS DA EMPRESA ─────────────────────────────────────────────────────────
 
-// POST /rotas/otimizar — empresa envia endereços e recebe rota otimizada
+// POST /rotas/otimizar — empresa envia endereços (JSON) e recebe rota otimizada
 router.post('/otimizar', autenticar, apenasEmpresa, RotaController.otimizar);
+
+// POST /rotas/otimizar-excel — empresa envia planilha (multipart/form-data)
+router.post(
+    '/otimizar-excel',
+    autenticar,
+    apenasEmpresa,
+    uploadPlanilha.single('planilha'),
+    RotaController.otimizarExcel
+);
 
 // GET /rotas — empresa lista todas as suas rotas
 router.get('/', autenticar, apenasEmpresa, RotaController.listar);
