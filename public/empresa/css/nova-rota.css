@@ -1,0 +1,43 @@
+/* Classes de apoio para sincronizar com o Bootstrap 5 */
+.bg-navy {
+    background: linear-gradient(180deg, #0B2A4A, #123B63) !important;
+}
+
+.text-navy {
+    color: #0B2A4A !important;
+}
+
+.btn-outline-navy {
+    color: #0B2A4A;
+    border-color: #0B2A4A;
+}
+
+.btn-outline-navy:hover, 
+.btn-check:checked + .btn-outline-navy {
+    background-color: #0B2A4A !important;
+    color: #ffffff !important;
+    border-color: #0B2A4A !important;
+}
+
+.btn-orange {
+    background-color: #F28C28 !important;
+    border-color: #F28C28 !important;
+    transition: 0.2s ease-in-out;
+}
+
+.btn-orange:hover {
+    background-color: #d97706 !important;
+    transform: translateY(-1px);
+}
+
+.style-active-orange {
+    background-color: #F28C28 !important;
+}
+
+.bg-white-10 {
+    background-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+.bg-white-10:hover {
+    background-color: #F28C28 !important;
+}
