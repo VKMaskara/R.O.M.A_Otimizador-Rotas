@@ -1,0 +1,250 @@
+/* ═══════════════════════════════════════════════════════
+   R.O.M.A — rotas.css  |  Padrão Bootstrap / Dashboard
+   ═══════════════════════════════════════════════════════ */
+
+/* ── Layout ─────────────────────────────────────────── */
+
+body {
+    background-color: #f4f7fb;
+    font-family: 'Segoe UI', Arial, sans-serif;
+}
+
+.layout-container {
+    min-height: 100vh;
+}
+
+/* ── Sidebar ─────────────────────────────────────────── */
+
+.sidebar {
+    width: 260px;
+    background: linear-gradient(180deg, #0B2A4A, #123B63);
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+    z-index: 1050;
+}
+
+.logo-img {
+    max-width: 120px;
+}
+
+/* ── Menu de navegação ───────────────────────────────── */
+
+.nav-link-custom {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: rgba(255, 255, 255, 0.75);
+    padding: 12px 16px;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 15px;
+    transition: background 0.2s, color 0.2s;
+}
+
+.nav-link-custom:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: #ffffff;
+}
+
+.nav-link-custom.active {
+    background-color: #F28C28;
+    color: #ffffff;
+}
+
+/* ── Botão logout ────────────────────────────────────── */
+
+.btn-logout {
+    background-color: rgba(255, 255, 255, 0.1);
+    transition: background 0.2s;
+}
+
+.btn-logout:hover {
+    background-color: #F28C28;
+    color: #ffffff !important;
+}
+
+/* ── Conteúdo principal ──────────────────────────────── */
+
+.main-content {
+    background-color: #f4f7fb;
+    min-width: 0;
+}
+
+/* ── Cores de texto ──────────────────────────────────── */
+
+.text-navy {
+    color: #0B2A4A !important;
+}
+
+/* ── Botão laranja ───────────────────────────────────── */
+
+.btn-orange {
+    background-color: #F28C28;
+    border: none;
+    border-radius: 10px;
+    transition: background 0.2s, transform 0.15s;
+}
+
+.btn-orange:hover {
+    background-color: #d97706;
+    transform: translateY(-2px);
+}
+
+/* ── Pesquisa ────────────────────────────────────────── */
+
+.input-group .form-control,
+.input-group .input-group-text {
+    border-color: #dcdcdc;
+    border-radius: 12px !important;
+    font-size: 15px;
+    padding: 14px 18px;
+}
+
+.input-group .form-control:focus {
+    border-color: #F28C28;
+    box-shadow: 0 0 0 3px rgba(242, 140, 40, 0.2);
+}
+
+.input-group-text {
+    border-right: none !important;
+    border-radius: 12px 0 0 12px !important;
+}
+
+.input-group .form-control {
+    border-left: none !important;
+    border-radius: 0 12px 12px 0 !important;
+}
+
+/* ── Tabela ──────────────────────────────────────────── */
+
+.custom-table thead th {
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    border-bottom: 1px solid #e9ecef;
+    background-color: #f8f9fa;
+}
+
+.custom-table tbody tr {
+    transition: background 0.15s;
+}
+
+.custom-table tbody tr:hover {
+    background-color: #f0f4ff;
+}
+
+.custom-table td {
+    font-size: 15px;
+    color: #374151;
+    padding: 16px 12px;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.custom-table td.ps-4 {
+    color: #0B2A4A;
+    font-weight: 700;
+}
+
+/* ── Badges de status ────────────────────────────────── */
+
+.badge-status {
+    padding: 6px 14px;
+    border-radius: 30px;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.badge-pendente {
+    background-color: #fef3c7;
+    color: #92400e;
+}
+
+.badge-andamento {
+    background-color: #dbeafe;
+    color: #1e40af;
+}
+
+.badge-concluida {
+    background-color: #dcfce7;
+    color: #166534;
+}
+
+/* ── Botões de ação ──────────────────────────────────── */
+
+.btn-detalhes {
+    background-color: #0B2A4A;
+    color: #ffffff;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    transition: opacity 0.2s, transform 0.15s;
+}
+
+.btn-detalhes:hover {
+    opacity: 0.85;
+    transform: translateY(-1px);
+    color: #ffffff;
+}
+
+.btn-editar {
+    background-color: #F28C28;
+    color: #ffffff;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    transition: opacity 0.2s, transform 0.15s;
+}
+
+.btn-editar:hover {
+    opacity: 0.85;
+    transform: translateY(-1px);
+    color: #ffffff;
+}
+
+/* ── Estado vazio / erro ─────────────────────────────── */
+
+.estado-vazio {
+    text-align: center;
+    padding: 50px 20px;
+    color: #9ca3af;
+}
+
+.estado-vazio i {
+    font-size: 48px;
+    margin-bottom: 16px;
+    display: block;
+}
+
+.estado-erro {
+    padding: 20px 25px;
+    background: #fee2e2;
+    border-left: 4px solid #dc2626;
+    border-radius: 8px;
+    color: #991b1b;
+    font-weight: 600;
+}
+
+/* ── Responsividade ──────────────────────────────────── */
+
+@media (max-width: 991px) {
+    .sidebar {
+        width: 280px;
+    }
+}
+
+@media (max-width: 576px) {
+    .main-content {
+        padding: 20px !important;
+    }
+
+    .custom-table td,
+    .custom-table th {
+        font-size: 13px;
+        padding: 12px 8px;
+    }
+}

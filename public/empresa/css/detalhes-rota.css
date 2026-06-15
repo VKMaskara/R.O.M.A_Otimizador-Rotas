@@ -1,0 +1,31 @@
+/* Customização dos Links do Menu seguindo o Dashboard padrão */
+.nav-link-custom {
+    color: rgba(255, 255, 255, 0.75);
+    text-decoration: none;
+    padding: 12px 16px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    transition: all 0.3s ease;
+}
+
+.nav-link-custom:hover {
+    color: #fff;
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.nav-link-custom.active {
+    color: #fff;
+    background-color: rgba(255, 255, 255, 0.2);
+    font-weight: bold;
+}
+
+/* Área de Logout */
+.btn-logout {
+    background-color: rgba(255, 255, 255, 0.1);
+    transition: background-color 0.3s;
+}
+
+.btn-logout:hover {
+    background-color: rgba(220, 53, 69, 0.8); /* Vermelho suave ao passar o mouse */
+}
