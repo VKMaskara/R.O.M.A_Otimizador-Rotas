@@ -74,8 +74,7 @@ document.addEventListener("DOMContentLoaded", function () {
         `;
 
         col.querySelector(".btn-perfil").addEventListener("click", () => {
-            alert(`Abrindo perfil de ${e.nome}...`);
-            // window.location.href = `perfil-entregador.html?id=${e.id}`;
+            window.location.href = `perfil-entregador.html?id=${e.id}`;
         });
 
         // ← agora redireciona para edição com o id na URL

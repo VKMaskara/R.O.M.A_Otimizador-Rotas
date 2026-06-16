@@ -4,11 +4,10 @@
 
 document.addEventListener("DOMContentLoaded", function () {
 
-    // Carrega as rotas do banco ao abrir a página
     carregarRotas();
 
     // Botão Nova Rota
-   const novaRotaBtn = document.getElementById("btnNovaRota");
+    const novaRotaBtn = document.getElementById("btnNovaRota");
     if (novaRotaBtn) {
         novaRotaBtn.addEventListener("click", function () {
             window.location.href = "nova-rota.html";
@@ -16,7 +15,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // Logout
-    const sairBtn = document.querySelector(".logout a");
+    const sairBtn = document.querySelector(".btn-logout");
     if (sairBtn) {
         sairBtn.addEventListener("click", function (event) {
             const confirmar = confirm("Deseja realmente sair do sistema R.O.M.A?");
@@ -33,19 +32,26 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 // ───────────────────────────────────────────────────────
-//  BUSCA AS ROTAS NO BACKEND E RENDERIZA OS CARDS
+//  BUSCA AS ROTAS NO BACKEND E RENDERIZA A TABELA
 // ───────────────────────────────────────────────────────
 
 async function carregarRotas() {
     const token = localStorage.getItem("roma_token");
+    const tbody = document.getElementById("lista-rotas");
 
     if (!token) {
-        exibirErroLista("Usuário não autenticado. Faça login novamente.");
+        exibirErroTabela("Usuário não autenticado. Faça login novamente.");
         return;
     }
 
-    const listaContainer = document.querySelector(".lista-rotas");
-    listaContainer.innerHTML = `<p style="color:#666; text-align:center; padding:30px;">Carregando rotas...</p>`;
+    tbody.innerHTML = `
+        <tr>
+            <td colspan="6" class="text-center text-muted py-4">
+                <div class="spinner-border spinner-border-sm me-2" role="status"></div>
+                Carregando rotas...
+            </td>
+        </tr>
+    `;
 
     try {
         const response = await fetch("http://localhost:3000/rotas", {
@@ -64,156 +70,171 @@ async function carregarRotas() {
             throw new Error(`Erro ao buscar rotas: ${response.status}`);
         }
 
-        const rotas = await response.json();
-        console.log("Rotas recebidas do backend:", rotas);
+        const resposta = await response.json();
+        console.log("Rotas recebidas do backend:", resposta);
 
-        // Se vier dentro de uma propriedade (ex: { rotas: [...] }), ajuste aqui:
-        const lista = Array.isArray(rotas) ? rotas : rotas.rotas ?? [];
+        // Backend retorna { status: "success", dados: [...] }
+        const lista = Array.isArray(resposta) ? resposta : resposta.dados ?? resposta.rotas ?? [];
 
-        if (lista.length === 0) {
-            listaContainer.innerHTML = `<p style="color:#666; text-align:center; padding:30px;">Nenhuma rota cadastrada ainda.</p>`;
+        // Remove duplicatas por ID (JOIN de paradas no backend duplica linhas)
+        const unicas = [];
+        const idsVistos = new Set();
+        lista.forEach(function (rota) {
+            if (!idsVistos.has(rota.id)) {
+                idsVistos.add(rota.id);
+                unicas.push(rota);
+            }
+        });
+
+        if (unicas.length === 0) {
+            tbody.innerHTML = `
+                <tr>
+                    <td colspan="6">
+                        <div class="estado-vazio">
+                            <i class="bi bi-geo-alt"></i>
+                            Nenhuma rota cadastrada ainda.
+                        </div>
+                    </td>
+                </tr>
+            `;
             return;
         }
 
-        // Renderiza os cards dinamicamente
-        listaContainer.innerHTML = lista.map(rota => criarCardHTML(rota)).join("");
+        tbody.innerHTML = unicas.map(rota => criarLinhaHTML(rota)).join("");
 
-        // Ativa pesquisa após renderizar
         ativarPesquisa();
-
-        // Ativa botões após renderizar
         ativarBotoesDetalhes();
         ativarBotoesEditar();
 
     } catch (error) {
         console.error("Erro ao carregar rotas:", error);
-        exibirErroLista(error.message || "Falha ao conectar com o banco de dados.");
+        exibirErroTabela(error.message || "Falha ao conectar com o banco de dados.");
     }
 }
 
 
 // ───────────────────────────────────────────────────────
-//  GERA O HTML DE CADA CARD DE ROTA
+//  GERA O HTML DE CADA LINHA DA TABELA
 // ───────────────────────────────────────────────────────
 
-function criarCardHTML(rota) {
+function criarLinhaHTML(rota) {
     const statusTexto = (rota.status || "pendente").toLowerCase();
 
-    // Mapeia o status para a classe CSS e texto exibido
-    let statusClasse = "pendente";
-    let statusLabel  = "Pendente";
+    let badgeClasse = "badge-pendente";
+    let statusLabel = "Pendente";
 
     if (statusTexto === "em andamento" || statusTexto === "andamento") {
-        statusClasse = "andamento";
-        statusLabel  = "Em andamento";
+        badgeClasse = "badge-andamento";
+        statusLabel = "Em andamento";
     } else if (statusTexto === "concluida" || statusTexto === "concluída") {
-        statusClasse = "concluida";
-        statusLabel  = "Concluída";
+        badgeClasse = "badge-concluida";
+        statusLabel = "Concluída";
     }
 
-    const entregador = rota.entregador || "Não atribuído";
-    const destino    = rota.destino    || "Destino não informado";
-    const distancia  = rota.distancia  ? `${rota.distancia} km` : "—";
+    const entregador = rota.entregador_id
+        ? `Entregador #${rota.entregador_id}`
+        : '<span class="text-muted fst-italic">Não atribuído</span>';
+
+    const distancia = rota.km_otimizado
+        ? `${rota.km_otimizado} km`
+        : rota.km_original
+            ? `${rota.km_original} km`
+            : "—";
+
+    const data = rota.data
+        ? new Date(rota.data + "T00:00:00").toLocaleDateString("pt-BR")
+        : "—";
+
+    const tempo = rota.tempo_estimado_min
+        ? formatarTempo(rota.tempo_estimado_min)
+        : "—";
 
     return `
-        <div class="rota-card" data-id="${rota.id}">
-
-            <div class="rota-info">
-                <h2>Rota #${rota.id}</h2>
-                <p><strong>Entregador:</strong> ${entregador}</p>
-                <p><strong>Destino:</strong> ${destino}</p>
-                <p><strong>Distância:</strong> ${distancia}</p>
-            </div>
-
-            <div class="status ${statusClasse}">
-                ${statusLabel}
-            </div>
-
-            <div class="acoes">
-                <button class="detalhes" data-id="${rota.id}">
-                    Ver detalhes
+        <tr>
+            <td class="ps-4 fw-bold text-navy">#${rota.id}</td>
+            <td>${entregador}</td>
+            <td>${data}</td>
+            <td>${distancia} <small class="text-muted">(${tempo})</small></td>
+            <td>
+                <span class="badge-status ${badgeClasse}">${statusLabel}</span>
+            </td>
+            <td class="pe-4 text-end">
+                <button class="btn-detalhes me-2" data-id="${rota.id}">
+                    <i class="bi bi-eye me-1"></i> Detalhes
                 </button>
-                <button class="editar" data-id="${rota.id}">
-                    Editar
+                <button class="btn-editar" data-id="${rota.id}">
+                    <i class="bi bi-pencil me-1"></i> Editar
                 </button>
-            </div>
-
-        </div>
+            </td>
+        </tr>
     `;
 }
 
 
 // ───────────────────────────────────────────────────────
-//  BOTÕES DETALHES — redireciona com o ID correto
+//  BOTÕES DETALHES
 // ───────────────────────────────────────────────────────
 
 function ativarBotoesDetalhes() {
-    const detalhesBtns = document.querySelectorAll(".detalhes");
-
-    detalhesBtns.forEach(function (botao) {
+    document.querySelectorAll(".btn-detalhes").forEach(function (botao) {
         botao.addEventListener("click", function () {
-            const id = this.getAttribute("data-id");
-            window.location.href = `detalhes-rota.html?id=${id}`;
+            window.location.href = `detalhes-rota.html?id=${this.getAttribute("data-id")}`;
         });
     });
 }
 
 
 // ───────────────────────────────────────────────────────
-//  BOTÕES EDITAR — redireciona com o ID correto
+//  BOTÕES EDITAR
 // ───────────────────────────────────────────────────────
 
 function ativarBotoesEditar() {
-    const editarBtns = document.querySelectorAll(".editar");
-
-    editarBtns.forEach(function (botao) {
+    document.querySelectorAll(".btn-editar").forEach(function (botao) {
         botao.addEventListener("click", function () {
-            const id = this.getAttribute("data-id");
-            window.location.href = `editar-rota.html?id=${id}`;
+            window.location.href = `editar-rota.html?id=${this.getAttribute("data-id")}`;
         });
     });
 }
 
 
 // ───────────────────────────────────────────────────────
-//  PESQUISA — filtra os cards pelo texto digitado
+//  PESQUISA
 // ───────────────────────────────────────────────────────
 
 function ativarPesquisa() {
-    const pesquisaInput = document.querySelector(".pesquisa input");
-
+    const pesquisaInput = document.querySelector(".pesquisa-input");
     if (!pesquisaInput) return;
 
     pesquisaInput.addEventListener("input", function () {
         const valor = this.value.toLowerCase();
-        const cards = document.querySelectorAll(".rota-card");
-
-        cards.forEach(function (card) {
-            const texto = card.innerText.toLowerCase();
-            card.style.display = texto.includes(valor) ? "flex" : "none";
+        document.querySelectorAll("#lista-rotas tr").forEach(function (linha) {
+            linha.style.display = linha.innerText.toLowerCase().includes(valor) ? "" : "none";
         });
     });
 }
 
 
 // ───────────────────────────────────────────────────────
-//  EXIBE ERRO NA LISTA
+//  UTILITÁRIOS
 // ───────────────────────────────────────────────────────
 
-function exibirErroLista(mensagem) {
-    const listaContainer = document.querySelector(".lista-rotas");
-    if (listaContainer) {
-        listaContainer.innerHTML = `
-            <div style="
-                background: #fee2e2;
-                border-left: 4px solid #dc2626;
-                padding: 20px 25px;
-                border-radius: 12px;
-                color: #991b1b;
-                font-weight: bold;
-            ">
-                ⚠️ ${mensagem}
-            </div>
+function formatarTempo(minutos) {
+    const h = Math.floor(minutos / 60);
+    const m = minutos % 60;
+    return h > 0 ? `${h}h ${m}min` : `${m}min`;
+}
+
+function exibirErroTabela(mensagem) {
+    const tbody = document.getElementById("lista-rotas");
+    if (tbody) {
+        tbody.innerHTML = `
+            <tr>
+                <td colspan="6">
+                    <div class="estado-erro m-3">
+                        <i class="bi bi-exclamation-triangle-fill me-2"></i>${mensagem}
+                    </div>
+                </td>
+            </tr>
         `;
     }
 }
