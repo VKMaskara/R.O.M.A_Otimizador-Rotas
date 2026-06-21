@@ -112,16 +112,16 @@ export class RotaModel {
     // ─── RESULTADOS ───────────────────────────────────────────────────────────
 
     static async salvarResultado(rota_id, dados) {
-        const [id] = await db('resultados').insert({
-            rota_id,
-            km_real: dados.km_real,
-            tempo_real_min: dados.tempo_real_min,
-            entregas_ok: dados.entregas_ok,
-            entregas_falha: dados.entregas_falha,
-            observacao: dados.observacao || null,
-        });
-        return id;
-    }
+    const [id] = await db('resultados').insert({
+        rota_id,
+        km_real:        dados.km_real        || 0,
+        tempo_real_min: dados.tempo_real_min || 0,
+        entrega_ok:     dados.entrega_ok     || 0,  // ✅ nome correto
+        entrega_falha:  dados.entrega_falha  || 0,  // ✅ nome correto
+        observacao:     dados.observacao     || null,
+    });
+    return id;
+}
 
     static async buscarResultado(rota_id) {
         return await db('resultados').where({ rota_id }).first();

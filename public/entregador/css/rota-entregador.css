@@ -1,0 +1,278 @@
+/* ═══════════════════════════════════════════════════════
+   R.O.M.A — rota-entregador.css  |  Mobile First
+   ═══════════════════════════════════════════════════════ */
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+    --navy:    #0B2A4A;
+    --orange:  #F28C28;
+    --topbar:  56px;
+}
+
+html, body {
+    height: 100%;
+    overflow: hidden;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: #f4f7fb;
+    -webkit-tap-highlight-color: transparent;
+}
+
+/* ── Topbar ──────────────────────────────────────────── */
+
+.topbar-mobile {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    height: var(--topbar);
+    background: linear-gradient(135deg, var(--navy), #123B63);
+    z-index: 1000;
+    box-shadow: 0 2px 12px rgba(0,0,0,.25);
+}
+
+.btn-voltar {
+    background: rgba(255,255,255,.15);
+    border: none;
+    color: white;
+    width: 34px;
+    height: 34px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    text-decoration: none;
+    transition: background .2s;
+    flex-shrink: 0;
+}
+.btn-voltar:hover { background: rgba(255,255,255,.3); color: white; }
+
+/* ── Mapa ────────────────────────────────────────────── */
+
+#mapa {
+    position: fixed;
+    top: var(--topbar);
+    left: 0; right: 0;
+    bottom: 220px;
+    z-index: 1;
+    transition: bottom .3s ease;
+}
+
+/* ── Painel inferior ─────────────────────────────────── */
+
+.painel {
+    position: fixed;
+    left: 0; right: 0; bottom: 0;
+    height: 220px;
+    background: #ffffff;
+    border-radius: 20px 20px 0 0;
+    box-shadow: 0 -4px 24px rgba(0,0,0,.15);
+    z-index: 500;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    transition: height .3s cubic-bezier(.4,0,.2,1);
+}
+
+/* Quando expandido, permite scroll interno */
+.painel .painel-scroll {
+    flex: 1;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+}
+
+/* ── Alça de arraste ─────────────────────────────────── */
+
+.alca {
+    display: flex;
+    justify-content: center;
+    padding: 10px 0 6px;
+    cursor: grab;
+    flex-shrink: 0;
+    touch-action: none;
+}
+
+.alca-barra {
+    width: 40px;
+    height: 4px;
+    border-radius: 2px;
+    background: #d1d5db;
+}
+
+/* ── Resumo da rota ──────────────────────────────────── */
+
+.resumo-rota {
+    border-bottom: 1px solid #f0f0f0;
+    padding: 0 16px 12px;
+    margin-bottom: 8px;
+    flex-shrink: 0;
+}
+
+/* ── Parada atual ────────────────────────────────────── */
+
+.parada-atual {
+    background: linear-gradient(135deg, #f0f7ff, #e8f4fd);
+    border: 1.5px solid #bfdbfe;
+    border-radius: 14px;
+    padding: 12px;
+    margin: 0 12px 8px;
+    flex-shrink: 0;
+}
+
+.numero-parada {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: var(--orange);
+    color: white;
+    font-weight: 700;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+/* ── Lista de paradas ────────────────────────────────── */
+
+.paradas-lista {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 0 12px 80px;  /* padding bottom para não ficar atrás do botão */
+}
+
+.parada-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    background: #f9fafb;
+    border-radius: 12px;
+    border: 1.5px solid #e5e7eb;
+    cursor: pointer;
+    transition: background .15s, border-color .15s;
+    list-style: none;
+}
+
+.parada-item:active      { background: #f0f4ff; }
+.parada-item.concluida   { opacity: .6; border-color: #d1fae5; background: #f0fdf4; }
+.parada-item.falhou      { opacity: .6; border-color: #fecaca; background: #fef2f2; }
+.parada-item.ativa       { border-color: var(--orange); background: #fff7ed; }
+.parada-item.ponto-base  { border-color: #c7d2fe; background: #eef2ff; }
+
+.icone-parada {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 700;
+    flex-shrink: 0;
+    color: white;
+}
+
+.icone-entrega   { background: var(--orange); }
+.icone-deposito  { background: var(--navy); }
+.icone-concluido { background: #16a34a; }
+
+.parada-info { flex: 1; min-width: 0; }
+.parada-info p { margin: 0; }
+
+.parada-status-badge {
+    font-size: 11px;
+    padding: 3px 8px;
+    border-radius: 20px;
+    font-weight: 600;
+    flex-shrink: 0;
+    white-space: nowrap;
+}
+
+.badge-pendente  { background: #fef3c7; color: #92400e; }
+.badge-concluida { background: #dcfce7; color: #166534; }
+.badge-falhou    { background: #fee2e2; color: #991b1b; }
+
+/* ── Botão flutuante ─────────────────────────────────── */
+
+.btn-flutuante {
+    position: fixed;
+    right: 16px;
+    bottom: 236px;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: white;
+    border: none;
+    box-shadow: 0 4px 16px rgba(0,0,0,.2);
+    z-index: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    color: var(--navy);
+    transition: bottom .3s ease, transform .15s;
+    cursor: pointer;
+}
+.btn-flutuante:active { transform: scale(.92); }
+
+/* ── Loading overlay ─────────────────────────────────── */
+
+.loading-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(11,42,74,.85);
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.loading-overlay.d-none { display: none !important; }
+
+/* ── Utilitários ─────────────────────────────────────── */
+
+.text-navy  { color: var(--navy) !important; }
+.min-width-0 { min-width: 0; }
+
+.btn-orange {
+    background: var(--orange);
+    border: none;
+    color: white;
+    border-radius: 10px;
+}
+.btn-orange:hover, .btn-orange:active { background: #d97706; color: white; }
+
+/* ── Desktop ─────────────────────────────────────────── */
+
+@media (min-width: 768px) {
+    #mapa {
+        right: 380px;
+        bottom: 0 !important;
+    }
+
+    .painel {
+        top: var(--topbar);
+        left: auto;
+        right: 0;
+        bottom: 0;
+        width: 380px;
+        height: auto !important;
+        border-radius: 0;
+        overflow-y: auto;
+        box-shadow: -4px 0 20px rgba(0,0,0,.1);
+    }
+
+    .painel .painel-scroll {
+        overflow: visible;
+    }
+
+    .alca { display: none; }
+
+    .btn-flutuante {
+        right: 396px;
+        bottom: 24px !important;
+    }
+
+    .paradas-lista { padding-bottom: 24px; }
+}

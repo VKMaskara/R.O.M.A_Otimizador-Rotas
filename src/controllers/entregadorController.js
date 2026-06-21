@@ -74,6 +74,7 @@ export class EntregadorController {
     }
 
     // GET /entregadores/minha-rota  (usado pelo próprio entregador)
+    // GET /entregadores/minha-rota
     static async minhaRota(req, res) {
         try {
             const entregador = await db('entregadores')
@@ -84,24 +85,25 @@ export class EntregadorController {
                 return res.status(404).json({ status: 'error', erro: 'Perfil de entregador não encontrado.' });
             }
 
-            const hoje = new Date().toISOString().split('T')[0];
-
-            const rota = await db('rotas')
+            // ✅ Remove o filtro de data — busca todas as rotas do entregador
+            const rotas = await db('rotas')
                 .where({ entregador_id: entregador.id })
-                .whereIn('status', ['em_andamento', 'pendente'])
-                .whereRaw('DATE(criado_em) = ?', [hoje])
-                .first();
-
-            if (!rota) {
-                return res.status(200).json({ status: 'success', dados: null, mensagem: 'Nenhuma rota atribuída para hoje.' });
-            }
-
-            const paradas = await db('paradas')
-                .where({ rota_id: rota.id })
-                .orderBy('posicao')
+                .orderBy('criado_em', 'desc')
                 .select('*');
 
-            return res.status(200).json({ status: 'success', dados: { ...rota, paradas } });
+            // Busca paradas de cada rota
+            const rotasComParadas = await Promise.all(
+                rotas.map(async (rota) => {
+                    const paradas = await db('paradas')
+                        .where({ rota_id: rota.id })
+                        .orderBy('posicao')
+                        .select('*');
+                    return { ...rota, paradas };
+                })
+            );
+
+            return res.status(200).json({ status: 'success', dados: rotasComParadas });
+
         } catch (err) {
             return res.status(500).json({ status: 'error', erro: err.message });
         }

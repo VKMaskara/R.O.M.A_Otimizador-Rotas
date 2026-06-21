@@ -11,6 +11,7 @@ const router = Router();
 // senão o Express interpreta "minha-rota" como um :id
 router.get('/minha-rota', autenticar, apenasEntregador, EntregadorController.minhaRota);
 
+
 // POST /entregadores — cadastrar novo entregador
 router.post('/', autenticar, apenasEmpresa, EntregadorController.criar);
 

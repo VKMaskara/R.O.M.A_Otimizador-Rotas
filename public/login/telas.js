@@ -46,7 +46,7 @@ form.addEventListener("submit", async function (event) {
             return;
         }
 
-        
+
         if (data.dados?.token) {
             localStorage.setItem("roma_token", data.dados.token);
             if (data.dados.usuario) {
@@ -56,8 +56,15 @@ form.addEventListener("submit", async function (event) {
 
         alert("Login realizado com sucesso!");
 
-        // REDIRECIONAR para a Dashboard
-        window.location.href = "../empresa/dashboard.html";
+        const tipo = data.dados.usuario?.tipo?.toUpperCase();
+
+        if (tipo === "EMPRESA") {
+            window.location.href = "../empresa/dashboard.html";
+        } else if (tipo === "ENTREGADOR") {
+            window.location.href = "../entregador/rotas.html";
+        } else {
+            alert("Tipo de usuário não reconhecido.");
+        }
 
     } catch (error) {
         console.error("Erro na requisição de login:", error);
