@@ -1,274 +1,300 @@
-# R.O.M.A — Rotas Otimizadas de Milha Ágil
+# 🗺️  R.O.M.A — Rotas Otimizadas de Milha Ágil
 
-> Sistema de roteirização inteligente de entregas de última milha, desenvolvido como Trabalho de Conclusão de Curso (TCC).
+<div align="center">
 
-O R.O.M.A permite que empresas de logística otimizem rotas de entrega, reduzindo quilometragem percorrida e custos operacionais. A empresa cadastra os endereços e pacotes, o sistema gera a rota otimizada e a atribui a um entregador, que registra os resultados ao final da jornada.
+![R.O.M.A Banner](./public/img/logo.jpeg)
 
----
+**Sistema completo de otimização e gestão de rotas de entrega**
 
-## Funcionalidades implementadas
+[![Node.js](https://img.shields.io/badge/Node.js-18%2B-339933?style=for-the-badge&logo=node.js&logoColor=white)](https://nodejs.org)
+[![Express](https://img.shields.io/badge/Express-4.x-000000?style=for-the-badge&logo=express&logoColor=white)](https://expressjs.com)
+[![SQLite](https://img.shields.io/badge/SQLite-3-003B57?style=for-the-badge&logo=sqlite&logoColor=white)](https://sqlite.org)
+[![Bootstrap](https://img.shields.io/badge/Bootstrap-5.3-7952B3?style=for-the-badge&logo=bootstrap&logoColor=white)](https://getbootstrap.com)
+[![Leaflet](https://img.shields.io/badge/Leaflet-1.9-199900?style=for-the-badge&logo=leaflet&logoColor=white)](https://leafletjs.com)
 
-- **3 modos de entrada de dados:** planilha Excel, OCR em imagens/PDF e cadastro manual pelo terminal
-- **Geocodificação** de endereços com suporte a Google Maps API e OpenRouteService (ORS)
-- **Matriz de distâncias e tempos** entre todos os pontos da rota
-- **Algoritmo de otimização TSP** (Vizinho Mais Próximo) com refinamento **2-Opt**
-- **Vinculação de pacotes** a cada endereço de entrega (código, destinatário, observação)
-- **Saída em JSON** com rota otimizada, coordenadas e métricas de desempenho
-- **Suporte a múltiplos provedores** de mapas via padrão Adapter (troca sem alterar o core)
+</div>
 
 ---
 
-## Arquitetura do sistema
+## 📋 Sobre o Projeto
+
+O **R.O.M.A** é uma plataforma web para empresas de entrega e seus entregadores autônomos. A empresa cadastra rotas com múltiplos pontos de entrega e o sistema aplica algoritmos de otimização (TSP + 2-Opt) para encontrar o menor caminho possível. O entregador recebe a rota otimizada no celular com mapa interativo e navegação integrada.
+
+### Problema que resolve
+
+Empresas de entrega perdem tempo e dinheiro planejando rotas manualmente. O R.O.M.A automatiza esse processo, calculando a sequência ideal de entregas e reduzindo quilômetros rodados e tempo de deslocamento.
+
+---
+
+## ✨ Funcionalidades
+
+### Para a Empresa
+- 📊 **Dashboard** com visão geral de rotas, entregadores e estatísticas
+- 🗺️ **Criação de rotas otimizadas** via endereços manuais ou upload de planilha Excel
+- 👥 **Gestão de entregadores** — cadastro, perfil e atribuição de rotas
+- 📍 **Detalhes de rota** com todas as paradas, status e histórico
+- ✏️ **Edição de rotas** — alterar status, entregador e data
+- ⚙️ **Configurações** — dados da empresa, senha e exclusão de conta
+
+### Para o Entregador
+- 📱 **Tela mobile-first** com lista de rotas atribuídas
+- 🗺️ **Mapa interativo** com pins numerados e linha de rota
+- 📍 **Rastreamento em tempo real** — ponto azul mostrando localização atual
+- 🧭 **Navegação integrada** — abre Waze ou Google Maps com um toque
+- ✅ **Confirmação de entrega** por parada individual
+- 🏁 **Finalização de rota** com registro automático no banco
+
+---
+
+## 🖥️ Telas do Sistema
+
+### Portal da Empresa
+| Tela | Descrição |
+|------|-----------|
+| Login | Autenticação com JWT por tipo de usuário |
+| Dashboard | Visão geral com cards de métricas e rotas recentes |
+| Rotas | Listagem com filtro, status colorido e ações |
+| Detalhes da Rota | Informações completas, paradas e histórico |
+| Editar Rota | Alteração de status, entregador e data |
+| Entregadores | Lista de entregadores da empresa |
+| Perfil do Entregador | Dados, veículo e estatísticas |
+| Configurações | Dados da empresa, senha e exclusão |
+
+### Portal do Entregador
+| Tela | Descrição |
+|------|-----------|
+| Minhas Rotas | Cards com rotas atribuídas e resumo de métricas |
+| Mapa da Rota | Mapa Leaflet com navegação e confirmação de entregas |
+
+---
+
+## 🏗️ Arquitetura
 
 ```
-Entrada de dados
-  ├── Excel (.xlsx)       → ExecelService
-  ├── Imagem/PDF (OCR)    → OcrService
-  └── Manual (terminal)   → ManualInputService
-          ↓
-      InputService  (orquestra os 3 modos)
-          ↓
-  GeolocationService  (geocodifica endereços)
-  ├── GoogleGeocodingAdapter
-  └── ORSGeocodingAdapter
-          ↓
-    MatrizService  (gera matriz de distâncias/tempos)
-  ├── GoogleAdapter
-  └── ORSAdapter
-          ↓
-  OtimizacaoService
-  ├── TspService     (Vizinho Mais Próximo)
-  └── TwoOptService  (refinamento 2-Opt)
-          ↓
-   OtimizacaoController  (orquestra o fluxo)
-          ↓
-  output/rota_final_otimizada.json
+R.O.M.A_Otimizador-Rotas/
+├── src/                          # Backend (Node.js + Express)
+│   ├── controllers/              # Controladores das rotas HTTP
+│   ├── services/                 # Regras de negócio
+│   │   ├── RotaService.js        # Orquestração da otimização
+│   │   ├── OtimizacaoService.js  # TSP + 2-Opt
+│   │   ├── MatrixService.js      # Matriz de distâncias
+│   │   └── GeolocationService.js # Geocodificação de endereços
+│   ├── models/                   # Acesso ao banco de dados (Knex)
+│   ├── routes/                   # Definição dos endpoints
+│   ├── middlewares/              # Auth JWT, upload, validações
+│   └── database/
+│       ├── db.js                 # Conexão SQLite via Knex
+│       └── migrations/           # Estrutura das tabelas
+│
+├── public/                       # Frontend (HTML + CSS + JS)
+│   ├── cadastro/                 # Tela de cadastro de empresa
+│   ├── login/                    # Tela de login
+│   ├── empresa/                  # Portal da empresa
+│   │   ├── *.html
+│   │   ├── css/
+│   │   └── js/
+│   └── entregador/               # Portal do entregador
+│       ├── rotas.html
+│       ├── rota-entregador.html
+│       ├── css/
+│       └── js/
 ```
 
 ---
 
-## Estrutura de pastas
+## 🔧 Tecnologias
 
-```
-R.O.M.A/
-├── data/
-│   └── input_enderecos.xlsx       # Planilha de entrada (modelo)
-├── output/
-│   ├── rota_final_otimizada.json  # Resultado da última otimização
-│   └── geolocalizacao_resultados.json
-├── src/
-│   ├── adapters/
-│   │   ├── GoogleAdapter.js           # Matriz via Google Maps
-│   │   ├── GoogleGeocodingAdapter.js  # Geocoding via Google
-│   │   ├── ORSAdapter.js              # Matriz via OpenRouteService
-│   │   └── ORSGeocodingAdapter.js     # Geocoding via ORS
-│   ├── config/
-│   │   └── mapsConfig.js              # Lê MAPS_PROVIDER do .env
-│   ├── controllers/
-│   │   └── OtimizacaoController.js    # Orquestra o fluxo completo
-│   └── services/
-│       ├── ExecelService.js           # Leitura de Excel
-│       ├── GeolocationService.js      # Geocodificação
-│       ├── InputService.js            # Orquestra os 3 modos de entrada
-│       ├── ManualInputService.js      # Entrada interativa pelo terminal
-│       ├── MatrixService.js           # Matriz de distâncias
-│       ├── OcrService.js              # Extração de texto via OCR
-│       ├── OtimizacaoService.js       # Coordena TSP + 2-Opt
-│       ├── TspService.js              # Algoritmo Vizinho Mais Próximo
-│       └── TwoOptService.js           # Refinamento 2-Opt
-├── .env.exemplo                       # Modelo de configuração
-├── .gitignore
-├── package.json
-└── ROADMAP.md                         # Checklist de desenvolvimento
-```
+### Backend
+- **Node.js** + **Express.js** — servidor HTTP
+- **Knex.js** — query builder e migrations
+- **SQLite** — banco de dados relacional
+- **JWT** — autenticação stateless por tipo de usuário
+- **Multer** — upload de planilhas
+- **bcrypt** — hash de senhas
+
+### Frontend
+- **HTML5** + **CSS3** + **JavaScript** puro
+- **Bootstrap 5.3** — componentes e grid responsivo
+- **Bootstrap Icons** — ícones
+- **Leaflet.js** — mapas interativos (OpenStreetMap)
+
+### Algoritmos
+- **TSP (Travelling Salesman Problem)** — encontra a rota mais curta
+- **2-Opt** — melhoria iterativa da solução inicial
+- **Geocodificação** — converte endereços em coordenadas lat/lng
 
 ---
 
-## Instalação
+## 🚀 Como Rodar
 
 ### Pré-requisitos
+- Node.js 18+
+- npm
 
-- Node.js 18 ou superior
-- Chave de API do [Google Maps](https://developers.google.com/maps) **ou** do [OpenRouteService](https://openrouteservice.org/) (gratuito)
-
-### Passos
+### Instalação
 
 ```bash
-# 1. Clone o repositório
-git clone https://github.com/VKMaskara/TCC_rotas_inteligentes.git
-cd TCC_rotas_inteligentes
+# Clone o repositório
+git clone https://github.com/VKMaskara/R.O.M.A_Otimizador-Rotas.git
+cd R.O.M.A_Otimizador-Rotas
 
-# 2. Instale as dependências
+# Instale as dependências
 npm install
 
-# 3. Configure as variáveis de ambiente
+# Configure as variáveis de ambiente
 cp .env.exemplo .env
 # Edite o .env com suas chaves de API
 ```
 
----
+### Variáveis de Ambiente
 
-## Configuração (.env)
+Crie um arquivo `.env` na raiz com:
 
 ```env
-# Provedor de mapas: google ou ors
-MAPS_PROVIDER=ors
-
-# Chaves de API (preencha apenas o do provedor escolhido)
-GOOGLE_MAPS_API_KEY=sua_chave_aqui
-ORS_API_KEY=sua_chave_aqui
-
-# Modo de entrada de dados: excel | ocr | manual
-INPUT_MODE=excel
-
-# Caminho do arquivo de entrada (para os modos excel e ocr)
-# INPUT_FILE=data/input_enderecos.xlsx
+PORT=3000
+JWT_SECRET=sua_chave_secreta_aqui
+ORS_API_KEY=sua_chave_openrouteservice
 ```
 
-> O OpenRouteService tem plano gratuito com 2.000 requisições/dia — ideal para desenvolvimento e TCC.
+> A chave ORS é gratuita e pode ser obtida em [openrouteservice.org](https://openrouteservice.org)
 
----
-
-## Como usar
-
-### Modo Excel (padrão)
-
-Preencha a planilha `data/input_enderecos.xlsx` com os seguintes campos:
-
-| Coluna | Obrigatório | Descrição |
-|---|---|---|
-| `Endereco` | Sim | Rua ou logradouro |
-| `Numero` | Sim | Número do imóvel |
-| `Bairro` | Não | Bairro |
-| `Cidade` | Sim | Cidade |
-| `Estado` | Sim | UF (ex: SP) |
-| `Tipo` | Sim | `DEPOSITO` para a origem, `Entrega` para os demais |
-| `Pacote` | Não | Código do pacote (ex: PKG-001) |
-| `Destinatario` | Não | Nome do destinatário |
-| `Observacao` | Não | Instruções de entrega |
-
-> Deve haver exatamente **uma linha** marcada como `DEPOSITO` — ela é o ponto de partida e retorno da rota.
+### Banco de Dados
 
 ```bash
-# Rodar com Excel (padrão)
+# Cria as tabelas via migrations
+npx knex migrate:latest
+```
+
+### Iniciando
+
+```bash
+# Desenvolvimento (com hot reload)
+npm run dev
+
+# Produção
 npm start
 ```
 
-### Modo manual (terminal interativo)
+O servidor sobe em `http://localhost:3000`
 
-```bash
-INPUT_MODE=manual npm start
+Para acessar o frontend, use o Live Server do VS Code ou qualquer servidor estático na pasta `public/`.
+
+---
+
+## 📡 API — Principais Endpoints
+
+### Autenticação
+| Método | Endpoint | Descrição |
+|--------|----------|-----------|
+| POST | `/auth/login` | Login de empresa ou entregador |
+
+### Empresas
+| Método | Endpoint | Acesso | Descrição |
+|--------|----------|--------|-----------|
+| POST | `/empresas` | Público | Cadastro de empresa |
+| GET | `/empresas/:id` | Empresa | Buscar empresa |
+| PUT | `/empresas/:id` | Empresa | Atualizar dados |
+| DELETE | `/empresas/:id` | Empresa | Desativar empresa |
+
+### Rotas
+| Método | Endpoint | Acesso | Descrição |
+|--------|----------|--------|-----------|
+| POST | `/rotas/otimizar` | Empresa | Criar rota via JSON |
+| POST | `/rotas/otimizar-excel` | Empresa | Criar rota via planilha |
+| GET | `/rotas` | Empresa | Listar rotas da empresa |
+| GET | `/rotas/:id` | Empresa | Detalhar rota com paradas |
+| PUT | `/rotas/:id` | Empresa | Editar rota |
+| PATCH | `/rotas/:id/entregador` | Empresa | Atribuir entregador |
+| POST | `/rotas/:id/resultado` | Entregador | Finalizar rota |
+
+### Paradas
+| Método | Endpoint | Acesso | Descrição |
+|--------|----------|--------|-----------|
+| PATCH | `/paradas/:id/status` | Entregador | Marcar entrega como `entregue` ou `falhou` |
+
+### Entregadores
+| Método | Endpoint | Acesso | Descrição |
+|--------|----------|--------|-----------|
+| POST | `/entregadores` | Empresa | Cadastrar entregador |
+| GET | `/entregadores` | Empresa | Listar entregadores |
+| GET | `/entregadores/:id` | Empresa | Buscar entregador |
+| PUT | `/entregadores/:id` | Empresa | Atualizar entregador |
+| GET | `/entregadores/minha-rota` | Entregador | Listar rotas do entregador logado |
+
+---
+
+## 🗄️ Banco de Dados
+
+```
+usuarios ──────────┐
+                   ├── empresas ──── rotas ──── paradas ──── pacotes
+                   └── entregadores ──┘              └── resultados
 ```
 
-O sistema irá solicitar os dados de cada endereço e pacote diretamente no terminal.
-
-### Modo OCR (imagem ou PDF)
-
-```bash
-INPUT_MODE=ocr INPUT_FILE=data/romaneio.png npm start
-```
-
-O documento deve conter blocos de texto no seguinte formato:
-
-```
-PACOTE: PKG-001
-DESTINATÁRIO: João Silva
-ENDEREÇO: Rua Augusta, 2500
-BAIRRO: Jardim Paulista
-CIDADE: São Paulo
-ESTADO: SP
-OBS: Entregar na portaria
-```
-
-Blocos separados por uma linha em branco. O bloco com `TIPO: DEPOSITO` define a origem.
+### Tabelas principais
+- **usuarios** — login e tipo (EMPRESA / ENTREGADOR)
+- **empresas** — dados cadastrais da empresa
+- **entregadores** — dados do entregador + veículo
+- **rotas** — rota otimizada com métricas
+- **paradas** — pontos de entrega com lat/lng e status
+- **pacotes** — dados do destinatário vinculados à parada
+- **resultados** — resultado final da rota
 
 ---
 
-## Resultado gerado
+## 📱 Portal do Entregador — Mapa
 
-Após a execução, o arquivo `output/rota_final_otimizada.json` contém:
+O mapa da rota usa **Leaflet + OpenStreetMap** (100% gratuito) e oferece:
 
-```json
-{
-  "distanciaOriginal": 42.30,
-  "distanciaOtimizada": 30.49,
-  "economiaKm": 11.81,
-  "tempoEstimadoMinutos": 87,
-  "rotaIndices": [0, 2, 1, 4, 3],
-  "rotaDetalhada": [
-    {
-      "posicao": 1,
-      "endereco": "Av. Paulista, 1578, Bela Vista, São Paulo, Brasil",
-      "tipo": "DEPOSITO",
-      "pacote": null,
-      "lat": -23.5613,
-      "lng": -46.6565
-    },
-    {
-      "posicao": 2,
-      "endereco": "Rua Augusta, 2500, Jardim Paulista, São Paulo, Brasil",
-      "tipo": "ENTREGA",
-      "pacote": {
-        "id": "PKG-001",
-        "destinatario": "João Silva",
-        "observacao": "Entregar na portaria"
-      },
-      "lat": -23.5551,
-      "lng": -46.6671
-    }
-  ]
-}
+- **Pins coloridos** — laranja (pendente), verde (entregue), azul escuro (depósito)
+- **Linha tracejada** — sequência otimizada da rota
+- **Ponto azul** — localização atual do entregador via GPS do dispositivo
+- **Linha de navegação** — tracejado azul do ponto atual até a próxima entrega
+- **Painel swipeable** — arraste para cima para ver a lista completa de paradas
+- **Botão Navegar** — abre Waze (se instalado) ou Google Maps com o destino preenchido
+
+---
+
+## 👥 Fluxo de Uso
+
+```
+1. Empresa se cadastra
+2. Empresa cria entregadores
+3. Empresa cria rota (endereços manuais ou planilha)
+   └── Sistema geocodifica os endereços
+   └── Aplica TSP + 2-Opt
+   └── Salva rota otimizada com paradas no banco
+4. Empresa atribui entregador à rota
+5. Entregador faz login → vê suas rotas
+6. Entregador inicia rota → abre mapa
+7. Entregador navega por cada parada
+   └── Confirma cada entrega (PATCH /paradas/:id/status)
+8. Entregador finaliza rota (POST /rotas/:id/resultado)
+9. Empresa vê resultado no dashboard
 ```
 
 ---
 
-## Algoritmo de otimização
+## 🤝 Contribuindo
 
-O R.O.M.A resolve o **Problema do Caixeiro Viajante (TSP)** em duas etapas:
-
-**1. Vizinho Mais Próximo (TSP guloso)**
-Partindo do depósito, sempre escolhe o próximo ponto não visitado com menor tempo de deslocamento. Gera uma solução inicial rápida.
-
-**2. Refinamento 2-Opt**
-Testa inversões de segmentos da rota para eliminar cruzamentos. Continua iterando até não encontrar mais melhorias ou atingir 1.000 tentativas.
-
-Em testes com 25 endereços reais de São Paulo, o algoritmo gerou uma economia média de **11,81 km** por rota em relação à ordem original de entrada.
+1. Fork o projeto
+2. Crie sua branch: `git checkout -b feat/minha-feature`
+3. Commit suas mudanças: `git commit -m 'feat: minha feature'`
+4. Push para a branch: `git push origin feat/minha-feature`
+5. Abra um Pull Request
 
 ---
 
-## Provedores de mapas suportados
+## 📄 Licença
 
-| Funcionalidade | Google Maps | OpenRouteService |
-|---|---|---|
-| Geocodificação | GoogleGeocodingAdapter | ORSGeocodingAdapter |
-| Matriz de distâncias | GoogleAdapter | ORSAdapter |
-| Plano gratuito | Limitado (crédito mensal) | 2.000 req/dia |
-| Precisão | Alta | Alta |
-
-Para trocar de provedor, basta alterar `MAPS_PROVIDER` no `.env`. Nenhum código precisa ser alterado.
+Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para mais detalhes.
 
 ---
 
-## Dependências
+<div align="center">
 
-| Pacote | Versão | Uso |
-|---|---|---|
-| `xlsx` | ^0.18.5 | Leitura de planilhas Excel |
-| `tesseract.js` | ^5.1.0 | OCR em imagens e PDFs |
-| `axios` | ^1.13.6 | Requisições HTTP para as APIs de mapas |
-| `@googlemaps/google-maps-services-js` | ^3.4.2 | SDK oficial do Google Maps |
-| `dotenv` | ^17.2.3 | Carregamento de variáveis de ambiente |
-| `csv-parser` | ^3.2.0 | Suporte a leitura de CSV |
+Desenvolvido com ☕ e muito JavaScript
 
----
+**[⬆ Voltar ao topo](#️-roma--roteirizador-e-otimizador-de-malha-para-autônomos)**
 
-## Próximos passos
-
-Veja o arquivo [ROADMAP.md](./ROADMAP.md) para o checklist completo de desenvolvimento, incluindo:
-
-- API REST com Express.js
-- Banco de dados SQLite (empresas, entregadores, rotas, resultados)
-- Mapa visual interativo com Leaflet.js
-- Deploy no Railway
-
----
+</div>
