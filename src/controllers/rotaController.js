@@ -1,14 +1,17 @@
 // src/controllers/RotaController.js
+import db from '../database/db.js';
 import fs from 'fs';
+import { RotaModel } from '../models/rotaModel.js';
 import { RotaService } from '../services/RotaService.js';
 import { ExecelService } from '../services/ExecelService.js';
+
 
 export class RotaController {
 
     // POST /rotas/otimizar
     static async otimizar(req, res) {
         try {
-            const empresa_id    = req.usuario.id;
+            const empresa_id = req.usuario.id;
             const { paradas, entregador_id } = req.body;
 
             if (!paradas || paradas.length < 2) {
@@ -49,7 +52,7 @@ export class RotaController {
             const paradas = ExecelService.getAddresFromExel(req.file.path);
 
             // Remove o arquivo temporário independentemente do resultado
-            fs.unlink(req.file.path, () => {});
+            fs.unlink(req.file.path, () => { });
 
             if (!paradas) {
                 return res.status(400).json({
@@ -69,7 +72,7 @@ export class RotaController {
             return res.status(201).json({ status: 'success', dados: resultado });
 
         } catch (error) {
-            if (req.file?.path) fs.unlink(req.file.path, () => {});
+            if (req.file?.path) fs.unlink(req.file.path, () => { });
             return res.status(400).json({ status: 'error', mensagem: error.message });
         }
     }
@@ -102,7 +105,7 @@ export class RotaController {
     // PATCH /rotas/:id/entregador
     static async atribuirEntregador(req, res) {
         try {
-            const empresa_id     = req.usuario.id;
+            const empresa_id = req.usuario.id;
             const { entregador_id } = req.body;
 
             await RotaService.atribuirEntregador(
@@ -154,6 +157,30 @@ export class RotaController {
             });
         } catch (error) {
             return res.status(400).json({ status: 'error', mensagem: error.message });
+        }
+    }
+
+    static async atualizar(req, res) {
+        try {
+            const { id } = req.params;
+            const { status, entregador_id, data } = req.body;
+
+            const rota = await RotaModel.buscarPorId(id);
+            if (!rota) return res.status(404).json({ erro: 'Rota não encontrada' });
+
+            // Busca o empresa_id real, igual ao RotaService faz
+            const empresa = await db('empresas').where({ usuario_id: req.usuario.id }).first();
+            if (!empresa) return res.status(404).json({ erro: 'Empresa não encontrada' });
+
+            if (Number(rota.empresa_id) !== Number(empresa.id))
+                return res.status(403).json({ erro: 'Sem permissão' });
+
+            await RotaModel.atualizar(id, { status, entregador_id, data });
+            const rotaAtualizada = await RotaModel.buscarPorId(id);
+            res.json(rotaAtualizada);
+        } catch (err) {
+            console.error('Erro ao atualizar rota:', err);
+            res.status(500).json({ erro: 'Erro interno ao atualizar rota' });
         }
     }
 }

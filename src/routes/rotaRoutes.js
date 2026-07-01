@@ -32,4 +32,7 @@ router.patch('/:id/entregador', autenticar, apenasEmpresa, RotaController.atribu
 // POST /rotas/:id/resultado — entregador finaliza e registra o resultado
 router.post('/:id/resultado', autenticar, apenasEntregador, RotaController.registrarResultado);
 
+// PUT /rotas/:id — empresa edita status, entregador e data da rota
+router.put('/:id', autenticar, apenasEmpresa, RotaController.atualizar);
+
 export default router;
