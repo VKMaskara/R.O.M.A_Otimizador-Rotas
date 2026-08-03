@@ -1,7 +1,7 @@
 {
-  "name": "tcc_rotas_inteligentes",
+  "name": "R.O.M.A_Otimizador-Rotas",
   "version": "1.0.0",
-  "description": "Repositório para o TCC",
+  "description": "Sistema web para gestão e otimização de rotas de entrega utilizando Node.js, Express, SQLite e APIs geográficas.",
   "main": "geolocalizacao.js",
   "type": "module",
   "scripts": {
@@ -14,7 +14,7 @@
     "url": "git+https://github.com/VKMaskara/TCC_rotas_inteligentes.git"
   },
   "keywords": [],
-  "author": "",
+  "author": "Vitor Kauê",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/VKMaskara/TCC_rotas_inteligentes/issues"
