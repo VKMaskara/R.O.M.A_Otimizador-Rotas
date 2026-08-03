@@ -1,5 +1,5 @@
 {
-  "name": "R.O.M.A_Otimizador-Rotas",
+  "name":  "roma-otimizador-rotas",
   "version": "1.0.0",
   "description": "Sistema web para gestão e otimização de rotas de entrega utilizando Node.js, Express, SQLite e APIs geográficas.",
   "main": "geolocalizacao.js",
